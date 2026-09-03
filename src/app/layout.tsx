@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Vela Team",
+  title: "Kurku",
   description: "Gestión de atletas y entrenamiento — equipo de vela",
 };
 

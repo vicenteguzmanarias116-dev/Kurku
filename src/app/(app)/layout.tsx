@@ -20,7 +20,7 @@ export default async function AppLayout({
   return (
     <div className="flex flex-1 flex-col">
       <header className="flex items-center gap-6 border-b border-zinc-200 px-6 py-3">
-        <span className="font-semibold">Vela Team</span>
+        <span className="font-semibold">Kurku</span>
         <nav className="flex gap-4 text-sm">
           {NAV.map((n) => (
             <Link key={n.href} href={n.href} className="hover:underline">

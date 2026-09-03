@@ -26,7 +26,7 @@ export default function LoginPage() {
   return (
     <main className="flex flex-1 items-center justify-center p-6">
       <div className="w-full max-w-sm space-y-6">
-        <h1 className="text-2xl font-semibold">Vela Team</h1>
+        <h1 className="text-2xl font-semibold">Kurku</h1>
         {sent ? (
           <p className="text-sm text-zinc-600">
             Te enviamos un enlace de acceso a <strong>{email}</strong>. Revisá tu
