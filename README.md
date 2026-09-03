@@ -1,6 +1,6 @@
-# Vela Team
+# Kurku
 
-Gestión de atletas y entrenamiento para un equipo de vela (ILCA / Laser).
+Plataforma de gestión de atletas y entrenamiento para cualquier deporte.
 Proyecto **independiente** — no comparte repo, base de datos ni hosting con
 ningún otro proyecto.
 
