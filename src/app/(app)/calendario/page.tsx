@@ -1,5 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { requireUser, isStaff } from "@/lib/auth";
+import { rajdhani, mono } from "../fonts";
 
 type Event = {
   id: string;
@@ -9,6 +10,9 @@ type Event = {
   location: string | null;
   description: string | null;
 };
+
+const input =
+  "border border-white/15 bg-black/30 px-2.5 py-2 text-sm text-white outline-none focus:border-cyan-300/60 focus:ring-1 focus:ring-cyan-300/40";
 
 async function addEvent(formData: FormData) {
   "use server";
@@ -46,27 +50,39 @@ export default async function CalendarioPage() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-lg font-semibold">Calendario</h2>
+      <h2 className={`${rajdhani.className} text-2xl font-bold uppercase tracking-tight`}>
+        Calendario
+      </h2>
 
       {staff && (
-        <form action={addEvent} className="grid grid-cols-2 gap-3 text-sm sm:grid-cols-3">
-          <input name="title" placeholder="Título" required className="rounded border border-zinc-300 px-2 py-1.5" />
-          <input name="starts_at" type="datetime-local" required className="rounded border border-zinc-300 px-2 py-1.5" />
-          <select name="kind" className="rounded border border-zinc-300 px-2 py-1.5">
+        <form
+          action={addEvent}
+          className="cut-corner grid grid-cols-2 gap-3 border border-cyan-400/20 bg-[#0D141E] p-5 text-sm sm:grid-cols-3"
+        >
+          <input name="title" placeholder="Título" required className={input} />
+          <input name="starts_at" type="datetime-local" required className={input} />
+          <select name="kind" className={input}>
             <option value="training">Entrenamiento</option>
             <option value="regatta">Regata</option>
             <option value="other">Otro</option>
           </select>
-          <input name="location" placeholder="Lugar" className="rounded border border-zinc-300 px-2 py-1.5" />
-          <input name="description" placeholder="Notas" className="rounded border border-zinc-300 px-2 py-1.5" />
-          <button className="rounded bg-zinc-900 px-3 py-1.5 text-white">Añadir</button>
+          <input name="location" placeholder="Lugar" className={input} />
+          <input name="description" placeholder="Notas" className={input} />
+          <button className="cut-corner bg-[#FF5A36] px-3 py-2 text-xs font-bold uppercase tracking-wide text-[#05080D] transition hover:bg-[#ff7154]">
+            Añadir
+          </button>
         </form>
       )}
 
-      <ul className="space-y-2 text-sm">
+      <ul className="cut-corner space-y-3 border border-cyan-400/20 bg-[#0D141E] p-6 text-sm">
         {(events as Event[] | null)?.map((e) => (
-          <li key={e.id} className="flex items-start gap-3 border-t border-zinc-100 pt-2">
-            <span className="w-28 shrink-0 text-zinc-500">
+          <li
+            key={e.id}
+            className="flex items-start gap-3 border-t border-white/10 pt-3 first:border-0 first:pt-0"
+          >
+            <span
+              className={`${mono.className} w-24 shrink-0 text-xs uppercase tracking-wider text-cyan-300`}
+            >
               {new Date(e.starts_at).toLocaleString("es-ES", {
                 day: "2-digit",
                 month: "short",
@@ -77,20 +93,24 @@ export default async function CalendarioPage() {
             <span className="flex-1">
               <strong>{e.title}</strong>
               {e.kind === "regatta" && (
-                <span className="ml-2 rounded bg-blue-100 px-1.5 text-xs text-blue-700">regata</span>
+                <span
+                  className={`${mono.className} ml-2 border border-[#FF5A36]/40 px-1.5 py-0.5 text-[10px] uppercase tracking-wider text-[#FF5A36]`}
+                >
+                  regata
+                </span>
               )}
-              {e.location && <span className="text-zinc-400"> · {e.location}</span>}
-              {e.description && <div className="text-zinc-500">{e.description}</div>}
+              {e.location && <span className="text-white/40"> · {e.location}</span>}
+              {e.description && <div className="text-white/40">{e.description}</div>}
             </span>
             {staff && (
               <form action={delEvent}>
                 <input type="hidden" name="id" value={e.id} />
-                <button className="text-xs text-red-600">borrar</button>
+                <button className="text-xs text-red-400 hover:underline">borrar</button>
               </form>
             )}
           </li>
         ))}
-        {!events?.length && <li className="text-zinc-400">Nada programado.</li>}
+        {!events?.length && <li className="text-white/30">Nada programado.</li>}
       </ul>
     </div>
   );
