@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Rajdhani, JetBrains_Mono } from "next/font/google";
-import HeroTelemetry from "./HeroTelemetry";
 
 const rajdhani = Rajdhani({ subsets: ["latin"], weight: ["600", "700"] });
 const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500"] });
@@ -27,38 +26,34 @@ export default function Home() {
       </header>
 
       <section className="relative z-10 flex flex-1 flex-col justify-center px-6 py-16 sm:px-12 lg:py-24">
-        <div className="grid gap-12 lg:grid-cols-[1fr_auto] lg:items-end">
-          <div className="max-w-2xl">
-            <span
-              className={`${mono.className} cut-corner mb-6 inline-flex items-center gap-2 border border-cyan-400/25 bg-cyan-400/5 px-3 py-1.5 text-[11px] uppercase tracking-widest text-cyan-300`}
-            >
-              <span className="h-1.5 w-1.5 rounded-full bg-cyan-300 motion-safe:animate-pulse" />
-              Equipo de vela · en línea
-            </span>
+        <div className="max-w-2xl">
+          <span
+            className={`${mono.className} cut-corner mb-6 inline-flex items-center gap-2 border border-cyan-400/25 bg-cyan-400/5 px-3 py-1.5 text-[11px] uppercase tracking-widest text-cyan-300`}
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-cyan-300 motion-safe:animate-pulse" />
+            Equipo de vela · en línea
+          </span>
 
-            <h1
-              className={`${rajdhani.className} text-5xl font-bold uppercase leading-[0.95] tracking-tight sm:text-7xl lg:text-8xl`}
-            >
-              Rumbo al
-              <br />
-              <span className="text-[#FF5A36]">rendimiento</span>
-            </h1>
+          <h1
+            className={`${rajdhani.className} text-5xl font-bold uppercase leading-[0.95] tracking-tight sm:text-7xl lg:text-8xl`}
+          >
+            Rumbo al
+            <br />
+            <span className="text-[#FF5A36]">rendimiento</span>
+          </h1>
 
-            <p className="mt-6 max-w-md text-lg text-white/50">
-              Atletas, carga de entrenamiento, calendario y comunicación del
-              equipo — todo en Kurku.
-            </p>
+          <p className="mt-6 max-w-md text-lg text-white/50">
+            Atletas, carga de entrenamiento, calendario y comunicación del
+            equipo — todo en Kurku.
+          </p>
 
-            <Link
-              href="/login"
-              className="cut-corner mt-9 inline-flex items-center gap-2 bg-[#FF5A36] px-7 py-3.5 text-sm font-semibold uppercase tracking-wide text-[#05080D] transition hover:bg-[#ff7154] focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 focus-visible:outline-offset-2"
-            >
-              Entrar al equipo
-              <span aria-hidden>→</span>
-            </Link>
-          </div>
-
-          <HeroTelemetry />
+          <Link
+            href="/login"
+            className="cut-corner mt-9 inline-flex items-center gap-2 bg-[#FF5A36] px-7 py-3.5 text-sm font-semibold uppercase tracking-wide text-[#05080D] transition hover:bg-[#ff7154] focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 focus-visible:outline-offset-2"
+          >
+            Entrar al equipo
+            <span aria-hidden>→</span>
+          </Link>
         </div>
       </section>
 
