@@ -82,7 +82,7 @@ export default function Home() {
           <div className="max-w-3xl">
             <Reveal>
               <h1
-                className={`${display.className} text-6xl font-bold uppercase leading-[0.88] tracking-tight sm:text-8xl lg:text-[7.5rem]`}
+                className={`${display.className} text-[2.6rem] font-bold uppercase leading-[0.9] tracking-tight sm:text-8xl lg:text-[7.5rem]`}
               >
                 Rumbo al
                 <br />
