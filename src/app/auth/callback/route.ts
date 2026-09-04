@@ -6,6 +6,7 @@ export async function GET(request: NextRequest) {
   const code = searchParams.get("code");
   const tokenHash = searchParams.get("token_hash");
   const type = searchParams.get("type");
+  const next = searchParams.get("next");
 
   const supabase = await createClient();
 
@@ -16,7 +17,9 @@ export async function GET(request: NextRequest) {
     await supabase.auth.verifyOtp({ token_hash: tokenHash, type: type as any });
   }
 
-  if (type === "recovery") {
+  // el flujo con "code" (PKCE) no manda type=recovery en la URL, así que
+  // usamos nuestra propia marca "next" para saber que es un reseteo de clave.
+  if (type === "recovery" || next === "/auth/reset") {
     return NextResponse.redirect(`${origin}/auth/reset`);
   }
 
