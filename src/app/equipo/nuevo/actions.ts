@@ -29,5 +29,5 @@ export async function createTeam(formData: FormData) {
     .eq("id", user.id);
   if (profileError) throw new Error(profileError.message);
 
-  redirect("/dashboard");
+  redirect("/dashboard?welcome=1");
 }

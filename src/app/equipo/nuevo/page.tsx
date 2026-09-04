@@ -4,6 +4,7 @@ import { requireUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { createTeam } from "./actions";
 import LogoUpload from "./LogoUpload";
+import SubmitButton from "./SubmitButton";
 
 export default async function NuevoEquipoPage() {
   const { profile } = await requireUser();
@@ -54,12 +55,7 @@ export default async function NuevoEquipoPage() {
             />
           </label>
 
-          <button
-            type="submit"
-            className="cut-corner w-full bg-[#FF5A36] px-4 py-3 text-sm font-semibold uppercase tracking-wide text-[#05080D] transition hover:bg-[#ff7154] focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 focus-visible:outline-offset-2"
-          >
-            Crear equipo
-          </button>
+          <SubmitButton />
         </form>
       </div>
     </main>

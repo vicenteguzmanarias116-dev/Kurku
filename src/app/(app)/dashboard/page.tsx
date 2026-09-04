@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireUser } from "@/lib/auth";
 import { rajdhani, mono } from "../fonts";
+import WelcomeModal from "../WelcomeModal";
 
 type Load = {
   athlete_id: string;
@@ -15,8 +16,13 @@ function acwrColor(r: number) {
   return "text-emerald-400";
 }
 
-export default async function Dashboard() {
+export default async function Dashboard({
+  searchParams,
+}: {
+  searchParams: Promise<{ welcome?: string }>;
+}) {
   const { supabase } = await requireUser();
+  const { welcome } = await searchParams;
 
   const [{ data: loads }, { data: events }] = await Promise.all([
     supabase.from("v_athlete_load").select("*").order("full_name"),
@@ -30,6 +36,7 @@ export default async function Dashboard() {
 
   return (
     <div className="space-y-6">
+      <WelcomeModal show={welcome === "1"} />
       <section className="cut-corner border border-cyan-400/20 bg-[#0D141E] p-6">
         <span
           className={`${mono.className} block text-[11px] uppercase tracking-widest text-cyan-300`}
