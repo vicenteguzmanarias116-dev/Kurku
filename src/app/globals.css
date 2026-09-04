@@ -62,3 +62,43 @@ body {
     animation: scan 2.4s ease-in-out 1;
   }
 }
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(103, 232, 249, 0.5);
+  }
+  50% {
+    opacity: 0.6;
+    box-shadow: 0 0 0 4px rgba(103, 232, 249, 0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pulse-dot {
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+}
+
+/* Esquinas HUD: solo en las 2 esquinas rectas que deja .cut-corner (arriba-izq,
+   abajo-der); las otras dos ya están cortadas en diagonal por el clip-path. */
+.hud-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 300ms ease;
+  background:
+    linear-gradient(currentColor, currentColor) top left / 16px 2px no-repeat,
+    linear-gradient(currentColor, currentColor) top left / 2px 16px no-repeat,
+    linear-gradient(currentColor, currentColor) bottom right / 16px 2px
+      no-repeat,
+    linear-gradient(currentColor, currentColor) bottom right / 2px 16px
+      no-repeat;
+}
+.hud-frame:hover::before,
+.hud-frame:focus-within::before {
+  opacity: 1;
+}

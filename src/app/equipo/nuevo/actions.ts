@@ -3,12 +3,12 @@
 import { redirect } from "next/navigation";
 import { requireUser } from "@/lib/auth";
 
-export async function createTeam(formData: FormData) {
+export async function createTeam(_prevState: string | null, formData: FormData) {
   const { supabase, user, profile } = await requireUser();
   if (profile?.team_id) redirect("/dashboard");
 
   const name = String(formData.get("name") || "").trim();
-  if (!name) throw new Error("Falta el nombre del equipo.");
+  if (!name) return "Falta el nombre del equipo.";
 
   const { data: team, error: teamError } = await supabase
     .from("teams")
@@ -21,13 +21,13 @@ export async function createTeam(formData: FormData) {
     })
     .select("id")
     .single();
-  if (teamError) throw new Error(teamError.message);
+  if (teamError) return teamError.message;
 
   const { error: profileError } = await supabase
     .from("profiles")
     .update({ team_id: team.id, role: "admin" })
     .eq("id", user.id);
-  if (profileError) throw new Error(profileError.message);
+  if (profileError) return profileError.message;
 
   redirect("/dashboard?welcome=1");
 }
