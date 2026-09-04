@@ -66,16 +66,16 @@ export default function Home() {
               KURKU
             </span>
           </div>
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-3">
             <a
               href="#funciones"
-              className={`${mono.className} hidden text-xs uppercase tracking-wider text-white/60 transition hover:text-cyan-300 sm:inline focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 focus-visible:outline-offset-4`}
+              className={`${mono.className} cut-corner hidden border-2 border-cyan-300 px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-cyan-300 transition hover:bg-cyan-300 hover:text-[#05080D] sm:inline focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 focus-visible:outline-offset-4`}
             >
               Ver funciones
             </a>
             <Link
               href="/login"
-              className="cut-corner border border-white/15 px-4 py-2 text-sm font-medium text-white/90 transition hover:border-cyan-300/50 hover:text-cyan-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 focus-visible:outline-offset-2"
+              className="cut-corner bg-white px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-[#05080D] transition hover:bg-cyan-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 focus-visible:outline-offset-2"
             >
               Entrar
             </Link>
@@ -84,13 +84,6 @@ export default function Home() {
 
         <section className="relative z-10 flex flex-1 flex-col justify-center px-6 py-16 sm:px-12 lg:py-24">
           <div className="max-w-2xl">
-            <span
-              className={`${mono.className} cut-corner mb-6 inline-flex items-center gap-2 border border-cyan-400/25 bg-cyan-400/5 px-3 py-1.5 text-[11px] uppercase tracking-widest text-cyan-300`}
-            >
-              <span className="h-1.5 w-1.5 rounded-full bg-cyan-300 motion-safe:animate-pulse" />
-              Equipo de vela · en línea
-            </span>
-
             <h1
               className={`${rajdhani.className} text-5xl font-bold uppercase leading-[0.95] tracking-tight sm:text-7xl lg:text-8xl`}
             >
@@ -114,9 +107,9 @@ export default function Home() {
               </Link>
               <a
                 href="#funciones"
-                className={`${mono.className} text-xs uppercase tracking-wider text-white/50 underline decoration-white/20 underline-offset-4 transition hover:text-cyan-300 hover:decoration-cyan-300 sm:hidden`}
+                className={`${mono.className} cut-corner border-2 border-cyan-300 px-5 py-3 text-sm font-bold uppercase tracking-wide text-cyan-300 transition hover:bg-cyan-300 hover:text-[#05080D] sm:hidden`}
               >
-                Ver funciones ↓
+                Ver funciones
               </a>
             </div>
           </div>
