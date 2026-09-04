@@ -16,5 +16,20 @@ export async function GET(request: NextRequest) {
     await supabase.auth.verifyOtp({ token_hash: tokenHash, type: type as any });
   }
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("team_id")
+      .eq("id", user.id)
+      .single();
+    if (!profile?.team_id) {
+      return NextResponse.redirect(`${origin}/equipo/nuevo`);
+    }
+  }
+
   return NextResponse.redirect(`${origin}/dashboard`);
 }

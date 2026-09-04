@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { requireUser, isStaff } from "@/lib/auth";
 import { signOut } from "./actions";
 
@@ -16,6 +17,7 @@ export default async function AppLayout({
   children: React.ReactNode;
 }) {
   const { profile } = await requireUser();
+  if (!profile?.team_id) redirect("/equipo/nuevo");
 
   return (
     <div className="flex flex-1 flex-col">

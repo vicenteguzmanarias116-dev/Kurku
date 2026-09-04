@@ -8,8 +8,12 @@ import { createClient } from "@/lib/supabase/client";
 const rajdhani = Rajdhani({ subsets: ["latin"], weight: ["600", "700"] });
 const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500"] });
 
+type Mode = "login" | "signup";
+
 export default function LoginPage() {
+  const [mode, setMode] = useState<Mode>("login");
   const [email, setEmail] = useState("");
+  const [fullName, setFullName] = useState("");
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -21,7 +25,12 @@ export default function LoginPage() {
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: `${location.origin}/auth/callback` },
+      options: {
+        emailRedirectTo: `${location.origin}/auth/callback`,
+        ...(mode === "signup" && fullName
+          ? { data: { full_name: fullName } }
+          : {}),
+      },
     });
     setLoading(false);
     if (error) setError(error.message);
@@ -42,15 +51,42 @@ export default function LoginPage() {
       </Link>
 
       <div className="cut-corner relative z-10 w-full max-w-sm border border-cyan-400/20 bg-[#0D141E]/80 p-8 backdrop-blur">
+        {!sent && (
+          <div className="mb-6 flex border border-white/15">
+            {(
+              [
+                ["login", "Iniciar sesión"],
+                ["signup", "Crear cuenta"],
+              ] as const
+            ).map(([m, label]) => (
+              <button
+                key={m}
+                type="button"
+                onClick={() => {
+                  setMode(m);
+                  setError(null);
+                }}
+                className={`${mono.className} flex-1 px-3 py-2.5 text-xs font-bold uppercase tracking-wide transition ${
+                  mode === m
+                    ? "bg-[#FF5A36] text-[#05080D]"
+                    : "text-white/50 hover:text-white"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        )}
+
         <span
           className={`${mono.className} mb-2 block text-[11px] uppercase tracking-widest text-cyan-300`}
         >
-          Acceso del equipo
+          {mode === "login" ? "Acceso del equipo" : "Coaches y staff"}
         </span>
         <h1
           className={`${rajdhani.className} mb-6 text-3xl font-bold uppercase leading-none`}
         >
-          Entrar a Kurku
+          {mode === "login" ? "Entrar a Kurku" : "Crea tu cuenta"}
         </h1>
 
         {sent ? (
@@ -61,6 +97,16 @@ export default function LoginPage() {
           </p>
         ) : (
           <form onSubmit={submit} className="space-y-4">
+            {mode === "signup" && (
+              <input
+                type="text"
+                required
+                placeholder="Tu nombre completo"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                className="w-full border border-white/15 bg-black/30 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none focus:border-cyan-300/60 focus:ring-1 focus:ring-cyan-300/40"
+              />
+            )}
             <input
               type="email"
               required
@@ -74,12 +120,20 @@ export default function LoginPage() {
               disabled={loading}
               className="cut-corner w-full bg-[#FF5A36] px-4 py-3 text-sm font-semibold uppercase tracking-wide text-[#05080D] transition hover:bg-[#ff7154] disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 focus-visible:outline-offset-2"
             >
-              {loading ? "Enviando…" : "Entrar con enlace"}
+              {loading
+                ? "Enviando…"
+                : mode === "login"
+                  ? "Entrar con enlace"
+                  : "Crear cuenta"}
             </button>
+            {mode === "signup" && (
+              <p className="text-xs text-white/35">
+                Después de crear tu cuenta armas el equipo: nombre, escudo,
+                descripción y ubicación.
+              </p>
+            )}
             {error && (
-              <p
-                className={`${mono.className} text-xs text-[#FF5A36]`}
-              >
+              <p className={`${mono.className} text-xs text-[#FF5A36]`}>
                 {error}
               </p>
             )}
