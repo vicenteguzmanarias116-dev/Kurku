@@ -6,12 +6,12 @@ import { createClient } from "@/lib/supabase/client";
 export default function LogoUpload() {
   const [preview, setPreview] = useState<string | null>(null);
   const [url, setUrl] = useState("");
+  const [dragging, setDragging] = useState(false);
   const [status, setStatus] = useState<"idle" | "uploading" | "done" | "error">(
     "idle",
   );
 
-  async function onChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
+  async function handleFile(file: File | undefined) {
     if (!file) return;
 
     setPreview(URL.createObjectURL(file));
@@ -47,29 +47,50 @@ export default function LogoUpload() {
       <span className="mb-1 block text-xs uppercase tracking-wider text-white/50">
         Escudo / logo
       </span>
-      <div className="flex items-center gap-4">
+      <label
+        onDragOver={(e) => {
+          e.preventDefault();
+          setDragging(true);
+        }}
+        onDragLeave={() => setDragging(false)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setDragging(false);
+          handleFile(e.dataTransfer.files?.[0]);
+        }}
+        className={`flex cursor-pointer items-center gap-4 border border-dashed px-4 py-4 transition ${
+          dragging
+            ? "border-cyan-300 bg-cyan-400/5"
+            : "border-white/15 bg-black/30 hover:border-cyan-300/60"
+        }`}
+      >
         {preview && (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={preview}
             alt=""
-            className="h-16 w-16 border border-white/15 object-cover"
+            className="h-16 w-16 shrink-0 border border-white/15 object-cover"
           />
         )}
-        <label className="cut-corner cursor-pointer border border-white/15 bg-black/30 px-4 py-2 text-xs uppercase tracking-wider text-white/70 hover:border-cyan-300/60">
-          {status === "uploading"
-            ? "Subiendo…"
-            : status === "done"
-              ? "Cambiar imagen"
-              : "Elegir imagen"}
-          <input
-            type="file"
-            accept="image/*"
-            onChange={onChange}
-            className="hidden"
-          />
-        </label>
-      </div>
+        <span className="text-xs uppercase tracking-wider text-white/70">
+          {status === "uploading" ? (
+            "Subiendo…"
+          ) : status === "done" ? (
+            "Listo · cambiar imagen"
+          ) : (
+            <>
+              Arrastra una imagen aquí o{" "}
+              <span className="text-cyan-300 underline">elige un archivo</span>
+            </>
+          )}
+        </span>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => handleFile(e.target.files?.[0])}
+          className="hidden"
+        />
+      </label>
       {status === "error" && (
         <p className="mt-1 text-xs text-[#FF5A36]">
           No se pudo subir la imagen. Intenta de nuevo.
