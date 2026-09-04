@@ -69,13 +69,13 @@ export default function Home() {
           <div className="flex items-center gap-3">
             <a
               href="#funciones"
-              className={`${mono.className} cut-corner hidden border-2 border-cyan-300 px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-cyan-300 transition hover:bg-cyan-300 hover:text-[#05080D] sm:inline focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 focus-visible:outline-offset-4`}
+              className={`${mono.className} cut-corner hidden border-2 border-[#FF5A36] px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-[#FF5A36] transition hover:bg-[#FF5A36] hover:text-[#05080D] sm:inline focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 focus-visible:outline-offset-4`}
             >
               Ver funciones
             </a>
             <Link
               href="/login"
-              className="cut-corner bg-white px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-[#05080D] transition hover:bg-cyan-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 focus-visible:outline-offset-2"
+              className="cut-corner bg-[#FF5A36] px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-[#05080D] transition hover:bg-[#ff7154] focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 focus-visible:outline-offset-2"
             >
               Entrar
             </Link>
@@ -107,7 +107,7 @@ export default function Home() {
               </Link>
               <a
                 href="#funciones"
-                className={`${mono.className} cut-corner border-2 border-cyan-300 px-5 py-3 text-sm font-bold uppercase tracking-wide text-cyan-300 transition hover:bg-cyan-300 hover:text-[#05080D] sm:hidden`}
+                className={`${mono.className} cut-corner border-2 border-[#FF5A36] px-5 py-3 text-sm font-bold uppercase tracking-wide text-[#FF5A36] transition hover:bg-[#FF5A36] hover:text-[#05080D] sm:hidden`}
               >
                 Ver funciones
               </a>
