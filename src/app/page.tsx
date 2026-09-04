@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Rajdhani, JetBrains_Mono } from "next/font/google";
+import HeroBackground from "./HeroBackground";
 
 const rajdhani = Rajdhani({ subsets: ["latin"], weight: ["600", "700"] });
 const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500"] });
@@ -8,15 +8,9 @@ const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500"] });
 export default function Home() {
   return (
     <main className="relative flex flex-1 flex-col overflow-hidden bg-[#05080D] text-[#EAF2F6]">
-      <Image
-        src="/hero/peru-aerial.jpg"
-        alt=""
-        fill
-        priority
-        className="object-cover"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#05080D] via-[#05080D]/85 to-[#05080D]/30" />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#05080D]/95 via-[#05080D]/55 to-transparent" />
+      <HeroBackground />
+      <div className="absolute inset-0 bg-[linear-gradient(100deg,#05080D_0%,rgba(5,8,13,0.8)_30%,rgba(5,8,13,0.35)_52%,rgba(5,8,13,0)_68%)]" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#05080D]/70 via-transparent to-transparent" />
       <div className="scanline pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/70 to-transparent" />
 
       <header className="relative z-10 flex items-center justify-between px-6 py-6 sm:px-12">
