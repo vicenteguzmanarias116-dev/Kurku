@@ -18,8 +18,23 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [checkEmail, setCheckEmail] = useState(false);
+  const [forgotSent, setForgotSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  async function forgotPassword() {
+    if (!email) {
+      setError("Escribe tu correo arriba primero.");
+      return;
+    }
+    setError(null);
+    const supabase = createClient();
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${location.origin}/auth/callback`,
+    });
+    if (error) setError(error.message);
+    else setForgotSent(true);
+  }
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -119,6 +134,12 @@ export default function LoginPage() {
             <strong className="text-white">{email}</strong> para confirmar tu
             cuenta. Ábrelo y vuelve a entrar con tu correo y contraseña.
           </p>
+        ) : forgotSent ? (
+          <p className="text-sm text-white/60">
+            Te enviamos un enlace a{" "}
+            <strong className="text-white">{email}</strong> para elegir una
+            contraseña nueva.
+          </p>
         ) : (
           <form onSubmit={submit} className="space-y-4">
             {mode === "signup" && (
@@ -164,6 +185,15 @@ export default function LoginPage() {
                 Después de crear tu cuenta armas el equipo: nombre, escudo,
                 descripción y ubicación.
               </p>
+            )}
+            {mode === "login" && (
+              <button
+                type="button"
+                onClick={forgotPassword}
+                className={`${mono.className} text-xs uppercase tracking-wider text-white/40 hover:text-cyan-300`}
+              >
+                ¿Olvidaste tu contraseña?
+              </button>
             )}
             {error && (
               <p className={`${mono.className} text-xs text-[#FF5A36]`}>

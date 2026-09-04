@@ -16,6 +16,10 @@ export async function GET(request: NextRequest) {
     await supabase.auth.verifyOtp({ token_hash: tokenHash, type: type as any });
   }
 
+  if (type === "recovery") {
+    return NextResponse.redirect(`${origin}/auth/reset`);
+  }
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
