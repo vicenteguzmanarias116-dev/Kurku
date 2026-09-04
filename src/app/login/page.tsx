@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Rajdhani, JetBrains_Mono } from "next/font/google";
 import { createClient } from "@/lib/supabase/client";
@@ -11,10 +12,12 @@ const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500"] });
 type Mode = "login" | "signup";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [mode, setMode] = useState<Mode>("login");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
-  const [sent, setSent] = useState(false);
+  const [checkEmail, setCheckEmail] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -23,18 +26,39 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOtp({
+
+    if (mode === "login") {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      setLoading(false);
+      if (error) setError(error.message);
+      else {
+        router.push("/dashboard");
+        router.refresh();
+      }
+      return;
+    }
+
+    const { data, error } = await supabase.auth.signUp({
       email,
+      password,
       options: {
         emailRedirectTo: `${location.origin}/auth/callback`,
-        ...(mode === "signup" && fullName
-          ? { data: { full_name: fullName } }
-          : {}),
+        data: { full_name: fullName },
       },
     });
     setLoading(false);
-    if (error) setError(error.message);
-    else setSent(true);
+    if (error) {
+      setError(error.message);
+    } else if (data.session) {
+      // confirmación de correo desactivada: ya queda logueado
+      router.push("/equipo/nuevo");
+      router.refresh();
+    } else {
+      setCheckEmail(true);
+    }
   }
 
   return (
@@ -51,7 +75,7 @@ export default function LoginPage() {
       </Link>
 
       <div className="cut-corner relative z-10 w-full max-w-sm border border-cyan-400/20 bg-[#0D141E]/80 p-8 backdrop-blur">
-        {!sent && (
+        {!checkEmail && (
           <div className="mb-6 flex border border-white/15">
             {(
               [
@@ -89,11 +113,11 @@ export default function LoginPage() {
           {mode === "login" ? "Entrar a Kurku" : "Crea tu cuenta"}
         </h1>
 
-        {sent ? (
+        {checkEmail ? (
           <p className="text-sm text-white/60">
-            Enviamos un enlace de acceso a{" "}
-            <strong className="text-white">{email}</strong>. Revisa tu correo
-            para entrar.
+            Te enviamos un correo a{" "}
+            <strong className="text-white">{email}</strong> para confirmar tu
+            cuenta. Ábrelo y vuelve a entrar con tu correo y contraseña.
           </p>
         ) : (
           <form onSubmit={submit} className="space-y-4">
@@ -115,15 +139,24 @@ export default function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
               className="w-full border border-white/15 bg-black/30 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none focus:border-cyan-300/60 focus:ring-1 focus:ring-cyan-300/40"
             />
+            <input
+              type="password"
+              required
+              minLength={6}
+              placeholder="Contraseña"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full border border-white/15 bg-black/30 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none focus:border-cyan-300/60 focus:ring-1 focus:ring-cyan-300/40"
+            />
             <button
               type="submit"
               disabled={loading}
               className="cut-corner w-full bg-[#FF5A36] px-4 py-3 text-sm font-semibold uppercase tracking-wide text-[#05080D] transition hover:bg-[#ff7154] disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 focus-visible:outline-offset-2"
             >
               {loading
-                ? "Enviando…"
+                ? "Un momento…"
                 : mode === "login"
-                  ? "Entrar con enlace"
+                  ? "Entrar"
                   : "Crear cuenta"}
             </button>
             {mode === "signup" && (
