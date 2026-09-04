@@ -8,51 +8,71 @@ type FeatureIcon =
   | "activity"
   | "calendar"
   | "message"
-  | "compass"
   | "video"
   | "heart"
   | "layers";
+
+/** Ubicación explícita en el bento grid de 4 columnas (solo desde lg:). */
+type BentoSlot = {
+  col: string; // ej. "lg:col-start-1 lg:col-span-2"
+  row: string; // ej. "lg:row-start-1 lg:row-span-2"
+};
 
 const FEATURES: {
   title: string;
   body: string;
   live: boolean;
   icon: FeatureIcon;
+  slot: BentoSlot;
 }[] = [
   {
     title: "Atletas y equipo",
     body: "Ficha de cada regatista: clase de barco, peso, historial.",
     live: true,
     icon: "users",
+    slot: {
+      col: "lg:col-start-1 lg:col-span-2",
+      row: "lg:row-start-1 lg:row-span-2",
+    },
   },
   {
     title: "Carga y monitoreo",
     body: "Registro de sesiones y ratio ACWR agudo/crónico por atleta.",
     live: true,
     icon: "activity",
+    slot: {
+      col: "lg:col-start-3 lg:col-span-2",
+      row: "lg:row-start-1 lg:row-span-1",
+    },
   },
   {
     title: "Planificación y calendario",
     body: "Entrenamientos y regatas del equipo en un solo lugar.",
     live: true,
     icon: "calendar",
+    slot: {
+      col: "lg:col-start-3 lg:col-span-1",
+      row: "lg:row-start-2 lg:row-span-1",
+    },
   },
   {
     title: "Comunicación",
     body: "Anuncios del staff directo a todo el equipo.",
     live: true,
     icon: "message",
-  },
-  {
-    title: "Tácticas y diagramas",
-    body: "Dibuja maniobras y estrategias de regata.",
-    live: false,
-    icon: "compass",
+    slot: {
+      col: "lg:col-start-4 lg:col-span-1",
+      row: "lg:row-start-2 lg:row-span-1",
+    },
   },
   {
     title: "Análisis de vídeo",
     body: "Sube y anota vídeo de entrenamiento y regatas.",
     live: false,
+    slot: {
+      col: "lg:col-start-1 lg:col-span-2",
+      row: "lg:row-start-3 lg:row-span-1",
+    },
     icon: "video",
   },
   {
@@ -60,12 +80,20 @@ const FEATURES: {
     body: "Seguimiento de lesiones y vuelta al agua.",
     live: false,
     icon: "heart",
+    slot: {
+      col: "lg:col-start-3 lg:col-span-1",
+      row: "lg:row-start-3 lg:row-span-1",
+    },
   },
   {
     title: "Colecciones",
     body: "Guarda y comparte sesiones, ejercicios y recursos del equipo.",
     live: false,
     icon: "layers",
+    slot: {
+      col: "lg:col-start-4 lg:col-span-1",
+      row: "lg:row-start-3 lg:row-span-1",
+    },
   },
 ];
 
@@ -88,12 +116,6 @@ const ICON_PATHS: Record<FeatureIcon, React.ReactNode> = {
   message: (
     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
   ),
-  compass: (
-    <>
-      <circle cx="12" cy="12" r="10" />
-      <path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36z" />
-    </>
-  ),
   video: (
     <>
       <rect x="2" y="5" width="14" height="14" rx="2" />
@@ -112,7 +134,15 @@ const ICON_PATHS: Record<FeatureIcon, React.ReactNode> = {
   ),
 };
 
-function FeatureIconSvg({ icon, live }: { icon: FeatureIcon; live: boolean }) {
+function FeatureIconSvg({
+  icon,
+  live,
+  big = false,
+}: {
+  icon: FeatureIcon;
+  live: boolean;
+  big?: boolean;
+}) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -121,10 +151,10 @@ function FeatureIconSvg({ icon, live }: { icon: FeatureIcon; live: boolean }) {
       strokeWidth="1.75"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className={`h-6 w-6 transition-colors duration-300 ${
+      className={`transition-colors duration-300 ${big ? "h-7 w-7" : "h-6 w-6"} ${
         live
-          ? "text-cyan-300 group-hover:text-cyan-200"
-          : "text-white/30 group-hover:text-white/50"
+          ? "text-[#FF5A36] group-hover:text-[#ff7154]"
+          : "text-[#FF5A36]/30 group-hover:text-[#FF5A36]/50"
       }`}
       aria-hidden
     >
@@ -246,58 +276,73 @@ export default function Home() {
           </p>
         </Reveal>
 
-        <div className="relative mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {FEATURES.map((f, i) => (
-            <Reveal key={f.title} delay={(i % 4) * 80}>
-              <div
-                className={`hud-frame cut-corner group relative h-full overflow-hidden border p-5 transition-all duration-300 hover:-translate-y-1 ${
-                  f.live
-                    ? "border-cyan-300/25 bg-white/[0.04] text-cyan-300 hover:border-cyan-300/60 hover:bg-white/[0.07] hover:shadow-[0_0_24px_-6px_rgba(103,232,249,0.35)]"
-                    : "border-dashed border-white/10 bg-white/[0.015] text-white/40 hover:border-white/25 hover:bg-white/[0.03]"
-                }`}
+        <div className="relative mt-12 grid gap-4 sm:grid-cols-2 lg:auto-rows-[minmax(150px,1fr)] lg:grid-cols-4">
+          {FEATURES.map((f, i) => {
+            const flagship = i === 0;
+            return (
+              <Reveal
+                key={f.title}
+                delay={(i % 4) * 80}
+                className={`${f.slot.col} ${f.slot.row} h-full`}
               >
-                <span
-                  className={`${mono.className} pointer-events-none absolute -right-1 -top-1 text-5xl font-bold text-white/[0.04] transition-colors duration-300 group-hover:text-white/[0.07]`}
+                <div
+                  className={`hud-frame cut-corner group relative flex h-full flex-col overflow-hidden border p-5 transition-all duration-300 hover:-translate-y-1 ${
+                    f.live
+                      ? "border-[#FF5A36]/25 bg-white/[0.04] text-[#FF5A36] hover:border-[#FF5A36]/60 hover:bg-white/[0.07] hover:shadow-[0_0_24px_-6px_rgba(255,90,54,0.35)]"
+                      : "border-dashed border-[#FF5A36]/15 bg-white/[0.015] text-[#FF5A36]/50 hover:border-[#FF5A36]/35 hover:bg-white/[0.03]"
+                  }`}
                 >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-
-                <div className="flex items-start justify-between">
-                  <div
-                    className={`flex h-11 w-11 items-center justify-center border ${
-                      f.live
-                        ? "border-cyan-300/30 bg-cyan-300/[0.06]"
-                        : "border-white/10 bg-white/[0.03]"
-                    }`}
-                  >
-                    <FeatureIconSvg icon={f.icon} live={f.live} />
-                  </div>
-
                   <span
-                    className={`${mono.className} inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider ${
-                      f.live ? "text-cyan-300" : "text-white/35"
-                    }`}
+                    className={`${mono.className} pointer-events-none absolute -right-1 -top-1 text-5xl font-bold text-white/[0.04] transition-colors duration-300 group-hover:text-white/[0.07]`}
                   >
-                    {f.live ? (
-                      <span className="pulse-dot h-1.5 w-1.5 rounded-full bg-cyan-300" />
-                    ) : (
-                      <span className="h-1.5 w-1.5 rounded-full border border-white/30" />
-                    )}
-                    {f.live ? "Disponible" : "Próximamente"}
+                    {String(i + 1).padStart(2, "0")}
                   </span>
+
+                  <div className="flex items-start justify-between">
+                    <div
+                      className={`flex items-center justify-center border ${
+                        flagship ? "h-14 w-14" : "h-11 w-11"
+                      } ${
+                        f.live
+                          ? "border-[#FF5A36]/30 bg-[#FF5A36]/[0.08]"
+                          : "border-[#FF5A36]/15 bg-[#FF5A36]/[0.03]"
+                      }`}
+                    >
+                      <FeatureIconSvg icon={f.icon} live={f.live} big={flagship} />
+                    </div>
+
+                    <span
+                      className={`${mono.className} inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider ${
+                        f.live ? "text-[#FF5A36]" : "text-[#FF5A36]/50"
+                      }`}
+                    >
+                      {f.live ? (
+                        <span className="pulse-dot h-1.5 w-1.5 rounded-full bg-[#FF5A36]" />
+                      ) : (
+                        <span className="h-1.5 w-1.5 rounded-full border border-[#FF5A36]/40" />
+                      )}
+                      {f.live ? "Disponible" : "Próximamente"}
+                    </span>
                 </div>
 
-                <h3
-                  className={`${display.className} relative mt-4 text-xl font-bold uppercase leading-tight text-[#EAF2F6]`}
-                >
-                  {f.title}
-                </h3>
-                <p className="relative mt-2 text-sm text-white/50">
-                  {f.body}
-                </p>
-              </div>
-            </Reveal>
-          ))}
+                  <h3
+                    className={`${display.className} relative mt-4 font-bold uppercase leading-tight text-[#EAF2F6] ${
+                      flagship ? "text-3xl" : "text-xl"
+                    }`}
+                  >
+                    {f.title}
+                  </h3>
+                  <p
+                    className={`relative mt-2 text-white/50 ${
+                      flagship ? "max-w-xs text-base" : "text-sm"
+                    }`}
+                  >
+                    {f.body}
+                  </p>
+                </div>
+              </Reveal>
+            );
+          })}
         </div>
       </section>
     </main>

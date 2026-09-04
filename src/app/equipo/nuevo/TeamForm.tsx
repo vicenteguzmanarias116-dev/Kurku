@@ -10,7 +10,16 @@ export default function TeamForm() {
   const [error, formAction] = useActionState(createTeam, null);
 
   return (
-    <form action={formAction} className="space-y-4">
+    <form
+      action={formAction}
+      onSubmit={(e) => {
+        console.log(
+          "[kurku] submit",
+          Object.fromEntries(new FormData(e.currentTarget)),
+        );
+      }}
+      className="space-y-4"
+    >
       <Field name="name" label="Nombre del equipo" required />
       <Field name="location" label="Ubicación" placeholder="Lima, Perú" />
       <LogoUpload />
