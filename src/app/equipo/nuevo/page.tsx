@@ -3,6 +3,7 @@ import { Rajdhani, JetBrains_Mono } from "next/font/google";
 import { requireUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { createTeam } from "./actions";
+import LogoUpload from "./LogoUpload";
 
 const rajdhani = Rajdhani({ subsets: ["latin"], weight: ["600", "700"] });
 const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500"] });
@@ -43,11 +44,7 @@ export default async function NuevoEquipoPage() {
         <form action={createTeam} className="space-y-4">
           <Field name="name" label="Nombre del equipo" required />
           <Field name="location" label="Ubicación" placeholder="Lima, Perú" />
-          <Field
-            name="logo_url"
-            label="Escudo / logo (URL)"
-            placeholder="https://…"
-          />
+          <LogoUpload />
           <label className="block text-sm">
             <span className={`${mono.className} mb-1 block text-xs uppercase tracking-wider text-white/50`}>
               Descripción
