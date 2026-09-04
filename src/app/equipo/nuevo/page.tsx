@@ -1,12 +1,9 @@
 import Link from "next/link";
-import { Rajdhani, JetBrains_Mono } from "next/font/google";
+import { display as rajdhani, mono } from "../../fonts";
 import { requireUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { createTeam } from "./actions";
 import LogoUpload from "./LogoUpload";
-
-const rajdhani = Rajdhani({ subsets: ["latin"], weight: ["600", "700"] });
-const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500"] });
 
 export default async function NuevoEquipoPage() {
   const { profile } = await requireUser();

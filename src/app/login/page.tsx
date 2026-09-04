@@ -3,11 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Rajdhani, JetBrains_Mono } from "next/font/google";
+import { display as rajdhani, mono } from "../fonts";
 import { createClient } from "@/lib/supabase/client";
-
-const rajdhani = Rajdhani({ subsets: ["latin"], weight: ["600", "700"] });
-const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500"] });
 
 type Mode = "login" | "signup";
 
