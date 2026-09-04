@@ -16,11 +16,15 @@ export async function requireUser() {
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("id, team_id, role, full_name")
     .eq("id", user.id)
     .single<Profile>();
+
+  if (profileError) {
+    console.error("[kurku] requireUser profile fetch failed", profileError);
+  }
 
   return { supabase, user, profile };
 }

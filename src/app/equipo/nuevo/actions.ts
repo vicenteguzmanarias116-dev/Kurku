@@ -23,11 +23,16 @@ export async function createTeam(_prevState: string | null, formData: FormData) 
     .single();
   if (teamError) return teamError.message;
 
-  const { error: profileError } = await supabase
+  const { data: updatedProfile, error: profileError } = await supabase
     .from("profiles")
     .update({ team_id: team.id, role: "admin" })
-    .eq("id", user.id);
+    .eq("id", user.id)
+    .select("id")
+    .maybeSingle();
   if (profileError) return profileError.message;
+  if (!updatedProfile) {
+    return "El equipo se creó pero no se pudo asignar a tu perfil (bloqueado por permisos). Avísale a soporte.";
+  }
 
   redirect("/dashboard?welcome=1");
 }

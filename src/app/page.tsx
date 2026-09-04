@@ -99,11 +99,12 @@ const FEATURES: {
 
 const ICON_PATHS: Record<FeatureIcon, React.ReactNode> = {
   users: (
+    // velero ILCA: mástil, vela y casco
     <>
-      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-      <circle cx="9" cy="7" r="4" />
-      <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      <path d="M12 2v14" />
+      <path d="M12 4l7 9h-7z" />
+      <path d="M6 16h12l-1.6 4H7.6z" />
+      <path d="M3 20.5c2.2 1.2 4.4 1.2 6.5 0s4.3-1.2 6.5 0 4.3 1.2 6.5 0" />
     </>
   ),
   activity: <path d="M22 12h-4l-3 9-6-18-3 9H2" />,
@@ -114,7 +115,11 @@ const ICON_PATHS: Record<FeatureIcon, React.ReactNode> = {
     </>
   ),
   message: (
-    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+    // banderín de señales náuticas
+    <>
+      <path d="M6 3v18" />
+      <path d="M6 4.5l10 3.5-10 3.5z" />
+    </>
   ),
   video: (
     <>
@@ -126,10 +131,11 @@ const ICON_PATHS: Record<FeatureIcon, React.ReactNode> = {
     <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8Z" />
   ),
   layers: (
+    // ancla: "guarda" tus sesiones y recursos
     <>
-      <path d="m12 2 9 5-9 5-9-5z" />
-      <path d="m3 12 9 5 9-5" />
-      <path d="m3 17 9 5 9-5" />
+      <circle cx="12" cy="5" r="2.5" />
+      <path d="M12 7.5V21" />
+      <path d="M4.5 11.5H2a10 10 0 0 0 20 0h-2.5" />
     </>
   ),
 };
@@ -261,8 +267,16 @@ export default function Home() {
       >
         <Reveal>
           <span
-            className={`${mono.className} block text-[11px] uppercase tracking-widest text-cyan-300`}
+            className={`${mono.className} inline-flex items-center gap-2 text-[11px] uppercase tracking-widest text-cyan-300`}
           >
+            <svg
+              viewBox="0 0 16 16"
+              className="h-3 w-3 -translate-y-px"
+              aria-hidden
+            >
+              <path d="M3 1v14" stroke="currentColor" strokeWidth="1.3" />
+              <path d="M3 2l10 3-10 3z" fill="currentColor" />
+            </svg>
             Hoja de ruta
           </span>
           <h2
@@ -274,6 +288,21 @@ export default function Home() {
             Empezamos con vela. Esto es lo que ya funciona y lo que viene
             después.
           </p>
+
+          <svg
+            className="mt-8 h-6 w-full max-w-xs text-[#FF5A36]/25"
+            viewBox="0 0 300 24"
+            preserveAspectRatio="none"
+            aria-hidden
+          >
+            <path
+              d="M0 12c15 0 15-8 30-8s15 8 30 8 15-8 30-8 15 8 30 8 15-8 30-8 15 8 30 8 15-8 30-8 15 8 30 8 15-8 30-8"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+          </svg>
         </Reveal>
 
         <div className="relative mt-12 grid gap-4 sm:grid-cols-2 lg:auto-rows-[minmax(150px,1fr)] lg:grid-cols-4">
