@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Rajdhani, JetBrains_Mono } from "next/font/google";
 
@@ -7,7 +8,15 @@ const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500"] });
 export default function Home() {
   return (
     <main className="relative flex flex-1 flex-col overflow-hidden bg-[#05080D] text-[#EAF2F6]">
-      <div className="radar-grid pointer-events-none absolute inset-0 opacity-40" />
+      <Image
+        src="/hero/peru-aerial.jpg"
+        alt=""
+        fill
+        priority
+        className="object-cover"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#05080D] via-[#05080D]/85 to-[#05080D]/30" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#05080D]/95 via-[#05080D]/55 to-transparent" />
       <div className="scanline pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/70 to-transparent" />
 
       <header className="relative z-10 flex items-center justify-between px-6 py-6 sm:px-12">
@@ -55,6 +64,12 @@ export default function Home() {
             <span aria-hidden>→</span>
           </Link>
         </div>
+
+        <p
+          className={`${mono.className} absolute bottom-6 right-6 hidden text-[10px] uppercase tracking-wider text-white/30 sm:right-12 lg:block`}
+        >
+          Flota Perú · ILCA
+        </p>
       </section>
 
       <svg
