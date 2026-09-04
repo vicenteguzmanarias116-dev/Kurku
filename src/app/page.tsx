@@ -176,7 +176,7 @@ export default function Home() {
         <HeroBackground />
         <div className="absolute inset-0 bg-[linear-gradient(100deg,#05080D_0%,rgba(5,8,13,0.8)_30%,rgba(5,8,13,0.35)_52%,rgba(5,8,13,0)_68%)]" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#05080D]/70 via-transparent to-transparent" />
-        <div className="scanline pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/70 to-transparent" />
+        <div className="scanline pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#FF5A36]/70 to-transparent" />
 
         <header className="relative z-10 flex items-center justify-between px-6 py-6 sm:px-12">
           <div className="flex items-center gap-2">
@@ -194,7 +194,7 @@ export default function Home() {
             </a>
             <Link
               href="/login"
-              className="cut-corner bg-[#FF5A36] px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-[#05080D] transition hover:bg-[#ff7154] focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 focus-visible:outline-offset-2"
+              className="cut-corner bg-[#FF5A36] px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-[#05080D] transition-all hover:scale-[1.03] hover:bg-[#ff7154] hover:shadow-lg hover:shadow-[#FF5A36]/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 focus-visible:outline-offset-2"
             >
               Entrar
             </Link>
@@ -224,7 +224,7 @@ export default function Home() {
               <div className="mt-9 flex flex-wrap items-center gap-4">
                 <Link
                   href="/login"
-                  className="cut-corner inline-flex items-center gap-2 bg-[#FF5A36] px-7 py-3.5 text-sm font-semibold uppercase tracking-wide text-[#05080D] transition hover:scale-[1.03] hover:bg-[#ff7154] focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 focus-visible:outline-offset-2"
+                  className="cut-corner inline-flex items-center gap-2 bg-[#FF5A36] px-7 py-3.5 text-sm font-semibold uppercase tracking-wide text-[#05080D] transition-all hover:scale-[1.03] hover:bg-[#ff7154] hover:shadow-lg hover:shadow-[#FF5A36]/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 focus-visible:outline-offset-2"
                 >
                   Entrar al equipo
                   <span aria-hidden>→</span>
@@ -247,7 +247,7 @@ export default function Home() {
         </section>
 
         <svg
-          className="relative z-10 h-10 w-full text-cyan-400/20"
+          className="relative z-10 h-10 w-full text-[#FF5A36]/20"
           viewBox="0 0 1200 40"
           preserveAspectRatio="none"
           aria-hidden
@@ -267,7 +267,7 @@ export default function Home() {
       >
         <Reveal>
           <span
-            className={`${mono.className} inline-flex items-center gap-2 text-[11px] uppercase tracking-widest text-cyan-300`}
+            className={`${mono.className} inline-flex items-center gap-2 text-[11px] uppercase tracking-widest text-[#FF5A36]`}
           >
             <svg
               viewBox="0 0 16 16"
@@ -374,6 +374,30 @@ export default function Home() {
           })}
         </div>
       </section>
+
+      <footer className="border-t border-white/10 px-6 py-10 sm:px-12">
+        <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-2">
+            <span className="h-2 w-2 bg-[#FF5A36]" />
+            <span
+              className={`${display.className} text-base font-bold tracking-tight`}
+            >
+              KURKU
+            </span>
+          </div>
+
+          <p
+            className={`${mono.className} text-[11px] uppercase tracking-widest text-white/30`}
+          >
+            Flota Perú · ILCA
+          </p>
+
+          <p className="text-xs text-white/30">
+            © {new Date().getFullYear()} Kurku. Todos los derechos
+            reservados.
+          </p>
+        </div>
+      </footer>
     </main>
   );
 }

@@ -34,7 +34,7 @@ body {
 .radar-grid {
   background-image: radial-gradient(
     circle at 1px 1px,
-    rgba(47, 230, 255, 0.14) 1px,
+    rgba(255, 90, 54, 0.12) 1px,
     transparent 0
   );
   background-size: 28px 28px;
