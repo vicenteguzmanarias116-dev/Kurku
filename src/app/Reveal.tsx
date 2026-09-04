@@ -35,7 +35,13 @@ export default function Reveal({
       { threshold: 0.15 },
     );
     io.observe(el);
-    return () => io.disconnect();
+    // seguro: si el observer no dispara (navegador raro, tab en segundo
+    // plano, lo que sea), el contenido no puede quedar invisible para siempre.
+    const fallback = setTimeout(() => setVisible(true), 1200);
+    return () => {
+      io.disconnect();
+      clearTimeout(fallback);
+    };
   }, []);
 
   return (
