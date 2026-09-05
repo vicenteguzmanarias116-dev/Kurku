@@ -43,9 +43,9 @@ export default async function JoinTeamPage({
         KURKU
       </Link>
 
-      <div className="cut-corner relative z-10 w-full max-w-sm border border-cyan-400/20 bg-[#0D141E]/80 p-8 text-center backdrop-blur">
+      <div className="cut-corner relative z-10 w-full max-w-sm border border-[#FF5A36]/20 bg-[#0D141E]/80 p-8 text-center backdrop-blur">
         <span
-          className={`${mono.className} mb-2 block text-[11px] uppercase tracking-widest text-cyan-300`}
+          className={`${mono.className} mb-2 block text-[11px] uppercase tracking-widest text-[#FF5A36]`}
         >
           Invitación
         </span>
@@ -76,7 +76,7 @@ export default async function JoinTeamPage({
             </p>
             <Link
               href={`/login?next=${encodeURIComponent(`/unirse/${teamId}`)}`}
-              className="cut-corner inline-block w-full bg-[#FF5A36] px-4 py-3 text-sm font-semibold uppercase tracking-wide text-[#05080D] transition hover:bg-[#ff7154]"
+              className="cut-corner inline-block w-full bg-[#FF5A36] px-4 py-3 text-sm font-semibold uppercase tracking-wide text-[#05080D] transition-all hover:scale-[1.03] hover:bg-[#ff7154] hover:shadow-lg hover:shadow-[#FF5A36]/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 focus-visible:outline-offset-2"
             >
               Entrar o crear cuenta
             </Link>

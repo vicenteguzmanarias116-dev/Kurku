@@ -10,7 +10,7 @@ function Submit() {
     <button
       type="submit"
       disabled={pending}
-      className="cut-corner w-full bg-[#FF5A36] px-4 py-3 text-sm font-semibold uppercase tracking-wide text-[#05080D] transition hover:bg-[#ff7154] disabled:opacity-60"
+      className="cut-corner w-full bg-[#FF5A36] px-4 py-3 text-sm font-semibold uppercase tracking-wide text-[#05080D] transition-all hover:scale-[1.03] hover:bg-[#ff7154] hover:shadow-lg hover:shadow-[#FF5A36]/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 focus-visible:outline-offset-2 disabled:pointer-events-none disabled:opacity-60"
     >
       {pending ? "Uniendo…" : "Unirme al equipo"}
     </button>
