@@ -20,8 +20,9 @@ const IMAGES = [
   },
 ];
 
-/** Imagen que el cursor "revela" bajo la calma del carrusel de arriba. */
-const SPOTLIGHT_IMAGE = "/hero/action-spray.jpg";
+/** Imagen que el cursor "revela" bajo la calma del carrusel de arriba.
+ *  null = función apagada (todavía no hay foto definida para esto). */
+const SPOTLIGHT_IMAGE: string | null = null;
 const SPOTLIGHT_R = 240;
 
 function SpotlightReveal({
@@ -127,7 +128,7 @@ export default function HeroBackground() {
   }, []);
 
   useEffect(() => {
-    if (reduceMotion) return;
+    if (reduceMotion || !SPOTLIGHT_IMAGE) return;
 
     const onMove = (e: MouseEvent) => {
       mouse.current.x = e.clientX;
@@ -163,7 +164,7 @@ export default function HeroBackground() {
           }`}
         />
       ))}
-      {!reduceMotion && (
+      {!reduceMotion && SPOTLIGHT_IMAGE && (
         <SpotlightReveal
           image={SPOTLIGHT_IMAGE}
           cursorX={cursor.x}
