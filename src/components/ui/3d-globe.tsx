@@ -131,18 +131,11 @@ function Marker({
   const imageGroupRef = useRef<THREE.Group>(null);
   const { camera } = useThree();
 
-  // Surface position (where the line starts)
-  const surfacePosition = useMemo(() => {
-    return latLngToVector3(marker.lat, marker.lng, radius * 1.001);
-  }, [marker.lat, marker.lng, radius]);
-
-  // Top of the line (where the image is) - positioned just off the surface
-  // (antes 1.18: con la perspectiva 3D el avatar quedaba lejos del pin real)
+  // Posición del marcador, apenas despegada de la superficie
+  // (antes 1.18: con la perspectiva 3D el avatar quedaba lejos del punto real)
   const topPosition = useMemo(() => {
     return latLngToVector3(marker.lat, marker.lng, radius * 1.045);
   }, [marker.lat, marker.lng, radius]);
-
-  const lineHeight = topPosition.distanceTo(surfacePosition);
 
   // Check if marker is facing the camera
   useFrame(() => {
@@ -179,37 +172,13 @@ function Marker({
     onClick?.(marker);
   }, [marker, onClick]);
 
-  // Calculate line center and orientation
-  const { lineCenter, lineQuaternion } = useMemo(() => {
-    const center = surfacePosition.clone().lerp(topPosition, 0.5);
-
-    // Calculate rotation to align cylinder with the direction from surface to top
-    const direction = topPosition.clone().sub(surfacePosition).normalize();
-    const quaternion = new THREE.Quaternion();
-    quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction);
-
-    return { lineCenter: center, lineQuaternion: quaternion };
-  }, [surfacePosition, topPosition]);
+  const size = (marker.size ?? defaultSize) * 220;
 
   return (
     <group ref={groupRef} visible={isVisible}>
-      {/* Pin line from surface to image - properly oriented */}
-      <mesh position={lineCenter} quaternion={lineQuaternion}>
-        <cylinderGeometry args={[0.003, 0.003, lineHeight, 8]} />
-        <meshBasicMaterial
-          color={hovered ? "#ffffff" : "#94a3b8"}
-          transparent
-          opacity={hovered ? 0.9 : 0.6}
-        />
-      </mesh>
-
-      {/* Pin point at the surface */}
-      <mesh position={surfacePosition} quaternion={lineQuaternion}>
-        <coneGeometry args={[0.015, 0.04, 8]} />
-        <meshBasicMaterial color={hovered ? "#ff7154" : "#FF5A36"} />
-      </mesh>
-
-      {/* Circular image at the top */}
+      {/* Circular image + colita de pin, todo en CSS (la línea/cono 3D
+          originales eran del orden de milésimas de unidad: invisibles en
+          un globo de radius=2, por eso el marcador se veía "flotando"). */}
       <group ref={imageGroupRef} position={topPosition}>
         <Html
           transform
@@ -224,22 +193,34 @@ function Marker({
         >
           <div
             className={cn(
-              "cursor-pointer overflow-hidden rounded-full bg-neutral-900 shadow-lg transition-transform duration-200",
-              hovered && "scale-125 shadow-xl ring-1 ring-white/50",
+              "flex cursor-pointer flex-col items-center transition-transform duration-200",
+              hovered && "scale-110",
             )}
-            style={{
-              width: `${(marker.size ?? defaultSize) * 90}px`,
-              height: `${(marker.size ?? defaultSize) * 90}px`,
-            }}
             onMouseEnter={handlePointerEnter}
             onMouseLeave={handlePointerLeave}
             onClick={handleClick}
           >
-            <img
-              src={marker.src}
-              alt={marker.label || "Marker"}
-              className="h-full w-full object-cover"
-              draggable={false}
+            <div
+              className="overflow-hidden rounded-full border-2 border-[#FF5A36] bg-neutral-900 shadow-lg"
+              style={{ width: `${size}px`, height: `${size}px` }}
+            >
+              <img
+                src={marker.src}
+                alt={marker.label || "Marker"}
+                className="h-full w-full object-cover"
+                draggable={false}
+              />
+            </div>
+            {/* colita del pin, apuntando al punto exacto en el globo */}
+            <div
+              style={{
+                width: 0,
+                height: 0,
+                borderLeft: `${size * 0.18}px solid transparent`,
+                borderRight: `${size * 0.18}px solid transparent`,
+                borderTop: `${size * 0.28}px solid #FF5A36`,
+                marginTop: "-2px",
+              }}
             />
           </div>
         </Html>

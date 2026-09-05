@@ -60,6 +60,8 @@ export default async function PaginaEquipoPage({
       .eq("id", profile!.team_id)
       .single<{ gallery_urls: string[] }>(),
   ]);
+  const galleryUrls = team?.gallery_urls ?? [];
+  const showGallery = editing || galleryUrls.length > 0;
 
   return (
     <div className="space-y-4">
@@ -76,7 +78,11 @@ export default async function PaginaEquipoPage({
           </Link>
         </div>
       )}
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+      <div
+        className={`grid gap-6 ${
+          showGallery ? "lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]" : ""
+        }`}
+      >
       <div className="max-w-2xl space-y-6">
         <div className="flex items-start justify-between gap-4">
           <div>
@@ -158,7 +164,7 @@ export default async function PaginaEquipoPage({
         </ul>
       </div>
 
-      <TeamGallery editing={editing} initialUrls={team?.gallery_urls ?? []} />
+      {showGallery && <TeamGallery editing={editing} initialUrls={galleryUrls} />}
       </div>
     </div>
   );
