@@ -2,33 +2,43 @@
 
 import { Globe3D, type GlobeMarker } from "@/components/ui/3d-globe";
 
-// avatar naranja de marca en SVG inline: sin depender de un asset externo
-const AVATAR = `data:image/svg+xml,${encodeURIComponent(
-  `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64">
-    <circle cx="32" cy="32" r="32" fill="#FF5A36"/>
-    <text x="32" y="43" font-family="sans-serif" font-size="30" font-weight="700" fill="#05080D" text-anchor="middle">A</text>
-  </svg>`,
-)}`;
+export type PublicTeam = { id: string; name: string; logo_url: string };
 
-const MARKERS: GlobeMarker[] = [
-  { lat: -12.05, lng: -77.04, src: AVATAR, label: "Los Avengers · Perú", size: 0.09 },
-];
+// Sin lat/lng por equipo todavía (falta capturar ubicación real al crear el
+// equipo). Mientras tanto los repartimos alrededor de Lima con un offset
+// determinístico por índice, para que no se pisen entre sí.
+function positionFor(i: number) {
+  const lat = -12.05 + (i % 3) * 2.5;
+  const lng = -77.04 + Math.floor(i / 3) * 3;
+  return { lat, lng };
+}
 
-export default function KurkuGlobe() {
+export default function KurkuGlobe({ teams }: { teams: PublicTeam[] }) {
+  const markers: GlobeMarker[] = teams.map((t, i) => ({
+    ...positionFor(i),
+    src: t.logo_url,
+    label: t.name,
+    size: 0.09,
+  }));
+
   return (
     <div className="cut-corner hud-frame group radar-grid relative border border-[#FF5A36]/20 bg-white/[0.02]">
-      <Globe3D
-        markers={MARKERS}
-        config={{
-          showAtmosphere: true,
-          atmosphereColor: "#FF5A36",
-          atmosphereIntensity: 2.2,
-          bumpScale: 5,
-          autoRotateSpeed: 0.3,
-          initialRotation: { x: 0.15, y: 2.4 },
-          backgroundColor: "transparent",
-        }}
-      />
+      {markers.length === 0 ? (
+        <div className="flex h-[420px] items-center justify-center text-sm text-white/30 sm:h-[520px]">
+          Todavía no hay equipos con logo público.
+        </div>
+      ) : (
+        <Globe3D
+          markers={markers}
+          config={{
+            showAtmosphere: false,
+            bumpScale: 5,
+            autoRotateSpeed: 0.3,
+            initialRotation: { x: 0.15, y: 2.4 },
+            backgroundColor: "transparent",
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -3,6 +3,7 @@ import HeroBackground from "./HeroBackground";
 import KurkuGlobe from "./KurkuGlobe";
 import Reveal from "./Reveal";
 import { display, mono } from "./fonts";
+import { createClient } from "@/lib/supabase/server";
 
 type FeatureIcon =
   | "users"
@@ -170,7 +171,10 @@ function FeatureIconSvg({
   );
 }
 
-export default function Home() {
+export default async function Home() {
+  const supabase = await createClient();
+  const { data: teams } = await supabase.rpc("public_teams_directory");
+
   return (
     <main className="flex flex-1 flex-col bg-[#05080D] text-[#EAF2F6]">
       <div className="relative flex min-h-screen flex-col overflow-hidden">
@@ -390,13 +394,15 @@ export default function Home() {
             className={`${mono.className} mt-6 inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-[#FF5A36]`}
           >
             <span className="pulse-dot h-1.5 w-1.5 rounded-full bg-[#FF5A36]" />
-            01 equipo activo
+            {String(teams?.length ?? 0).padStart(2, "0")} equipo
+            {(teams?.length ?? 0) === 1 ? "" : "s"} activo
+            {(teams?.length ?? 0) === 1 ? "" : "s"}
           </span>
         </Reveal>
 
         <Reveal delay={150}>
           <div className="mt-8 h-[420px] w-full sm:h-[520px]">
-            <KurkuGlobe />
+            <KurkuGlobe teams={teams ?? []} />
           </div>
         </Reveal>
       </section>
