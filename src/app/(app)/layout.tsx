@@ -19,6 +19,7 @@ export default async function AppLayout({
     { href: "/atletas", label: "Atletas" },
     { href: "/entrenamientos", label: "Entrenamientos" },
     { href: "/calendario", label: "Calendario" },
+    { href: "/noticias", label: "Noticias" },
     ...(isAdmin(profile) ? [{ href: "/equipo/miembros", label: "Miembros" }] : []),
   ];
 
