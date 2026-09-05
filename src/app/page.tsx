@@ -238,12 +238,6 @@ export default function Home() {
               </div>
             </Reveal>
           </div>
-
-          <p
-            className={`${mono.className} absolute bottom-6 right-6 hidden text-[10px] uppercase tracking-wider text-white/30 sm:right-12 lg:block`}
-          >
-            Flota Perú · ILCA
-          </p>
         </section>
 
         <svg
