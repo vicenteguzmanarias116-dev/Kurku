@@ -385,10 +385,17 @@ export default function Home() {
           <p className="mt-4 max-w-lg text-white/50">
             Cada equipo que se une agrega su bandera al mapa.
           </p>
+
+          <span
+            className={`${mono.className} mt-6 inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-[#FF5A36]`}
+          >
+            <span className="pulse-dot h-1.5 w-1.5 rounded-full bg-[#FF5A36]" />
+            01 equipo activo
+          </span>
         </Reveal>
 
         <Reveal delay={150}>
-          <div className="mt-12 h-[420px] w-full sm:h-[520px]">
+          <div className="mt-8 h-[420px] w-full sm:h-[520px]">
             <KurkuGlobe />
           </div>
         </Reveal>
