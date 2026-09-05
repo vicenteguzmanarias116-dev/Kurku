@@ -380,12 +380,6 @@ export default function Home() {
             </span>
           </div>
 
-          <p
-            className={`${mono.className} text-[11px] uppercase tracking-widest text-white/30`}
-          >
-            Flota Perú · ILCA
-          </p>
-
           <p className="text-xs text-white/30">
             © {new Date().getFullYear()} Kurku. Todos los derechos
             reservados.
