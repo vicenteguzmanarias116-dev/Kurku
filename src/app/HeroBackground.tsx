@@ -7,6 +7,17 @@ const IMAGES = [
   { src: "/hero/peru-aerial.jpg", alt: "Flota ILCA de Perú vista desde arriba" },
   { src: "/hero/fleet-start.jpg", alt: "Salida de regata ILCA con múltiples países" },
   { src: "/hero/action-spray.jpg", alt: "Regatista ILCA planeando entre la espuma" },
+  { src: "/hero/cenida-cate.jpg", alt: "Ceñida entre dos ILCA de Perú" },
+  {
+    src: "/hero/adelante-luca-maio-brasil.jpg",
+    alt: "Flota ILCA en el Campeonato Centro y Sudamericano, Veleiros do Sul",
+  },
+  { src: "/hero/con-mi-viejo-snipe.jpg", alt: "Tripulación de Snipe en regata" },
+  { src: "/hero/navegando-sunset.jpg", alt: "Flota navegando al atardecer" },
+  {
+    src: "/hero/partida-mundial-lightning-finlandia.jpg",
+    alt: "Salida del Mundial de Lightning en Finlandia",
+  },
 ];
 
 /** Imagen que el cursor "revela" bajo la calma del carrusel de arriba. */
