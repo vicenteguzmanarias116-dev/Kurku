@@ -9,11 +9,24 @@ type NewsItem = {
   image: string | null;
 };
 
+// Bing News (no Google): el link trae la URL real del medio en el query
+// string, sin redirect intermedio — hace falta para poder sacar el og:image.
 const GENERAL_FEED =
-  "https://news.google.com/rss/search?q=vela%20regata%20velero&hl=es-419&gl=PE&ceid=PE:es-419";
+  "https://www.bing.com/news/search?q=vela+regata+velero&format=RSS&setlang=es";
 // clases dinghy: botes chicos, un timonel, sin quilla fija (ILCA/Laser, Optimist, 420, 470, Snipe...)
 const DINGHY_FEED =
-  "https://news.google.com/rss/search?q=ILCA%20OR%20Laser%20OR%20Optimist%20OR%20Snipe%20OR%20%22420%22%20vela%20regata&hl=es-419&gl=PE&ceid=PE:es-419";
+  "https://www.bing.com/news/search?q=ILCA+OR+Laser+OR+Optimist+OR+Snipe+OR+%22420%22+vela+regata&format=RSS&setlang=es";
+
+/** Bing envuelve el link real en apiclick.aspx?...&url=<encoded>; lo desenvolvemos. */
+function realLink(bingLink: string) {
+  try {
+    const u = new URL(bingLink);
+    const real = u.searchParams.get("url");
+    return real ? decodeURIComponent(real) : bingLink;
+  } catch {
+    return bingLink;
+  }
+}
 
 const DINGHY_KEYWORDS =
   /\b(ilca|l[aá]ser|optimist|snipe|420|470|cadete|dinghy|dingui)\b/i;
@@ -46,9 +59,9 @@ async function fetchFeed(url: string) {
       const title = tag(block, "title");
       return {
         title,
-        link: tag(block, "link"),
+        link: realLink(tag(block, "link")),
         pubDate: tag(block, "pubDate"),
-        source: tag(block, "source"),
+        source: tag(block, "News:Source") || tag(block, "source"),
         isDinghy: DINGHY_KEYWORDS.test(title),
         image: null as string | null,
       };
