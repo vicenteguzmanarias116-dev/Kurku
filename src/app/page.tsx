@@ -1,5 +1,6 @@
 import Link from "next/link";
 import HeroBackground from "./HeroBackground";
+import KurkuGlobe from "./KurkuGlobe";
 import Reveal from "./Reveal";
 import { display, mono } from "./fonts";
 
@@ -367,6 +368,30 @@ export default function Home() {
             );
           })}
         </div>
+      </section>
+
+      <section className="border-t border-white/10 px-6 py-20 sm:px-12 lg:py-28">
+        <Reveal>
+          <span
+            className={`${mono.className} block text-[11px] uppercase tracking-widest text-[#FF5A36]`}
+          >
+            Ya en el agua
+          </span>
+          <h2
+            className={`${display.className} mt-2 max-w-xl text-4xl font-bold uppercase leading-none sm:text-5xl`}
+          >
+            Dónde navega Kurku
+          </h2>
+          <p className="mt-4 max-w-lg text-white/50">
+            Cada equipo que se une agrega su bandera al mapa.
+          </p>
+        </Reveal>
+
+        <Reveal delay={150}>
+          <div className="mt-12 h-[420px] w-full sm:h-[520px]">
+            <KurkuGlobe />
+          </div>
+        </Reveal>
       </section>
 
       <footer className="border-t border-white/10 px-6 py-10 sm:px-12">
