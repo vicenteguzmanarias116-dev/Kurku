@@ -19,10 +19,10 @@ async function post(formData: FormData) {
     .from("announcements")
     .insert({ team_id: profile!.team_id, author_id: profile!.id, body });
   if (error) throw new Error(error.message);
-  revalidatePath("/comunicacion");
+  revalidatePath("/pagina-equipo");
 }
 
-export default async function ComunicacionPage() {
+export default async function PaginaEquipoPage() {
   const { supabase, profile } = await requireUser();
   const { data: items } = await supabase
     .from("announcements")
@@ -32,9 +32,15 @@ export default async function ComunicacionPage() {
 
   return (
     <div className="max-w-xl space-y-6">
-      <h2 className={`${rajdhani.className} text-2xl font-bold uppercase tracking-tight`}>
-        Comunicación
-      </h2>
+      <div>
+        <h2 className={`${rajdhani.className} text-2xl font-bold uppercase tracking-tight`}>
+          Página del equipo
+        </h2>
+        <p className="mt-1 text-sm text-white/50">
+          Avisos de regata, entrenamiento físico, nutrición o del club — lo
+          último que publicó el staff.
+        </p>
+      </div>
 
       {isStaff(profile) && (
         <form

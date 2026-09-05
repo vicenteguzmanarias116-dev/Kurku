@@ -13,11 +13,11 @@ export default async function AppLayout({
   if (!profile?.team_id) redirect("/equipo/nuevo");
 
   const NAV = [
+    { href: "/pagina-equipo", label: "Página del equipo" },
     { href: "/dashboard", label: "Panel" },
     { href: "/atletas", label: "Atletas" },
     { href: "/entrenamientos", label: "Entrenamientos" },
     { href: "/calendario", label: "Calendario" },
-    { href: "/comunicacion", label: "Comunicación" },
     ...(isAdmin(profile) ? [{ href: "/equipo/miembros", label: "Miembros" }] : []),
   ];
 
