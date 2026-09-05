@@ -7,6 +7,7 @@ export type Profile = {
   role: "admin" | "coach" | "athlete";
   full_name: string | null;
   avatar_url: string | null;
+  bio: string | null;
 };
 
 /** Usuario + profile, o redirige a /login. */
@@ -19,7 +20,7 @@ export async function requireUser() {
 
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
-    .select("id, team_id, role, full_name, avatar_url")
+    .select("id, team_id, role, full_name, avatar_url, bio")
     .eq("id", user.id)
     .single<Profile>();
 

@@ -31,14 +31,18 @@ export default async function CuentaPage() {
           Correo
         </span>
         <p className="text-sm text-white/80">{user.email}</p>
-        <ProfileForm fullName={profile?.full_name ?? ""} avatarUrl={profile?.avatar_url ?? null} />
+        <ProfileForm
+          fullName={profile?.full_name ?? ""}
+          avatarUrl={profile?.avatar_url ?? null}
+          bio={profile?.bio ?? ""}
+        />
       </section>
 
       <section className="cut-corner space-y-4 border border-cyan-400/20 bg-[#0D141E] p-6">
         <h3 className={`${mono.className} text-xs uppercase tracking-wider text-white/40`}>
           Contraseña
         </h3>
-        <PasswordForm />
+        <PasswordForm email={user.email!} />
       </section>
 
       <form action={signOut}>

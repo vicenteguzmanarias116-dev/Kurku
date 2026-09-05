@@ -8,11 +8,12 @@ export async function updateAccount(_prevState: string | null, formData: FormDat
 
   const full_name = String(formData.get("full_name") || "").trim();
   const avatar_url = String(formData.get("avatar_url") || "") || null;
+  const bio = String(formData.get("bio") || "").trim() || null;
   if (!full_name) return "Falta tu nombre.";
 
   const { error } = await supabase
     .from("profiles")
-    .update({ full_name, avatar_url })
+    .update({ full_name, avatar_url, bio })
     .eq("id", user.id);
   if (error) return error.message;
 
