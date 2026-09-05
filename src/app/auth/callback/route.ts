@@ -23,6 +23,10 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(`${origin}/auth/reset`);
   }
 
+  if (next && next.startsWith("/unirse/")) {
+    return NextResponse.redirect(`${origin}${next}`);
+  }
+
   const {
     data: { user },
   } = await supabase.auth.getUser();

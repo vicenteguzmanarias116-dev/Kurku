@@ -11,9 +11,8 @@ function num(v: FormDataEntryValue | null) {
 
 export async function saveAthlete(_prevState: string | null, formData: FormData) {
   const { supabase, profile } = await requireUser();
-  if (!isStaff(profile)) return "Solo staff.";
-
   const id = String(formData.get("id") || "");
+  if (!isStaff(profile) && id === "nuevo") return "Solo staff.";
   const birthdate = String(formData.get("birthdate") || "").trim();
   const row = {
     team_id: profile!.team_id,

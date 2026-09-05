@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { display as rajdhani, mono } from "../fonts";
 import { createClient } from "@/lib/supabase/client";
@@ -9,7 +9,17 @@ import { createClient } from "@/lib/supabase/client";
 type Mode = "login" | "signup";
 
 export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginForm />
+    </Suspense>
+  );
+}
+
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const next = searchParams.get("next");
   const [mode, setMode] = useState<Mode>("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -47,7 +57,7 @@ export default function LoginPage() {
       setLoading(false);
       if (error) setError(error.message);
       else {
-        router.push("/dashboard");
+        router.push(next || "/dashboard");
         router.refresh();
       }
       return;
@@ -57,7 +67,9 @@ export default function LoginPage() {
       email,
       password,
       options: {
-        emailRedirectTo: `${location.origin}/auth/callback`,
+        emailRedirectTo: `${location.origin}/auth/callback${
+          next ? `?next=${encodeURIComponent(next)}` : ""
+        }`,
         data: { full_name: fullName },
       },
     });
@@ -66,7 +78,7 @@ export default function LoginPage() {
       setError(error.message);
     } else if (data.session) {
       // confirmación de correo desactivada: ya queda logueado
-      router.push("/equipo/nuevo");
+      router.push(next || "/equipo/nuevo");
       router.refresh();
     } else {
       setCheckEmail(true);

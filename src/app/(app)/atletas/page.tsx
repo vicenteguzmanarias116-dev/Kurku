@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireUser, isStaff } from "@/lib/auth";
 import { rajdhani, mono } from "../fonts";
+import InviteLink from "./InviteLink";
 
 type Athlete = {
   id: string;
@@ -34,6 +35,8 @@ export default async function AtletasPage() {
           </Link>
         )}
       </div>
+
+      {staff && profile?.team_id && <InviteLink teamId={profile.team_id} />}
 
       <div className="cut-corner border border-cyan-400/20 bg-[#0D141E] p-6">
         <table className="w-full text-sm">
