@@ -9,29 +9,30 @@ function num(v: FormDataEntryValue | null) {
   return Number.isFinite(n) ? n : null;
 }
 
-export async function saveAthlete(formData: FormData) {
+export async function saveAthlete(_prevState: string | null, formData: FormData) {
   const { supabase, profile } = await requireUser();
-  if (!isStaff(profile)) throw new Error("Solo staff.");
+  if (!isStaff(profile)) return "Solo staff.";
 
   const id = String(formData.get("id") || "");
+  const birthdate = String(formData.get("birthdate") || "").trim();
   const row = {
     team_id: profile!.team_id,
     full_name: String(formData.get("full_name") || "").trim(),
     boat_class: String(formData.get("boat_class") || "") || null,
-    birthdate: String(formData.get("birthdate") || "") || null,
+    birthdate: birthdate || null,
     weight_kg: num(formData.get("weight_kg")),
     photo_url: String(formData.get("photo_url") || "") || null,
     notes: String(formData.get("notes") || "") || null,
     active: formData.get("active") === "on",
   };
-  if (!row.full_name) throw new Error("Falta el nombre.");
+  if (!row.full_name) return "Falta el nombre.";
 
   const q =
     id && id !== "nuevo"
       ? supabase.from("athletes").update(row).eq("id", id)
       : supabase.from("athletes").insert(row);
   const { error } = await q;
-  if (error) throw new Error(error.message);
+  if (error) return error.message;
 
   revalidatePath("/atletas");
   redirect("/atletas");
