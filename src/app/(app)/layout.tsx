@@ -22,15 +22,16 @@ export default async function AppLayout({
 
   const { data: team } = await supabase
     .from("teams")
-    .select("name, logo_url")
+    .select("name, logo_url, description")
     .eq("id", profile.team_id)
-    .single<{ name: string; logo_url: string | null }>();
+    .single<{ name: string; logo_url: string | null; description: string | null }>();
 
   return (
     <div className="flex flex-1 flex-col bg-[#05080D] text-[#EAF2F6]">
       <header className="flex items-center gap-6 border-b border-white/10 bg-[#0D141E] px-6 py-4 sm:px-10">
         <Link
           href="/dashboard"
+          title={team?.description || undefined}
           className="flex items-center gap-3 overflow-hidden"
         >
           {team?.logo_url ? (
