@@ -1,6 +1,7 @@
 import { requireUser, isStaff } from "@/lib/auth";
 import { addSession } from "./actions";
-import { rajdhani, mono } from "../fonts";
+import { mono } from "../fonts";
+import PageHead from "../PageHead";
 
 type Row = {
   id: string;
@@ -34,12 +35,10 @@ export default async function EntrenamientosPage() {
 
   return (
     <div className="space-y-6">
-      <h2 className={`${rajdhani.className} text-2xl font-bold uppercase tracking-tight`}>
-        Entrenamientos
-      </h2>
+      <PageHead eyebrow="Carga · ACWR" title="Entrenamientos" />
 
       {staff && (
-        <details className="cut-corner border border-cyan-400/20 bg-[#0D141E] p-5">
+        <details className="rounded-xl border border-white/10 bg-[#0D141E]/80 p-5">
           <summary
             className={`${mono.className} cursor-pointer text-xs uppercase tracking-wider text-cyan-300`}
           >
@@ -73,7 +72,7 @@ export default async function EntrenamientosPage() {
         </details>
       )}
 
-      <div className="cut-corner border border-cyan-400/20 bg-[#0D141E] p-6">
+      <div className="rounded-xl border border-white/10 bg-[#0D141E]/80 p-6">
         <table className="w-full text-sm">
           <thead
             className={`${mono.className} text-left text-[11px] uppercase tracking-wider text-white/40`}

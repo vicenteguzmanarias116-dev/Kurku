@@ -1,6 +1,7 @@
 import { revalidatePath } from "next/cache";
 import { requireUser, isStaff } from "@/lib/auth";
-import { rajdhani, mono } from "../fonts";
+import { mono } from "../fonts";
+import PageHead from "../PageHead";
 
 type Event = {
   id: string;
@@ -50,14 +51,12 @@ export default async function CalendarioPage() {
 
   return (
     <div className="space-y-6">
-      <h2 className={`${rajdhani.className} text-2xl font-bold uppercase tracking-tight`}>
-        Calendario
-      </h2>
+      <PageHead eyebrow="Regatas · Entrenos" title="Calendario" />
 
       {staff && (
         <form
           action={addEvent}
-          className="cut-corner grid grid-cols-2 gap-3 border border-cyan-400/20 bg-[#0D141E] p-5 text-sm sm:grid-cols-3"
+          className="grid grid-cols-2 gap-3 rounded-xl border border-white/10 bg-[#0D141E]/80 p-5 text-sm sm:grid-cols-3"
         >
           <input name="title" placeholder="Título" required className={input} />
           <input name="starts_at" type="datetime-local" required className={input} />
@@ -74,7 +73,7 @@ export default async function CalendarioPage() {
         </form>
       )}
 
-      <ul className="cut-corner space-y-3 border border-cyan-400/20 bg-[#0D141E] p-6 text-sm">
+      <ul className="space-y-3 rounded-xl border border-white/10 bg-[#0D141E]/80 p-6 text-sm">
         {(events as Event[] | null)?.map((e) => (
           <li
             key={e.id}

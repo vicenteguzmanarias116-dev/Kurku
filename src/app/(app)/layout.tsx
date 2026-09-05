@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { requireUser, isAdmin } from "@/lib/auth";
@@ -30,8 +31,22 @@ export default async function AppLayout({
     .single<{ name: string; logo_url: string | null; description: string | null }>();
 
   return (
-    <div className="flex flex-1 flex-col bg-[#05080D] text-[#EAF2F6]">
-      <header className="flex items-center gap-6 border-b border-white/10 bg-[#0D141E] px-6 py-4 sm:px-10">
+    <div className="relative flex flex-1 flex-col bg-[#05080D] text-[#EAF2F6]">
+      {/* fondo de vela sutil, comparte lenguaje con el Hero del index */}
+      <div className="pointer-events-none fixed inset-0 z-0" aria-hidden>
+        <Image
+          src="/hero/navegando-sunset.jpg"
+          alt=""
+          fill
+          className="object-cover opacity-[0.10]"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#05080D]/80 via-[#05080D]/92 to-[#05080D]" />
+        <div className="radar-grid absolute inset-0 opacity-50" />
+      </div>
+      <div className="scanline pointer-events-none absolute inset-x-0 top-0 z-20 h-px bg-gradient-to-r from-transparent via-cyan-300/60 to-transparent" />
+
+      <header className="relative z-10 flex items-center gap-6 border-b border-white/10 bg-[#0D141E]/85 px-6 py-4 backdrop-blur-sm sm:px-10">
         <div className="group relative flex shrink-0 items-center">
           <Link href="/dashboard" className="flex items-center gap-3 overflow-hidden">
             {team?.logo_url ? (
@@ -91,7 +106,7 @@ export default async function AppLayout({
         </div>
       </header>
       <nav
-        className={`${mono.className} flex gap-4 overflow-x-auto border-b border-white/10 bg-[#0D141E] px-6 py-2.5 text-xs uppercase tracking-wider text-white/50 sm:hidden`}
+        className={`${mono.className} relative z-10 flex gap-4 overflow-x-auto border-b border-white/10 bg-[#0D141E]/85 px-6 py-2.5 text-xs uppercase tracking-wider text-white/50 backdrop-blur-sm sm:hidden`}
       >
         {NAV.map((n) => (
           <Link
@@ -103,7 +118,25 @@ export default async function AppLayout({
           </Link>
         ))}
       </nav>
-      <main className="flex-1 px-6 py-8 sm:px-10">{children}</main>
+
+      {/* ola: motivo marítimo que enlaza con el Hero */}
+      <svg
+        className="relative z-10 h-8 w-full text-[#FF5A36]/25"
+        viewBox="0 0 1200 40"
+        preserveAspectRatio="none"
+        aria-hidden
+      >
+        <path
+          d="M0 20 Q150 0 300 20 T600 20 T900 20 T1200 20"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1"
+        />
+      </svg>
+
+      <main className="relative z-10 flex-1 px-6 pb-10 pt-4 sm:px-10">
+        {children}
+      </main>
     </div>
   );
 }

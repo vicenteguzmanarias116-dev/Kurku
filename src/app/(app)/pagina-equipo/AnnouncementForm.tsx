@@ -56,7 +56,7 @@ export default function AnnouncementForm() {
   return (
     <form
       action={formAction}
-      className="hud-frame cut-corner relative space-y-3 border border-cyan-400/20 bg-[#0D141E] p-5"
+      className="relative space-y-3 rounded-xl border border-white/10 bg-[#0D141E]/80 p-5"
     >
       <span
         className={`${mono.className} block text-[10px] uppercase tracking-widest text-white/40`}

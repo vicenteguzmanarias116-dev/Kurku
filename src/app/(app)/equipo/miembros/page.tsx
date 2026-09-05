@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { requireUser, isAdmin } from "@/lib/auth";
-import { rajdhani, mono } from "../../fonts";
+import { mono } from "../../fonts";
+import PageHead from "../../PageHead";
 import { removeMember } from "../actions";
 
 const ROLE_LABEL: Record<string, string> = {
@@ -28,11 +29,9 @@ export default async function MiembrosPage() {
 
   return (
     <div className="max-w-lg space-y-6">
-      <h2 className={`${rajdhani.className} text-2xl font-bold uppercase tracking-tight`}>
-        Miembros del equipo
-      </h2>
+      <PageHead eyebrow="Staff · Atletas" title="Miembros del equipo" />
 
-      <div className="cut-corner divide-y divide-white/10 border border-cyan-400/20 bg-[#0D141E]">
+      <div className="divide-y divide-white/10 rounded-xl border border-white/10 bg-[#0D141E]/80">
         {(members as Member[] | null)?.map((m) => (
           <div key={m.id} className="flex items-center gap-3 px-5 py-3">
             {m.avatar_url ? (

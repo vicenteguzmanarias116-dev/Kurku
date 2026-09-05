@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireUser, isStaff, isAdmin } from "@/lib/auth";
-import { rajdhani, mono } from "../fonts";
+import { mono } from "../fonts";
+import PageHead from "../PageHead";
 import TeamGallery from "./TeamGallery";
 import AnnouncementForm from "./AnnouncementForm";
 
@@ -84,15 +85,11 @@ export default async function PaginaEquipoPage({
         }`}
       >
       <div className="max-w-2xl space-y-6">
-        <div>
-          <h2 className={`${rajdhani.className} text-2xl font-bold uppercase tracking-tight`}>
-            Página del equipo
-          </h2>
-          <p className="mt-1 text-sm text-white/50">
-            Avisos de regata, entrenamiento físico, nutrición o del club — lo
-            último que publicó el staff.
-          </p>
-        </div>
+        <PageHead
+          eyebrow="Flota · ILCA"
+          title="Página del equipo"
+          subtitle="Avisos de regata, entrenamiento físico, nutrición o del club — lo último que publicó el staff."
+        />
 
         {isStaff(profile) && <AnnouncementForm />}
 
@@ -100,7 +97,7 @@ export default async function PaginaEquipoPage({
         {(items as Ann[] | null)?.map((a) => (
           <li
             key={a.id}
-            className="hud-frame cut-corner relative flex gap-3 border border-cyan-400/20 bg-[#0D141E] p-5 text-sm"
+            className="relative flex gap-3 rounded-xl border border-white/10 bg-[#0D141E]/80 p-5 text-sm transition hover:border-white/20"
           >
             {a.profiles?.avatar_url ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -161,7 +158,7 @@ export default async function PaginaEquipoPage({
           </li>
         ))}
         {!items?.length && (
-          <li className="cut-corner border border-dashed border-white/10 bg-white/[0.015] px-6 py-10 text-center text-sm text-white/30">
+          <li className="rounded-xl border border-dashed border-white/10 bg-white/[0.015] px-6 py-10 text-center text-sm text-white/30">
             Todavía no hay avisos. {isStaff(profile) ? "Publica el primero arriba." : "Cuando el staff publique algo, aparece acá."}
           </li>
         )}

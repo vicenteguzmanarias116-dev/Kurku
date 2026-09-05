@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireUser, isStaff } from "@/lib/auth";
-import { rajdhani, mono } from "../fonts";
+import { mono } from "../fonts";
+import PageHead from "../PageHead";
 import InviteLink from "./InviteLink";
 
 type Athlete = {
@@ -22,14 +23,12 @@ export default async function AtletasPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className={`${rajdhani.className} text-2xl font-bold uppercase tracking-tight`}>
-          Atletas
-        </h2>
+      <div className="flex items-end justify-between gap-4">
+        <PageHead eyebrow="Flota · ILCA" title="Atletas" />
         {staff && (
           <Link
             href="/atletas/nuevo"
-            className={`${mono.className} cut-corner bg-[#FF5A36] px-4 py-2 text-xs font-bold uppercase tracking-wide text-[#05080D] transition hover:bg-[#ff7154]`}
+            className={`${mono.className} cut-corner mb-7 shrink-0 bg-[#FF5A36] px-4 py-2 text-xs font-bold uppercase tracking-wide text-[#05080D] transition hover:bg-[#ff7154]`}
           >
             Nuevo atleta
           </Link>
@@ -38,7 +37,7 @@ export default async function AtletasPage() {
 
       {staff && profile?.team_id && <InviteLink teamId={profile.team_id} />}
 
-      <div className="cut-corner border border-cyan-400/20 bg-[#0D141E] p-6">
+      <div className="rounded-xl border border-white/10 bg-[#0D141E]/80 p-6">
         <table className="w-full text-sm">
           <thead
             className={`${mono.className} text-left text-[11px] uppercase tracking-wider text-white/40`}

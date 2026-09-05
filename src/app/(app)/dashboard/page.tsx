@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireUser } from "@/lib/auth";
 import { rajdhani, mono } from "../fonts";
+import PageHead from "../PageHead";
 import WelcomeModal from "../WelcomeModal";
 
 type Load = {
@@ -37,7 +38,8 @@ export default async function Dashboard({
   return (
     <div className="space-y-6">
       <WelcomeModal show={welcome === "1"} />
-      <section className="cut-corner border border-cyan-400/20 bg-[#0D141E] p-6">
+      <PageHead eyebrow="Flota · ILCA" title="Panel" />
+      <section className="rounded-xl border border-white/10 bg-[#0D141E]/80 p-6">
         <span
           className={`${mono.className} block text-[11px] uppercase tracking-widest text-cyan-300`}
         >
@@ -92,7 +94,7 @@ export default async function Dashboard({
         </p>
       </section>
 
-      <section className="cut-corner border border-cyan-400/20 bg-[#0D141E] p-6">
+      <section className="rounded-xl border border-white/10 bg-[#0D141E]/80 p-6">
         <span
           className={`${mono.className} block text-[11px] uppercase tracking-widest text-cyan-300`}
         >
