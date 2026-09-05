@@ -49,6 +49,20 @@ export default async function JoinTeamPage({
         >
           Invitación
         </span>
+
+        {team.logo_url ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={team.logo_url}
+            alt=""
+            className="mx-auto mb-4 h-16 w-16 rounded-full border border-white/15 object-cover"
+          />
+        ) : (
+          <span className="mx-auto mb-4 flex h-16 w-16 items-center justify-center border border-[#FF5A36]/40 bg-[#FF5A36]/10 text-2xl font-bold text-[#FF5A36]">
+            {team.name.charAt(0).toUpperCase()}
+          </span>
+        )}
+
         <h1
           className={`${rajdhani.className} mb-4 text-3xl font-bold uppercase leading-none`}
         >
