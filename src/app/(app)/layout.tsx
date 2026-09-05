@@ -1,16 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { requireUser, isStaff } from "@/lib/auth";
-import { signOut } from "./actions";
+import { requireUser, isAdmin } from "@/lib/auth";
 import { rajdhani, mono } from "./fonts";
-
-const NAV = [
-  { href: "/dashboard", label: "Panel" },
-  { href: "/atletas", label: "Atletas" },
-  { href: "/entrenamientos", label: "Entrenamientos" },
-  { href: "/calendario", label: "Calendario" },
-  { href: "/comunicacion", label: "Comunicación" },
-];
+import AccountMenu from "./AccountMenu";
 
 export default async function AppLayout({
   children,
@@ -19,6 +11,15 @@ export default async function AppLayout({
 }) {
   const { supabase, profile } = await requireUser();
   if (!profile?.team_id) redirect("/equipo/nuevo");
+
+  const NAV = [
+    { href: "/dashboard", label: "Panel" },
+    { href: "/atletas", label: "Atletas" },
+    { href: "/entrenamientos", label: "Entrenamientos" },
+    { href: "/calendario", label: "Calendario" },
+    { href: "/comunicacion", label: "Comunicación" },
+    ...(isAdmin(profile) ? [{ href: "/equipo/miembros", label: "Miembros" }] : []),
+  ];
 
   const { data: team } = await supabase
     .from("teams")
@@ -72,29 +73,17 @@ export default async function AppLayout({
             </Link>
           ))}
         </nav>
-        <form action={signOut} className="ml-auto flex items-center gap-4">
-          <span
-            className={`${mono.className} hidden items-center gap-1 text-[10px] uppercase tracking-widest text-white/25 md:inline-flex`}
-          >
-            <span className="h-1.5 w-1.5 bg-[#FF5A36]/60" />
-            Kurku
-          </span>
-          <span
-            className={`${mono.className} hidden text-xs uppercase tracking-wider text-white/40 sm:inline`}
-          >
-            {profile?.full_name ?? ""}
-            {isStaff(profile) && (
-              <span className="ml-2 border border-cyan-400/30 px-1.5 py-0.5 text-cyan-300">
-                staff
-              </span>
-            )}
-          </span>
-          <button
-            className={`${mono.className} text-xs uppercase tracking-wider text-white/50 transition hover:text-[#FF5A36]`}
-          >
-            Salir
-          </button>
-        </form>
+        <span
+          className={`${mono.className} ml-auto hidden items-center gap-1 text-[10px] uppercase tracking-widest text-white/25 md:inline-flex`}
+        >
+          <span className="h-1.5 w-1.5 bg-[#FF5A36]/60" />
+          Kurku
+        </span>
+        <AccountMenu
+          fullName={profile?.full_name ?? null}
+          role={profile?.role}
+          avatarUrl={profile?.avatar_url ?? null}
+        />
       </header>
       <nav
         className={`${mono.className} flex gap-4 overflow-x-auto border-b border-white/10 bg-[#0D141E] px-6 py-2.5 text-xs uppercase tracking-wider text-white/50 sm:hidden`}
