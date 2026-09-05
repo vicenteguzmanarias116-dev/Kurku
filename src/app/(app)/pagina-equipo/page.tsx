@@ -1,7 +1,8 @@
 import { revalidatePath } from "next/cache";
-import { requireUser, isStaff } from "@/lib/auth";
+import { requireUser, isStaff, isAdmin } from "@/lib/auth";
 import { rajdhani, mono } from "../fonts";
 import PostButton from "./PostButton";
+import TeamGallery from "./TeamGallery";
 
 type Ann = {
   id: string;
@@ -40,33 +41,41 @@ function timeAgo(iso: string) {
 
 export default async function PaginaEquipoPage() {
   const { supabase, profile } = await requireUser();
-  const { data: items } = await supabase
-    .from("announcements")
-    .select("id, body, created_at, profiles(full_name, avatar_url)")
-    .order("created_at", { ascending: false })
-    .limit(100);
+  const [{ data: items }, { data: team }] = await Promise.all([
+    supabase
+      .from("announcements")
+      .select("id, body, created_at, profiles(full_name, avatar_url)")
+      .order("created_at", { ascending: false })
+      .limit(100),
+    supabase
+      .from("teams")
+      .select("gallery_urls")
+      .eq("id", profile!.team_id)
+      .single<{ gallery_urls: string[] }>(),
+  ]);
 
   return (
-    <div className="max-w-2xl space-y-6">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h2 className={`${rajdhani.className} text-2xl font-bold uppercase tracking-tight`}>
-            Página del equipo
-          </h2>
-          <p className="mt-1 text-sm text-white/50">
-            Avisos de regata, entrenamiento físico, nutrición o del club — lo
-            último que publicó el staff.
-          </p>
+    <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+      <div className="max-w-2xl space-y-6">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h2 className={`${rajdhani.className} text-2xl font-bold uppercase tracking-tight`}>
+              Página del equipo
+            </h2>
+            <p className="mt-1 text-sm text-white/50">
+              Avisos de regata, entrenamiento físico, nutrición o del club — lo
+              último que publicó el staff.
+            </p>
+          </div>
+          <span
+            className={`${mono.className} hidden shrink-0 items-center gap-1.5 text-[10px] uppercase tracking-widest text-cyan-300 sm:flex`}
+          >
+            <span className="pulse-dot h-1.5 w-1.5 rounded-full bg-cyan-300" />
+            En vivo
+          </span>
         </div>
-        <span
-          className={`${mono.className} hidden shrink-0 items-center gap-1.5 text-[10px] uppercase tracking-widest text-cyan-300 sm:flex`}
-        >
-          <span className="pulse-dot h-1.5 w-1.5 rounded-full bg-cyan-300" />
-          En vivo
-        </span>
-      </div>
 
-      {isStaff(profile) && (
+        {isStaff(profile) && (
         <form
           action={post}
           className="hud-frame cut-corner relative space-y-3 border border-cyan-400/20 bg-[#0D141E] p-5"
@@ -125,7 +134,10 @@ export default async function PaginaEquipoPage() {
             Todavía no hay avisos. {isStaff(profile) ? "Publica el primero arriba." : "Cuando el staff publique algo, aparece acá."}
           </li>
         )}
-      </ul>
+        </ul>
+      </div>
+
+      <TeamGallery isAdmin={isAdmin(profile)} initialUrls={team?.gallery_urls ?? []} />
     </div>
   );
 }
