@@ -136,9 +136,10 @@ function Marker({
     return latLngToVector3(marker.lat, marker.lng, radius * 1.001);
   }, [marker.lat, marker.lng, radius]);
 
-  // Top of the line (where the image is) - positioned further out to prevent going inside globe
+  // Top of the line (where the image is) - positioned just off the surface
+  // (antes 1.18: con la perspectiva 3D el avatar quedaba lejos del pin real)
   const topPosition = useMemo(() => {
-    return latLngToVector3(marker.lat, marker.lng, radius * 1.18);
+    return latLngToVector3(marker.lat, marker.lng, radius * 1.045);
   }, [marker.lat, marker.lng, radius]);
 
   const lineHeight = topPosition.distanceTo(surfacePosition);
@@ -205,7 +206,7 @@ function Marker({
       {/* Pin point at the surface */}
       <mesh position={surfacePosition} quaternion={lineQuaternion}>
         <coneGeometry args={[0.015, 0.04, 8]} />
-        <meshBasicMaterial color={hovered ? "#f97316" : "#ef4444"} />
+        <meshBasicMaterial color={hovered ? "#ff7154" : "#FF5A36"} />
       </mesh>
 
       {/* Circular image at the top */}
@@ -227,8 +228,8 @@ function Marker({
               hovered && "scale-125 shadow-xl ring-1 ring-white/50",
             )}
             style={{
-              width: "8px",
-              height: "8px",
+              width: `${(marker.size ?? defaultSize) * 90}px`,
+              height: `${(marker.size ?? defaultSize) * 90}px`,
             }}
             onMouseEnter={handlePointerEnter}
             onMouseLeave={handlePointerLeave}
