@@ -201,7 +201,7 @@ function Marker({
             onClick={handleClick}
           >
             <div
-              className="overflow-hidden rounded-full border-2 border-[#FF5A36] bg-neutral-900 shadow-lg"
+              className="overflow-hidden rounded-full bg-neutral-900 shadow-lg"
               style={{ width: `${size}px`, height: `${size}px` }}
             >
               <img

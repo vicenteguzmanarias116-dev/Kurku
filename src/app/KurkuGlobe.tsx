@@ -18,7 +18,7 @@ export default function KurkuGlobe({ teams }: { teams: PublicTeam[] }) {
     ...positionFor(i),
     src: t.logo_url,
     label: t.name,
-    size: 0.09,
+    size: 0.05,
   }));
 
   return (

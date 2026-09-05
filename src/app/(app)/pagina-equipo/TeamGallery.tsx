@@ -5,6 +5,11 @@ import { mono } from "../fonts";
 import { createClient } from "@/lib/supabase/client";
 import { setGallery } from "./gallery-actions";
 
+// bento: la primera foto ocupa 2x2, el resto va en celdas simples
+const SPAN: Record<number, string> = {
+  0: "col-span-2 row-span-2",
+};
+
 export default function TeamGallery({
   editing,
   initialUrls,
@@ -45,23 +50,29 @@ export default function TeamGallery({
   }
 
   return (
-    <div className="hud-frame cut-corner relative border border-cyan-400/20 bg-[#0D141E] p-5">
+    <div>
       <span
-        className={`${mono.className} mb-4 block text-[10px] uppercase tracking-widest text-white/40`}
+        className={`${mono.className} mb-3 block text-[10px] uppercase tracking-widest text-white/30`}
       >
         Fotos del equipo
       </span>
 
-      <div className="grid grid-cols-2 gap-2">
-        {urls.map((u) => (
-          <div key={u} className="group relative aspect-square overflow-hidden border border-white/10">
+      <div className="grid grid-cols-2 auto-rows-[110px] gap-2.5">
+        {urls.map((u, i) => (
+          <div
+            key={u}
+            className={`group relative overflow-hidden rounded-2xl shadow-lg shadow-black/40 transition-transform duration-300 hover:scale-[1.02] ${
+              SPAN[i] ?? ""
+            }`}
+          >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={u} alt="" className="h-full w-full object-cover" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
             {editing && (
               <button
                 onClick={() => remove(u)}
                 aria-label="Quitar foto"
-                className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/70 text-white/80 transition hover:bg-[#FF5A36] hover:text-[#05080D]"
+                className="absolute right-1.5 top-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white/80 opacity-0 backdrop-blur transition hover:bg-[#FF5A36] hover:text-[#05080D] group-hover:opacity-100"
               >
                 ×
               </button>
@@ -70,7 +81,11 @@ export default function TeamGallery({
         ))}
 
         {editing && (
-          <label className="flex aspect-square cursor-pointer flex-col items-center justify-center gap-1 border border-dashed border-cyan-300/40 bg-cyan-300/[0.03] text-center text-xs text-cyan-300/80 transition hover:border-cyan-300/70 hover:text-cyan-300">
+          <label
+            className={`flex cursor-pointer flex-col items-center justify-center gap-1 rounded-2xl border border-dashed border-white/15 bg-white/[0.02] text-center text-xs text-white/40 transition hover:border-cyan-300/50 hover:bg-cyan-300/[0.04] hover:text-cyan-300 ${
+              urls.length === 0 ? "col-span-2 row-span-2" : ""
+            }`}
+          >
             {uploading ? (
               "Subiendo…"
             ) : (
@@ -88,10 +103,6 @@ export default function TeamGallery({
           </label>
         )}
       </div>
-
-      {!urls.length && !editing && (
-        <p className="text-sm text-white/30">Todavía no hay fotos.</p>
-      )}
     </div>
   );
 }
