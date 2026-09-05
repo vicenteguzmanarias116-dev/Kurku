@@ -46,7 +46,7 @@ export default async function AppLayout({
       </div>
       <div className="scanline pointer-events-none absolute inset-x-0 top-0 z-20 h-px bg-gradient-to-r from-transparent via-cyan-300/60 to-transparent" />
 
-      <header className="relative z-10 flex items-center gap-6 border-b border-white/10 bg-[#0D141E]/85 px-6 py-4 backdrop-blur-sm sm:px-10">
+      <header className="relative z-40 flex items-center gap-6 border-b border-white/10 bg-[#0D141E]/85 px-6 py-4 backdrop-blur-sm sm:px-10">
         <div className="group relative flex shrink-0 items-center">
           <Link href="/dashboard" className="flex items-center gap-3 overflow-hidden">
             {team?.logo_url ? (
@@ -106,7 +106,7 @@ export default async function AppLayout({
         </div>
       </header>
       <nav
-        className={`${mono.className} relative z-10 flex gap-4 overflow-x-auto border-b border-white/10 bg-[#0D141E]/85 px-6 py-2.5 text-xs uppercase tracking-wider text-white/50 backdrop-blur-sm sm:hidden`}
+        className={`${mono.className} relative z-40 flex gap-4 overflow-x-auto border-b border-white/10 bg-[#0D141E]/85 px-6 py-2.5 text-xs uppercase tracking-wider text-white/50 backdrop-blur-sm sm:hidden`}
       >
         {NAV.map((n) => (
           <Link
