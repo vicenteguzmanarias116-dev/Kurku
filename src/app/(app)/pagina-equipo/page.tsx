@@ -1,28 +1,28 @@
 import Link from "next/link";
-import { revalidatePath } from "next/cache";
 import { requireUser, isStaff, isAdmin } from "@/lib/auth";
 import { rajdhani, mono } from "../fonts";
-import PostButton from "./PostButton";
 import TeamGallery from "./TeamGallery";
+import AnnouncementForm from "./AnnouncementForm";
 
 type Ann = {
   id: string;
   body: string;
   created_at: string;
+  attachment_urls: string[] | null;
   profiles: { full_name: string | null; avatar_url: string | null } | null;
 };
 
-async function post(formData: FormData) {
-  "use server";
-  const { supabase, profile } = await requireUser();
-  if (!isStaff(profile)) throw new Error("Solo staff.");
-  const body = String(formData.get("body") || "").trim();
-  if (!body) return;
-  const { error } = await supabase
-    .from("announcements")
-    .insert({ team_id: profile!.team_id, author_id: profile!.id, body });
-  if (error) throw new Error(error.message);
-  revalidatePath("/pagina-equipo");
+const IMG_EXT = /\.(jpe?g|png|gif|webp|avif|bmp|svg)(\?|$)/i;
+
+function fileName(url: string) {
+  try {
+    return decodeURIComponent(url.split("/").pop() || "archivo").replace(
+      /^\d+-/,
+      "",
+    );
+  } catch {
+    return "archivo";
+  }
 }
 
 function timeAgo(iso: string) {
@@ -51,7 +51,7 @@ export default async function PaginaEquipoPage({
   const [{ data: items }, { data: team }] = await Promise.all([
     supabase
       .from("announcements")
-      .select("id, body, created_at, profiles(full_name, avatar_url)")
+      .select("id, body, created_at, attachment_urls, profiles(full_name, avatar_url)")
       .order("created_at", { ascending: false })
       .limit(100),
     supabase
@@ -84,44 +84,17 @@ export default async function PaginaEquipoPage({
         }`}
       >
       <div className="max-w-2xl space-y-6">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h2 className={`${rajdhani.className} text-2xl font-bold uppercase tracking-tight`}>
-              Página del equipo
-            </h2>
-            <p className="mt-1 text-sm text-white/50">
-              Avisos de regata, entrenamiento físico, nutrición o del club — lo
-              último que publicó el staff.
-            </p>
-          </div>
-          <span
-            className={`${mono.className} hidden shrink-0 items-center gap-1.5 text-[10px] uppercase tracking-widest text-cyan-300 sm:flex`}
-          >
-            <span className="pulse-dot h-1.5 w-1.5 rounded-full bg-cyan-300" />
-            En vivo
-          </span>
+        <div>
+          <h2 className={`${rajdhani.className} text-2xl font-bold uppercase tracking-tight`}>
+            Página del equipo
+          </h2>
+          <p className="mt-1 text-sm text-white/50">
+            Avisos de regata, entrenamiento físico, nutrición o del club — lo
+            último que publicó el staff.
+          </p>
         </div>
 
-        {isStaff(profile) && (
-        <form
-          action={post}
-          className="hud-frame cut-corner relative space-y-3 border border-cyan-400/20 bg-[#0D141E] p-5"
-        >
-          <span
-            className={`${mono.className} block text-[10px] uppercase tracking-widest text-white/40`}
-          >
-            Nuevo aviso
-          </span>
-          <textarea
-            name="body"
-            required
-            rows={3}
-            placeholder="Aviso para el equipo…"
-            className="w-full resize-none border border-white/15 bg-black/30 px-3 py-2 text-sm text-white placeholder:text-white/30 outline-none focus:border-cyan-300/60 focus:ring-1 focus:ring-cyan-300/40"
-          />
-          <PostButton />
-        </form>
-      )}
+        {isStaff(profile) && <AnnouncementForm />}
 
       <ul className="space-y-3">
         {(items as Ann[] | null)?.map((a) => (
@@ -152,7 +125,38 @@ export default async function PaginaEquipoPage({
                   {timeAgo(a.created_at)}
                 </span>
               </div>
-              <p className="mt-1 whitespace-pre-wrap text-white/70">{a.body}</p>
+              {a.body && (
+                <p className="mt-1 whitespace-pre-wrap text-white/70">{a.body}</p>
+              )}
+              {!!a.attachment_urls?.length && (
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {a.attachment_urls.map((url) =>
+                    IMG_EXT.test(url) ? (
+                      <a key={url} href={url} target="_blank" rel="noopener noreferrer">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={url}
+                          alt=""
+                          className="h-28 w-28 rounded-lg border border-white/10 object-cover transition hover:opacity-90"
+                        />
+                      </a>
+                    ) : (
+                      <a
+                        key={url}
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`${mono.className} flex items-center gap-1.5 border border-white/15 bg-black/20 px-2.5 py-1.5 text-[11px] text-cyan-300 transition hover:border-cyan-300/60`}
+                      >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3 w-3">
+                          <path d="M21.44 11.05 12.25 20.24a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+                        </svg>
+                        {fileName(url)}
+                      </a>
+                    ),
+                  )}
+                </div>
+              )}
             </div>
           </li>
         ))}
