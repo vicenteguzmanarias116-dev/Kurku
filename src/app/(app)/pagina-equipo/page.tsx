@@ -3,6 +3,7 @@ import { requireUser, isStaff, isAdmin } from "@/lib/auth";
 import { mono } from "../fonts";
 import PageHead from "../PageHead";
 import TeamGallery from "./TeamGallery";
+import ModuleToggles from "./ModuleToggles";
 import AnnouncementForm from "./AnnouncementForm";
 
 type Ann = {
@@ -57,9 +58,9 @@ export default async function PaginaEquipoPage({
       .limit(100),
     supabase
       .from("teams")
-      .select("gallery_urls")
+      .select("gallery_urls, hidden_modules")
       .eq("id", profile!.team_id)
-      .single<{ gallery_urls: string[] }>(),
+      .single<{ gallery_urls: string[]; hidden_modules: string[] }>(),
   ]);
   const galleryUrls = team?.gallery_urls ?? [];
   const showGallery = editing || galleryUrls.length > 0;
@@ -81,7 +82,7 @@ export default async function PaginaEquipoPage({
       )}
       <div
         className={`grid gap-6 ${
-          showGallery ? "lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]" : ""
+          showGallery || editing ? "lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]" : ""
         }`}
       >
       <div className="max-w-2xl space-y-6">
@@ -165,7 +166,16 @@ export default async function PaginaEquipoPage({
         </ul>
       </div>
 
-      {showGallery && <TeamGallery editing={editing} initialUrls={galleryUrls} />}
+      {(showGallery || editing) && (
+        <div className="space-y-6">
+          {editing && (
+            <ModuleToggles initialHidden={team?.hidden_modules ?? []} />
+          )}
+          {showGallery && (
+            <TeamGallery editing={editing} initialUrls={galleryUrls} />
+          )}
+        </div>
+      )}
       </div>
     </div>
   );

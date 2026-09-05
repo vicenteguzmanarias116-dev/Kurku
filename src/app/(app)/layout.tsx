@@ -5,6 +5,7 @@ import { requireUser, isAdmin } from "@/lib/auth";
 import { rajdhani, mono } from "./fonts";
 import AccountMenu from "./AccountMenu";
 import HeaderSettings from "./HeaderSettings";
+import { OPTIONAL_MODULES } from "./modules";
 
 export default async function AppLayout({
   children,
@@ -14,21 +15,27 @@ export default async function AppLayout({
   const { supabase, profile } = await requireUser();
   if (!profile?.team_id) redirect("/equipo/nuevo");
 
+  const { data: team } = await supabase
+    .from("teams")
+    .select("name, logo_url, description, hidden_modules")
+    .eq("id", profile.team_id)
+    .single<{
+      name: string;
+      logo_url: string | null;
+      description: string | null;
+      hidden_modules: string[];
+    }>();
+
+  const hidden = new Set(team?.hidden_modules ?? []);
   const NAV = [
     { href: "/pagina-equipo", label: "Página del equipo" },
     { href: "/dashboard", label: "Panel" },
-    { href: "/atletas", label: "Atletas" },
-    { href: "/entrenamientos", label: "Entrenamientos" },
-    { href: "/calendario", label: "Calendario" },
-    { href: "/noticias", label: "Noticias" },
+    ...OPTIONAL_MODULES.filter((m) => !hidden.has(m.key)).map((m) => ({
+      href: m.href,
+      label: m.label,
+    })),
     ...(isAdmin(profile) ? [{ href: "/equipo/miembros", label: "Miembros" }] : []),
   ];
-
-  const { data: team } = await supabase
-    .from("teams")
-    .select("name, logo_url, description")
-    .eq("id", profile.team_id)
-    .single<{ name: string; logo_url: string | null; description: string | null }>();
 
   return (
     <div className="relative flex flex-1 flex-col bg-[#05080D] text-[#EAF2F6]">
