@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { mono } from "../fonts";
 import { createClient } from "@/lib/supabase/client";
 import { setGallery } from "./gallery-actions";
 
@@ -51,12 +50,6 @@ export default function TeamGallery({
 
   return (
     <div>
-      <span
-        className={`${mono.className} mb-3 block text-[10px] uppercase tracking-widest text-white/30`}
-      >
-        Fotos del equipo
-      </span>
-
       <div className="grid grid-cols-2 auto-rows-[110px] gap-2.5">
         {urls.map((u, i) => (
           <div
