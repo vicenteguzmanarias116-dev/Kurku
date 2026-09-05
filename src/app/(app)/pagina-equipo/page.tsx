@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { revalidatePath } from "next/cache";
 import { requireUser, isStaff, isAdmin } from "@/lib/auth";
 import { rajdhani, mono } from "../fonts";
@@ -39,8 +40,14 @@ function timeAgo(iso: string) {
   });
 }
 
-export default async function PaginaEquipoPage() {
+export default async function PaginaEquipoPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ editar?: string }>;
+}) {
   const { supabase, profile } = await requireUser();
+  const { editar } = await searchParams;
+  const editing = isAdmin(profile) && editar === "1";
   const [{ data: items }, { data: team }] = await Promise.all([
     supabase
       .from("announcements")
@@ -55,7 +62,21 @@ export default async function PaginaEquipoPage() {
   ]);
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+    <div className="space-y-4">
+      {editing && (
+        <div className="cut-corner flex flex-wrap items-center justify-between gap-3 border border-cyan-400/40 bg-cyan-400/[0.06] px-4 py-3 text-sm">
+          <span className={`${mono.className} text-xs uppercase tracking-wider text-cyan-300`}>
+            Modo personalización
+          </span>
+          <Link
+            href="/pagina-equipo"
+            className={`${mono.className} text-xs uppercase tracking-wider text-white/60 hover:text-white`}
+          >
+            Salir
+          </Link>
+        </div>
+      )}
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
       <div className="max-w-2xl space-y-6">
         <div className="flex items-start justify-between gap-4">
           <div>
@@ -137,7 +158,8 @@ export default async function PaginaEquipoPage() {
         </ul>
       </div>
 
-      <TeamGallery isAdmin={isAdmin(profile)} initialUrls={team?.gallery_urls ?? []} />
+      <TeamGallery editing={editing} initialUrls={team?.gallery_urls ?? []} />
+      </div>
     </div>
   );
 }

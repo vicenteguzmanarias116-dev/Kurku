@@ -34,7 +34,7 @@ export default function AccountMenu({
   const initial = (fullName || "?").charAt(0).toUpperCase();
 
   return (
-    <div ref={ref} className="relative ml-auto">
+    <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((v) => !v)}
         className="flex items-center gap-2 rounded-full transition hover:opacity-80"

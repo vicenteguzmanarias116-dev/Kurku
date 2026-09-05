@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { requireUser, isAdmin } from "@/lib/auth";
 import { rajdhani, mono } from "./fonts";
 import AccountMenu from "./AccountMenu";
+import HeaderSettings from "./HeaderSettings";
 
 export default async function AppLayout({
   children,
@@ -73,17 +74,20 @@ export default async function AppLayout({
             </Link>
           ))}
         </nav>
-        <span
-          className={`${mono.className} ml-auto hidden items-center gap-1 text-[10px] uppercase tracking-widest text-white/25 md:inline-flex`}
-        >
-          <span className="h-1.5 w-1.5 bg-[#FF5A36]/60" />
-          Kurku
-        </span>
-        <AccountMenu
-          fullName={profile?.full_name ?? null}
-          role={profile?.role}
-          avatarUrl={profile?.avatar_url ?? null}
-        />
+        <div className="ml-auto flex items-center gap-4">
+          <span
+            className={`${mono.className} hidden items-center gap-1 text-[10px] uppercase tracking-widest text-white/25 md:inline-flex`}
+          >
+            <span className="h-1.5 w-1.5 bg-[#FF5A36]/60" />
+            Kurku
+          </span>
+          {isAdmin(profile) && <HeaderSettings />}
+          <AccountMenu
+            fullName={profile?.full_name ?? null}
+            role={profile?.role}
+            avatarUrl={profile?.avatar_url ?? null}
+          />
+        </div>
       </header>
       <nav
         className={`${mono.className} flex gap-4 overflow-x-auto border-b border-white/10 bg-[#0D141E] px-6 py-2.5 text-xs uppercase tracking-wider text-white/50 sm:hidden`}
