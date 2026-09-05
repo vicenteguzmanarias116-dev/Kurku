@@ -55,7 +55,7 @@ export default function ProfileForm({
           name="bio"
           rows={3}
           defaultValue={bio}
-          placeholder="Un par de líneas sobre vos…"
+          placeholder="Un par de líneas sobre ti…"
           className="w-full border border-white/15 bg-black/30 px-3 py-2 text-sm text-white outline-none focus:border-cyan-300/60 focus:ring-1 focus:ring-cyan-300/40"
         />
       </label>
