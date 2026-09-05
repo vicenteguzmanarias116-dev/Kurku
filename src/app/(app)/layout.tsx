@@ -17,18 +17,39 @@ export default async function AppLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { profile } = await requireUser();
+  const { supabase, profile } = await requireUser();
   if (!profile?.team_id) redirect("/equipo/nuevo");
+
+  const { data: team } = await supabase
+    .from("teams")
+    .select("name, logo_url")
+    .eq("id", profile.team_id)
+    .single<{ name: string; logo_url: string | null }>();
 
   return (
     <div className="flex flex-1 flex-col bg-[#05080D] text-[#EAF2F6]">
       <header className="flex items-center gap-6 border-b border-white/10 bg-[#0D141E] px-6 py-4 sm:px-10">
         <Link
           href="/dashboard"
-          className={`${rajdhani.className} flex items-center gap-2 text-lg font-bold tracking-wide`}
+          className="flex items-center gap-3 overflow-hidden"
         >
-          <span className="h-2 w-2 bg-[#FF5A36]" />
-          KURKU
+          {team?.logo_url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={team.logo_url}
+              alt=""
+              className="h-9 w-9 shrink-0 rounded-full border border-white/15 object-cover"
+            />
+          ) : (
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center border border-[#FF5A36]/40 bg-[#FF5A36]/10 text-sm font-bold text-[#FF5A36]">
+              {(team?.name ?? "K").charAt(0).toUpperCase()}
+            </span>
+          )}
+          <span
+            className={`${rajdhani.className} truncate text-xl font-bold tracking-wide sm:text-2xl`}
+          >
+            {team?.name ?? "Kurku"}
+          </span>
         </Link>
         <nav
           className={`${mono.className} hidden gap-5 text-xs uppercase tracking-wider text-white/50 sm:flex`}
@@ -44,6 +65,12 @@ export default async function AppLayout({
           ))}
         </nav>
         <form action={signOut} className="ml-auto flex items-center gap-4">
+          <span
+            className={`${mono.className} hidden items-center gap-1 text-[10px] uppercase tracking-widest text-white/25 md:inline-flex`}
+          >
+            <span className="h-1.5 w-1.5 bg-[#FF5A36]/60" />
+            Kurku
+          </span>
           <span
             className={`${mono.className} hidden text-xs uppercase tracking-wider text-white/40 sm:inline`}
           >
