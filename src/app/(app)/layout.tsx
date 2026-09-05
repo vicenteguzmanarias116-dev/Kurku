@@ -29,29 +29,36 @@ export default async function AppLayout({
   return (
     <div className="flex flex-1 flex-col bg-[#05080D] text-[#EAF2F6]">
       <header className="flex items-center gap-6 border-b border-white/10 bg-[#0D141E] px-6 py-4 sm:px-10">
-        <Link
-          href="/dashboard"
-          title={team?.description || undefined}
-          className="flex items-center gap-3 overflow-hidden"
-        >
-          {team?.logo_url ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={team.logo_url}
-              alt=""
-              className="h-9 w-9 shrink-0 rounded-full border border-white/15 object-cover"
-            />
-          ) : (
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center border border-[#FF5A36]/40 bg-[#FF5A36]/10 text-sm font-bold text-[#FF5A36]">
-              {(team?.name ?? "K").charAt(0).toUpperCase()}
+        <div className="group relative flex shrink-0 items-center">
+          <Link href="/dashboard" className="flex items-center gap-3 overflow-hidden">
+            {team?.logo_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={team.logo_url}
+                alt=""
+                className="h-9 w-9 shrink-0 rounded-full border border-white/15 object-cover"
+              />
+            ) : (
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center border border-[#FF5A36]/40 bg-[#FF5A36]/10 text-sm font-bold text-[#FF5A36]">
+                {(team?.name ?? "K").charAt(0).toUpperCase()}
+              </span>
+            )}
+            <span
+              className={`${rajdhani.className} truncate text-xl font-bold tracking-wide sm:text-2xl`}
+            >
+              {team?.name ?? "Kurku"}
             </span>
+          </Link>
+
+          {team?.description && (
+            <div
+              role="tooltip"
+              className="pointer-events-none absolute left-0 top-full z-30 mt-3 w-max max-w-[280px] -translate-y-1 border border-white/10 border-l-2 border-l-[#FF5A36] bg-[#0D141E] px-3.5 py-2.5 text-sm leading-snug text-white/70 opacity-0 shadow-xl shadow-black/50 transition-all duration-200 ease-out group-hover:translate-y-0 group-hover:opacity-100"
+            >
+              {team.description}
+            </div>
           )}
-          <span
-            className={`${rajdhani.className} truncate text-xl font-bold tracking-wide sm:text-2xl`}
-          >
-            {team?.name ?? "Kurku"}
-          </span>
-        </Link>
+        </div>
         <nav
           className={`${mono.className} hidden gap-5 text-xs uppercase tracking-wider text-white/50 sm:flex`}
         >
