@@ -45,11 +45,12 @@ function timeAgo(iso: string) {
 export default async function PaginaEquipoPage({
   searchParams,
 }: {
-  searchParams: Promise<{ editar?: string }>;
+  searchParams: Promise<{ editar?: string; tab?: string }>;
 }) {
   const { supabase, profile } = await requireUser();
-  const { editar } = await searchParams;
+  const { editar, tab } = await searchParams;
   const editing = isAdmin(profile) && editar === "1";
+  const activeTab = tab === "archivos" ? "archivos" : "avisos";
   const [{ data: items }, { data: team }] = await Promise.all([
     supabase
       .from("announcements")
@@ -64,6 +65,14 @@ export default async function PaginaEquipoPage({
   ]);
   const galleryUrls = team?.gallery_urls ?? [];
   const showGallery = editing || galleryUrls.length > 0;
+
+  const files = ((items as Ann[] | null) ?? []).flatMap((a) =>
+    (a.attachment_urls ?? []).map((url) => ({
+      url,
+      author: a.profiles?.full_name ?? "—",
+      created_at: a.created_at,
+    })),
+  );
 
   return (
     <div className="space-y-4">
@@ -92,6 +101,66 @@ export default async function PaginaEquipoPage({
           subtitle="Avisos de regata, entrenamiento físico, nutrición o del club — lo último que publicó el staff."
         />
 
+        <div className={`${mono.className} flex gap-4 border-b border-white/10 text-xs uppercase tracking-wider`}>
+          <Link
+            href="/pagina-equipo"
+            className={`-mb-px border-b-2 pb-2 transition ${
+              activeTab === "avisos"
+                ? "border-[#FF5A36] text-white"
+                : "border-transparent text-white/40 hover:text-white/70"
+            }`}
+          >
+            Avisos
+          </Link>
+          <Link
+            href="/pagina-equipo?tab=archivos"
+            className={`-mb-px border-b-2 pb-2 transition ${
+              activeTab === "archivos"
+                ? "border-[#FF5A36] text-white"
+                : "border-transparent text-white/40 hover:text-white/70"
+            }`}
+          >
+            Archivos ({files.length})
+          </Link>
+        </div>
+
+        {activeTab === "archivos" ? (
+          <ul className="divide-y divide-white/10 rounded-xl border border-white/10 bg-[#0D141E]/80">
+            {files.map((f) => (
+              <li key={f.url} className="flex items-center gap-3 px-5 py-3 text-sm">
+                {IMG_EXT.test(f.url) ? (
+                  <a href={f.url} target="_blank" rel="noopener noreferrer">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={f.url} alt="" className="h-10 w-10 shrink-0 rounded border border-white/10 object-cover" />
+                  </a>
+                ) : (
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded border border-white/10 text-cyan-300">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4">
+                      <path d="M21.44 11.05 12.25 20.24a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+                    </svg>
+                  </span>
+                )}
+                <a
+                  href={f.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="min-w-0 flex-1 truncate text-cyan-300 hover:underline"
+                >
+                  {fileName(f.url)}
+                </a>
+                <span className={`${mono.className} shrink-0 text-[10px] uppercase tracking-wider text-white/30`}>
+                  {f.author} · {timeAgo(f.created_at)}
+                </span>
+              </li>
+            ))}
+            {!files.length && (
+              <li className="px-5 py-10 text-center text-sm text-white/30">
+                Sin archivos. Aparecen acá cuando el staff adjunta algo a un aviso.
+              </li>
+            )}
+          </ul>
+        ) : (
+          <>
         {isStaff(profile) && <AnnouncementForm />}
 
       <ul className="space-y-3">
@@ -164,6 +233,8 @@ export default async function PaginaEquipoPage({
           </li>
         )}
         </ul>
+          </>
+        )}
       </div>
 
       {(showGallery || editing) && (

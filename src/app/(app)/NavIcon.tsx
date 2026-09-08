@@ -31,9 +31,6 @@ const PATHS: Record<string, React.ReactNode> = {
       <path d="M10.5 13.5v-3M9 12h3" />
     </>
   ),
-  biblioteca: (
-    <path d="M4 5a2 2 0 0 1 2-2h4l2 2h6a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z" />
-  ),
   mensajes: (
     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
   ),
