@@ -22,25 +22,48 @@ export default async function Dashboard({
 }: {
   searchParams: Promise<{ welcome?: string }>;
 }) {
-  const { supabase } = await requireUser();
+  const { supabase, user, profile } = await requireUser();
   const { welcome } = await searchParams;
 
   const today = new Date().toISOString().slice(0, 10);
-  const [{ data: loads }, { data: events }, { data: painToday }, { data: activeInjuries }] =
-    await Promise.all([
-      supabase.from("v_athlete_load").select("*").order("full_name"),
-      supabase
-        .from("events")
-        .select("id, title, kind, starts_at, location")
-        .gte("starts_at", new Date().toISOString())
-        .order("starts_at")
-        .limit(5),
-      supabase
-        .from("health_checkins")
-        .select("muscle_pain, athletes(full_name)")
-        .eq("checkin_date", today),
-      supabase.from("injuries").select("id, body_part, athletes(full_name)").eq("status", "activa"),
-    ]);
+  const tomorrow = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+  const [
+    { data: loads },
+    { data: events },
+    { data: painToday },
+    { data: activeInjuries },
+    { data: myAthlete },
+    { data: todayEvents },
+  ] = await Promise.all([
+    supabase.from("v_athlete_load").select("*").order("full_name"),
+    supabase
+      .from("events")
+      .select("id, title, kind, starts_at, location")
+      .gte("starts_at", new Date().toISOString())
+      .order("starts_at")
+      .limit(5),
+    supabase
+      .from("health_checkins")
+      .select("muscle_pain, athletes(full_name)")
+      .eq("checkin_date", today),
+    supabase.from("injuries").select("id, body_part, athletes(full_name)").eq("status", "activa"),
+    profile?.role === "athlete"
+      ? supabase.from("athletes").select("id").eq("profile_id", user.id).maybeSingle()
+      : Promise.resolve({ data: null }),
+    supabase
+      .from("events")
+      .select("id, title, kind, starts_at, location, athlete_id")
+      .gte("starts_at", `${today}T00:00:00`)
+      .lt("starts_at", `${tomorrow}T00:00:00`)
+      .order("starts_at"),
+  ]);
+
+  // recordatorio de "sesiones de hoy": para todos si es de todo el equipo,
+  // o solo si te lo asignaron a vos puntualmente.
+  const myAthleteId = (myAthlete as { id: string } | null)?.id;
+  const remindersToday = (todayEvents ?? []).filter(
+    (e) => !e.athlete_id || e.athlete_id === myAthleteId,
+  );
 
   type PainRow = { muscle_pain: Record<string, number> | null; athletes: { full_name: string } | null };
   const alerts: string[] = [];
@@ -60,6 +83,27 @@ export default async function Dashboard({
     <div className="space-y-6">
       <WelcomeModal show={welcome === "1"} />
       <PageHead eyebrow="Flota · ILCA" title="Panel" />
+
+      {remindersToday.length > 0 && (
+        <section className="rounded-xl border border-[#FF5A36]/30 bg-[#FF5A36]/[0.06] p-5">
+          <span className={`${mono.className} block text-[11px] uppercase tracking-widest text-[#FF5A36]`}>
+            Recordatorio · hoy
+          </span>
+          <ul className="mt-2 space-y-1.5 text-sm">
+            {remindersToday.map((e) => (
+              <li key={e.id}>
+                <Link href={`/calendario/${e.id}`} className="text-white/90 hover:text-[#FF5A36]">
+                  🔔{" "}
+                  {new Date(e.starts_at).toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit" })}
+                  {" — "}
+                  {e.title}
+                  {e.location && <span className="text-white/40"> · {e.location}</span>}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {alerts.length > 0 && (
         <section className="rounded-xl border border-red-400/30 bg-red-400/[0.06] p-5">
