@@ -129,7 +129,8 @@ export default async function Dashboard({
           Carga de entrenamiento (ACWR)
         </h2>
 
-        <table className="mt-5 w-full max-w-xl text-sm">
+        <div className="mt-5 max-w-xl overflow-x-auto">
+        <table className="w-full min-w-[360px] text-sm">
           <thead
             className={`${mono.className} text-left text-[11px] uppercase tracking-wider text-white/40`}
           >
@@ -167,6 +168,7 @@ export default async function Dashboard({
             )}
           </tbody>
         </table>
+        </div>
         <p className={`${mono.className} mt-3 text-[10px] uppercase tracking-wider text-white/30`}>
           Verde 0.8–1.5 · Rojo &gt;1.5 sobrecarga · Ámbar &lt;0.8 poca carga
         </p>

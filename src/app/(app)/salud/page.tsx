@@ -73,7 +73,8 @@ export default async function SaludPage() {
           {!teamToday?.length ? (
             <p className="text-sm text-white/30">Nadie llenó el check-in todavía.</p>
           ) : (
-            <table className="w-full text-sm">
+            <div className="overflow-x-auto">
+            <table className="w-full min-w-[520px] text-sm">
               <thead className={`${mono.className} text-left text-[11px] uppercase tracking-wider text-white/40`}>
                 <tr>
                   <th className="py-1 font-normal">Atleta</th>
@@ -102,6 +103,7 @@ export default async function SaludPage() {
                 })}
               </tbody>
             </table>
+            </div>
           )}
         </div>
       )}

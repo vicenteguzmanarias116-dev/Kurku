@@ -41,8 +41,8 @@ export default async function AtletasPage() {
 
       {staff && profile?.team_id && <InviteLink teamId={profile.team_id} />}
 
-      <div className="rounded-xl border border-white/10 bg-[#0D141E]/80 p-6">
-        <table className="w-full text-sm">
+      <div className="overflow-x-auto rounded-xl border border-white/10 bg-[#0D141E]/80 p-6">
+        <table className="w-full min-w-[420px] text-sm">
           <thead
             className={`${mono.className} text-left text-[11px] uppercase tracking-wider text-white/40`}
           >

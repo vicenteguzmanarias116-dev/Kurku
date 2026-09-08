@@ -119,7 +119,7 @@ export default function MuscleMap({
 
   return (
     <div>
-      <div className="grid grid-cols-2 gap-4 rounded-lg border border-white/10 bg-black/20 p-4">
+      <div className="grid grid-cols-1 gap-4 rounded-lg border border-white/10 bg-black/20 p-4 sm:grid-cols-2">
         <div>
           <p className="mb-1 text-center text-[11px] uppercase tracking-wider text-white/30">
             Frente
