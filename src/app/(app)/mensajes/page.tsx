@@ -17,6 +17,8 @@ type Msg = {
 const ROLE_LABEL: Record<string, string> = {
   admin: "Administrador",
   coach: "Coach",
+  fisico: "Preparador físico",
+  nutricionista: "Nutricionista",
   athlete: "Atleta",
 };
 

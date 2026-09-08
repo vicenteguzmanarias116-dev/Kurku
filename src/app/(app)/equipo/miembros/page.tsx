@@ -7,6 +7,8 @@ import { removeMember, setMemberRole } from "../actions";
 const ROLE_LABEL: Record<string, string> = {
   admin: "Administrador",
   coach: "Coach",
+  fisico: "Preparador físico",
+  nutricionista: "Nutricionista",
   athlete: "Atleta",
 };
 
@@ -61,6 +63,8 @@ export default async function MiembrosPage() {
               >
                 <option value="athlete">Atleta</option>
                 <option value="coach">Coach</option>
+                <option value="fisico">Preparador físico</option>
+                <option value="nutricionista">Nutricionista</option>
                 <option value="admin">Administrador</option>
               </select>
               <button className="border border-white/15 px-2 py-1.5 text-xs text-white/60 hover:text-white">

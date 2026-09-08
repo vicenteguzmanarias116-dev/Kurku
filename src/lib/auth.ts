@@ -4,7 +4,7 @@ import { createClient } from "./supabase/server";
 export type Profile = {
   id: string;
   team_id: string | null;
-  role: "admin" | "coach" | "athlete";
+  role: "admin" | "coach" | "fisico" | "nutricionista" | "athlete";
   full_name: string | null;
   avatar_url: string | null;
   bio: string | null;
@@ -32,6 +32,9 @@ export async function requireUser() {
 }
 
 export const isStaff = (p?: Profile | null) =>
-  p?.role === "admin" || p?.role === "coach";
+  p?.role === "admin" ||
+  p?.role === "coach" ||
+  p?.role === "fisico" ||
+  p?.role === "nutricionista";
 
 export const isAdmin = (p?: Profile | null) => p?.role === "admin";

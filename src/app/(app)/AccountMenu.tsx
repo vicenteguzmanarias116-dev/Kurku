@@ -8,6 +8,8 @@ import { signOut } from "./actions";
 const ROLE_LABEL: Record<string, string> = {
   admin: "Admin",
   coach: "Coach",
+  fisico: "Prep. físico",
+  nutricionista: "Nutricionista",
   athlete: "Atleta",
 };
 

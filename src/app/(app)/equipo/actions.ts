@@ -21,7 +21,7 @@ export async function removeMember(formData: FormData) {
   revalidatePath("/equipo/miembros");
 }
 
-const VALID_ROLES = ["admin", "coach", "athlete"] as const;
+const VALID_ROLES = ["admin", "coach", "fisico", "nutricionista", "athlete"] as const;
 
 export async function setMemberRole(formData: FormData) {
   const { supabase, profile, user } = await requireUser();
