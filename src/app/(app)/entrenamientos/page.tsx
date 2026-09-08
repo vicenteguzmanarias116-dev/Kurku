@@ -2,6 +2,7 @@ import { requireUser, isStaff } from "@/lib/auth";
 import { addSession } from "./actions";
 import { mono } from "../fonts";
 import PageHead from "../PageHead";
+import ExportButton from "../ExportButton";
 
 type Row = {
   id: string;
@@ -35,7 +36,14 @@ export default async function EntrenamientosPage() {
 
   return (
     <div className="space-y-6">
-      <PageHead eyebrow="Carga · ACWR" title="Entrenamientos" />
+      <div className="flex items-end justify-between gap-4">
+        <PageHead eyebrow="Carga · ACWR" title="Entrenamientos" />
+        {staff && (
+          <div className="mb-7 shrink-0">
+            <ExportButton type="entrenamientos" />
+          </div>
+        )}
+      </div>
 
       {staff && (
         <details className="rounded-xl border border-white/10 bg-[#0D141E]/80 p-5">

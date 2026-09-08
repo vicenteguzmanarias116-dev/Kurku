@@ -2,6 +2,7 @@ import { requireUser, isStaff } from "@/lib/auth";
 import { mono, rajdhani } from "../fonts";
 import PageHead from "../PageHead";
 import { addInjury, setStatus } from "./actions";
+import ExportButton from "../ExportButton";
 
 type Injury = {
   id: string;
@@ -50,11 +51,18 @@ export default async function LesionesPage() {
 
   return (
     <div className="space-y-6">
-      <PageHead
-        eyebrow="Prevención"
-        title="Lesiones"
-        subtitle={staff ? "Registro y seguimiento del equipo." : "Tu historial de lesiones."}
-      />
+      <div className="flex items-end justify-between gap-4">
+        <PageHead
+          eyebrow="Prevención"
+          title="Lesiones"
+          subtitle={staff ? "Registro y seguimiento del equipo." : "Tu historial de lesiones."}
+        />
+        {staff && (
+          <div className="mb-7 shrink-0">
+            <ExportButton type="lesiones" />
+          </div>
+        )}
+      </div>
 
       {staff && (
         <details className="rounded-xl border border-white/10 bg-[#0D141E]/80 p-5">

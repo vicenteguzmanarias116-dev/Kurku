@@ -3,6 +3,7 @@ import { requireUser, isStaff } from "@/lib/auth";
 import { mono } from "../fonts";
 import PageHead from "../PageHead";
 import InviteLink from "./InviteLink";
+import ExportButton from "../ExportButton";
 
 type Athlete = {
   id: string;
@@ -26,12 +27,15 @@ export default async function AtletasPage() {
       <div className="flex items-end justify-between gap-4">
         <PageHead eyebrow="Flota · ILCA" title="Atletas" />
         {staff && (
-          <Link
-            href="/atletas/nuevo"
-            className={`${mono.className} cut-corner mb-7 shrink-0 bg-[#FF5A36] px-4 py-2 text-xs font-bold uppercase tracking-wide text-[#05080D] transition hover:bg-[#ff7154]`}
-          >
-            Nuevo atleta
-          </Link>
+          <div className="mb-7 flex shrink-0 gap-2">
+            <ExportButton type="atletas" />
+            <Link
+              href="/atletas/nuevo"
+              className={`${mono.className} cut-corner bg-[#FF5A36] px-4 py-2 text-xs font-bold uppercase tracking-wide text-[#05080D] transition hover:bg-[#ff7154]`}
+            >
+              Nuevo atleta
+            </Link>
+          </div>
         )}
       </div>
 

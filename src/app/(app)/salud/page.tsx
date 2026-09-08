@@ -2,6 +2,7 @@ import { requireUser, isStaff } from "@/lib/auth";
 import { mono } from "../fonts";
 import PageHead from "../PageHead";
 import CheckinForm from "./CheckinForm";
+import ExportButton from "../ExportButton";
 
 type CheckinRow = {
   athlete_id: string;
@@ -63,9 +64,12 @@ export default async function SaludPage() {
 
       {staff && (
         <div className="rounded-xl border border-white/10 bg-[#0D141E]/80 p-6">
-          <span className={`${mono.className} mb-4 block text-[11px] uppercase tracking-widest text-cyan-300`}>
-            Equipo hoy
-          </span>
+          <div className="mb-4 flex items-center justify-between">
+            <span className={`${mono.className} block text-[11px] uppercase tracking-widest text-cyan-300`}>
+              Equipo hoy
+            </span>
+            <ExportButton type="salud" label="Exportar historial CSV" />
+          </div>
           {!teamToday?.length ? (
             <p className="text-sm text-white/30">Nadie llenó el check-in todavía.</p>
           ) : (
