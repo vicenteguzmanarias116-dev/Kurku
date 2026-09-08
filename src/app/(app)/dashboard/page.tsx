@@ -25,20 +25,54 @@ export default async function Dashboard({
   const { supabase } = await requireUser();
   const { welcome } = await searchParams;
 
-  const [{ data: loads }, { data: events }] = await Promise.all([
-    supabase.from("v_athlete_load").select("*").order("full_name"),
-    supabase
-      .from("events")
-      .select("id, title, kind, starts_at, location")
-      .gte("starts_at", new Date().toISOString())
-      .order("starts_at")
-      .limit(5),
-  ]);
+  const today = new Date().toISOString().slice(0, 10);
+  const [{ data: loads }, { data: events }, { data: painToday }, { data: activeInjuries }] =
+    await Promise.all([
+      supabase.from("v_athlete_load").select("*").order("full_name"),
+      supabase
+        .from("events")
+        .select("id, title, kind, starts_at, location")
+        .gte("starts_at", new Date().toISOString())
+        .order("starts_at")
+        .limit(5),
+      supabase
+        .from("health_checkins")
+        .select("muscle_pain, athletes(full_name)")
+        .eq("checkin_date", today),
+      supabase.from("injuries").select("id, body_part, athletes(full_name)").eq("status", "activa"),
+    ]);
+
+  type PainRow = { muscle_pain: Record<string, number> | null; athletes: { full_name: string } | null };
+  const alerts: string[] = [];
+  for (const l of (loads as Load[] | null) ?? []) {
+    const r = l.chronic > 0 ? l.acute / l.chronic : 0;
+    if (r > 1.5) alerts.push(`${l.full_name}: sobrecarga (ACWR ${r.toFixed(2)})`);
+  }
+  for (const p of (painToday as unknown as PainRow[] | null) ?? []) {
+    const worst = Math.max(0, ...Object.values(p.muscle_pain ?? {}));
+    if (worst >= 3) alerts.push(`${p.athletes?.full_name ?? "—"}: dolor fuerte reportado hoy`);
+  }
+  for (const inj of (activeInjuries as unknown as { athletes: { full_name: string } | null; body_part: string }[] | null) ?? []) {
+    alerts.push(`${inj.athletes?.full_name ?? "—"}: lesión activa (${inj.body_part})`);
+  }
 
   return (
     <div className="space-y-6">
       <WelcomeModal show={welcome === "1"} />
       <PageHead eyebrow="Flota · ILCA" title="Panel" />
+
+      {alerts.length > 0 && (
+        <section className="rounded-xl border border-red-400/30 bg-red-400/[0.06] p-5">
+          <span className={`${mono.className} block text-[11px] uppercase tracking-widest text-red-400`}>
+            Alertas
+          </span>
+          <ul className="mt-2 space-y-1 text-sm text-red-200">
+            {alerts.map((a, i) => (
+              <li key={i}>⚠ {a}</li>
+            ))}
+          </ul>
+        </section>
+      )}
       <section className="rounded-xl border border-white/10 bg-[#0D141E]/80 p-6">
         <span
           className={`${mono.className} block text-[11px] uppercase tracking-widest text-cyan-300`}
