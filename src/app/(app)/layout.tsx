@@ -6,6 +6,7 @@ import { rajdhani, mono } from "./fonts";
 import AccountMenu from "./AccountMenu";
 import HeaderSettings from "./HeaderSettings";
 import { OPTIONAL_MODULES } from "./modules";
+import HealthReminderModal from "./HealthReminderModal";
 
 export default async function AppLayout({
   children,
@@ -27,6 +28,26 @@ export default async function AppLayout({
     }>();
 
   const hidden = new Set(team?.hidden_modules ?? []);
+
+  let needsHealthCheckin = false;
+  if (profile.role === "athlete" && !hidden.has("salud")) {
+    const { data: myAthlete } = await supabase
+      .from("athletes")
+      .select("id")
+      .eq("profile_id", profile.id)
+      .maybeSingle();
+    if (myAthlete) {
+      const today = new Date().toISOString().slice(0, 10);
+      const { data: checkin } = await supabase
+        .from("health_checkins")
+        .select("id")
+        .eq("athlete_id", myAthlete.id)
+        .eq("checkin_date", today)
+        .maybeSingle();
+      needsHealthCheckin = !checkin;
+    }
+  }
+
   const NAV = [
     { href: "/pagina-equipo", label: "Página del equipo" },
     { href: "/dashboard", label: "Panel" },
@@ -144,6 +165,8 @@ export default async function AppLayout({
       <main className="relative z-10 flex-1 px-6 pb-10 pt-4 sm:px-10">
         {children}
       </main>
+
+      <HealthReminderModal show={needsHealthCheckin} />
     </div>
   );
 }
