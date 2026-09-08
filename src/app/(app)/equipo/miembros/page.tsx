@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { requireUser, isAdmin } from "@/lib/auth";
 import { mono } from "../../fonts";
 import PageHead from "../../PageHead";
-import { removeMember } from "../actions";
+import { removeMember, setMemberRole } from "../actions";
 
 const ROLE_LABEL: Record<string, string> = {
   admin: "Administrador",
@@ -52,6 +52,21 @@ export default async function MiembrosPage() {
                 {ROLE_LABEL[m.role] ?? m.role}
               </p>
             </div>
+            <form action={setMemberRole} className="flex items-center gap-1.5">
+              <input type="hidden" name="id" value={m.id} />
+              <select
+                name="role"
+                defaultValue={m.role}
+                className="border border-white/15 bg-black/30 px-2 py-1.5 text-xs text-white outline-none focus:border-cyan-300/60"
+              >
+                <option value="athlete">Atleta</option>
+                <option value="coach">Coach</option>
+                <option value="admin">Administrador</option>
+              </select>
+              <button className="border border-white/15 px-2 py-1.5 text-xs text-white/60 hover:text-white">
+                Guardar
+              </button>
+            </form>
             {m.id !== user.id && (
               <form action={removeMember}>
                 <input type="hidden" name="id" value={m.id} />
