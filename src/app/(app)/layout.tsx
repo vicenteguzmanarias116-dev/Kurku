@@ -7,6 +7,7 @@ import AccountMenu from "./AccountMenu";
 import HeaderSettings from "./HeaderSettings";
 import { OPTIONAL_MODULES } from "./modules";
 import HealthReminderModal from "./HealthReminderModal";
+import NavIcon from "./NavIcon";
 
 export default async function AppLayout({
   children,
@@ -49,13 +50,16 @@ export default async function AppLayout({
   }
 
   const NAV = [
-    { href: "/pagina-equipo", label: "Página del equipo" },
-    { href: "/dashboard", label: "Panel" },
+    { href: "/pagina-equipo", label: "Página del equipo", key: "pagina-equipo" },
+    { href: "/dashboard", label: "Panel", key: "dashboard" },
     ...OPTIONAL_MODULES.filter((m) => !hidden.has(m.key)).map((m) => ({
       href: m.href,
       label: m.label,
+      key: m.key,
     })),
-    ...(isAdmin(profile) ? [{ href: "/equipo/miembros", label: "Miembros" }] : []),
+    ...(isAdmin(profile)
+      ? [{ href: "/equipo/miembros", label: "Miembros", key: "miembros" }]
+      : []),
   ];
 
   return (
@@ -106,14 +110,15 @@ export default async function AppLayout({
           )}
         </div>
         <nav
-          className={`${mono.className} hidden gap-5 text-xs uppercase tracking-wider text-white/50 sm:flex`}
+          className={`${rajdhani.className} hidden gap-1 text-sm font-medium text-white/60 lg:flex`}
         >
           {NAV.map((n) => (
             <Link
               key={n.href}
               href={n.href}
-              className="transition hover:text-cyan-300"
+              className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 transition hover:bg-white/5 hover:text-white"
             >
+              <NavIcon name={n.key} className="h-4 w-4 shrink-0" />
               {n.label}
             </Link>
           ))}
@@ -134,14 +139,15 @@ export default async function AppLayout({
         </div>
       </header>
       <nav
-        className={`${mono.className} relative z-40 flex gap-4 overflow-x-auto border-b border-white/10 bg-[#0D141E]/85 px-6 py-2.5 text-xs uppercase tracking-wider text-white/50 backdrop-blur-sm sm:hidden`}
+        className={`${rajdhani.className} relative z-40 flex gap-1 overflow-x-auto border-b border-white/10 bg-[#0D141E]/85 px-4 py-2 text-sm font-medium text-white/60 backdrop-blur-sm lg:hidden`}
       >
         {NAV.map((n) => (
           <Link
             key={n.href}
             href={n.href}
-            className="whitespace-nowrap transition hover:text-cyan-300"
+            className="flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1.5 transition hover:bg-white/5 hover:text-white"
           >
+            <NavIcon name={n.key} className="h-4 w-4 shrink-0" />
             {n.label}
           </Link>
         ))}
