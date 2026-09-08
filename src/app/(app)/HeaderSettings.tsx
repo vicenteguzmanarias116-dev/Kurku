@@ -48,6 +48,13 @@ export default function HeaderSettings() {
           >
             Personalizar página del equipo
           </Link>
+          <Link
+            href="/equipo/miembros"
+            onClick={() => setOpen(false)}
+            className={`${mono.className} block px-4 py-2 text-xs uppercase tracking-wider text-white/60 hover:bg-white/5 hover:text-white`}
+          >
+            Miembros
+          </Link>
         </div>
       )}
     </div>

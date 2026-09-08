@@ -57,9 +57,6 @@ export default async function AppLayout({
       label: m.label,
       key: m.key,
     })),
-    ...(isAdmin(profile)
-      ? [{ href: "/equipo/miembros", label: "Miembros", key: "miembros" }]
-      : []),
   ];
 
   return (
