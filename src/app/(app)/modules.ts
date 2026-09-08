@@ -4,5 +4,6 @@ export const OPTIONAL_MODULES = [
   { key: "atletas", href: "/atletas", label: "Atletas" },
   { key: "entrenamientos", href: "/entrenamientos", label: "Entrenamientos" },
   { key: "calendario", href: "/calendario", label: "Calendario" },
+  { key: "salud", href: "/salud", label: "Salud" },
   { key: "noticias", href: "/noticias", label: "Noticias" },
 ] as const;
