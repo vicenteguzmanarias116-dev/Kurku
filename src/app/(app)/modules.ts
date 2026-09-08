@@ -6,6 +6,7 @@ export const OPTIONAL_MODULES = [
   { key: "calendario", href: "/calendario", label: "Calendario" },
   { key: "salud", href: "/salud", label: "Salud" },
   { key: "lesiones", href: "/lesiones", label: "Lesiones" },
+  { key: "biblioteca", href: "/biblioteca", label: "Biblioteca" },
   { key: "mensajes", href: "/mensajes", label: "Mensajes" },
   { key: "noticias", href: "/noticias", label: "Noticias" },
 ] as const;
