@@ -84,7 +84,50 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* Kurku landing: HUD/tech accents */
+/* ───────────────────────── Kurku dashboard: tema claro ─────────────────────
+   Paleta del dashboard interno (src/app/(app)/). Nombres propios, no los de
+   shadcn: esos son globales y pisarían también la landing.
+
+   Contraste: #FF5A36 con blanco encima da 3.0:1 y NO pasa AA en texto chico.
+   Por eso hay tres naranjas — `brand` solo para rellenos sin texto,
+   `brand-strong` para el botón primario, `brand-text` para texto naranja. */
+@theme {
+  --color-canvas: #f6f7f9; /* fondo de página */
+  --color-surface: #ffffff; /* cards, header */
+  --color-sunken: #f1f3f5; /* inputs, thead, filas alternas */
+  --color-line: #e4e7eb; /* bordes decorativos */
+  --color-line-strong: #98a2b3; /* borde de input (3:1, AA no-texto) */
+
+  --color-ink: #0f172a; /* texto principal   16:1 */
+  --color-ink-2: #475569; /* secundario         7.5:1 */
+  --color-ink-3: #64748b; /* muted/placeholder  4.8:1 */
+
+  --color-brand: #ff5a36; /* marca: fills, barras, iconos */
+  --color-brand-strong: #d64520; /* fondo de botón: blanco encima = 4.6:1 */
+  --color-brand-soft: #fff1ed; /* tint de item activo */
+  --color-brand-text: #b33a18; /* texto naranja sobre claro */
+
+  --color-ok: #16a34a;
+  --color-ok-soft: #ecfdf3;
+  --color-ok-text: #15803d;
+  --color-warn: #d97706;
+  --color-warn-soft: #fffbeb;
+  --color-warn-text: #b45309;
+  --color-bad: #dc2626;
+  --color-bad-soft: #fef2f2;
+  --color-bad-text: #b91c1c;
+  --color-info: #2563eb;
+  --color-info-soft: #eff6ff;
+  --color-info-text: #1d4ed8;
+
+  --radius-card: 14px;
+  --shadow-card:
+    0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.1);
+}
+
+/* ─── Kurku landing: adornos HUD ───
+   SOLO los usa la landing pública (src/app/page.tsx, KurkuGlobe.tsx).
+   No usar dentro de (app)/ — el dashboard es claro y sin adornos. */
 .cut-corner {
   clip-path: polygon(
     0 0,
@@ -166,90 +209,6 @@
 .hud-frame:hover::before,
 .hud-frame:focus-within::before {
   opacity: 1;
-}
-
-.radar-grid {
-  background-image: radial-gradient(
-    circle at 1px 1px,
-    rgba(255, 90, 54, 0.12) 1px,
-    transparent 0
-  );
-  background-size: 28px 28px;
-}
-
-@keyframes scan {
-  0% {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(2200%);
-    opacity: 0;
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .scanline {
-    animation: scan 2.4s ease-in-out 1;
-  }
-}
-
-@keyframes pulse-dot {
-  0%,
-  100% {
-    opacity: 1;
-    box-shadow: 0 0 0 0 rgba(255, 90, 54, 0.5);
-  }
-  50% {
-    opacity: 0.6;
-    box-shadow: 0 0 0 4px rgba(255, 90, 54, 0);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .pulse-dot {
-    animation: pulse-dot 2s ease-in-out infinite;
-  }
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
 }
 
 @layer base {

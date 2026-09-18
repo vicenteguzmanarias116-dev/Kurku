@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { mono } from "./fonts";
 import { signOut } from "./actions";
 
 const ROLE_LABEL: Record<string, string> = {
@@ -46,38 +45,32 @@ export default function AccountMenu({
           <img
             src={avatarUrl}
             alt=""
-            className="h-9 w-9 rounded-full border border-white/15 object-cover"
+            className="h-9 w-9 rounded-full border border-line object-cover"
           />
         ) : (
-          <span className="flex h-9 w-9 items-center justify-center rounded-full border border-cyan-300/40 bg-cyan-300/10 text-sm font-bold text-cyan-300">
+          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-sunken text-sm font-bold text-ink-2">
             {initial}
           </span>
         )}
       </button>
 
       {open && (
-        <div className="cut-corner absolute right-0 top-full z-30 mt-2 w-48 border border-cyan-400/20 bg-[#0D141E] py-2 shadow-xl shadow-black/50">
-          <div className="border-b border-white/10 px-4 py-2">
-            <p className="truncate text-sm text-white/80">{fullName}</p>
+        <div className="absolute right-0 top-full z-30 mt-2 w-52 overflow-hidden rounded-xl border border-line bg-surface py-1.5 shadow-lg">
+          <div className="border-b border-line px-4 py-2.5">
+            <p className="truncate text-sm font-medium text-ink">{fullName}</p>
             {role && (
-              <p
-                className={`${mono.className} text-[10px] uppercase tracking-widest text-cyan-300`}
-              >
-                {ROLE_LABEL[role] ?? role}
-              </p>
+              <p className="text-xs text-ink-3">{ROLE_LABEL[role] ?? role}</p>
             )}
           </div>
           <Link
             href="/cuenta"
             onClick={() => setOpen(false)}
-            className={`${mono.className} block px-4 py-2 text-xs uppercase tracking-wider text-white/60 hover:bg-white/5 hover:text-white`}
+            className="block px-4 py-2.5 text-sm text-ink-2 hover:bg-sunken hover:text-ink"
           >
             Mi cuenta
           </Link>
           <form action={signOut}>
-            <button
-              className={`${mono.className} block w-full px-4 py-2 text-left text-xs uppercase tracking-wider text-white/60 hover:bg-white/5 hover:text-[#FF5A36]`}
-            >
+            <button className="block w-full px-4 py-2.5 text-left text-sm text-ink-2 hover:bg-sunken hover:text-bad-text">
               Cerrar sesión
             </button>
           </form>

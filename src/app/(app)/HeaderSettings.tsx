@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { mono } from "./fonts";
 
 export default function HeaderSettings() {
   const [open, setOpen] = useState(false);
@@ -22,10 +21,10 @@ export default function HeaderSettings() {
         onClick={() => setOpen((v) => !v)}
         aria-label="Ajustes"
         title="Ajustes"
-        className={`flex h-9 w-9 items-center justify-center rounded-full border transition ${
+        className={`flex h-9 w-9 items-center justify-center rounded-full transition ${
           open
-            ? "border-cyan-300 bg-cyan-300/10 text-cyan-300"
-            : "border-white/15 text-white/50 hover:border-cyan-300/60 hover:text-cyan-300"
+            ? "bg-brand-soft text-brand-text"
+            : "text-ink-3 hover:bg-sunken hover:text-ink"
         }`}
       >
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4">
@@ -35,23 +34,21 @@ export default function HeaderSettings() {
       </button>
 
       {open && (
-        <div className="cut-corner absolute right-0 top-full z-30 mt-2 w-56 border border-cyan-400/20 bg-[#0D141E] py-2 shadow-xl shadow-black/50">
-          <div className="border-b border-white/10 px-4 py-2">
-            <p className={`${mono.className} text-[10px] uppercase tracking-widest text-white/40`}>
-              Ajustes
-            </p>
+        <div className="absolute right-0 top-full z-30 mt-2 w-60 overflow-hidden rounded-xl border border-line bg-surface py-1.5 shadow-lg">
+          <div className="border-b border-line px-4 py-2.5">
+            <p className="text-xs text-ink-3">Ajustes</p>
           </div>
           <Link
             href="/pagina-equipo?editar=1"
             onClick={() => setOpen(false)}
-            className={`${mono.className} block px-4 py-2 text-xs uppercase tracking-wider text-white/60 hover:bg-white/5 hover:text-white`}
+            className="block px-4 py-2.5 text-sm text-ink-2 hover:bg-sunken hover:text-ink"
           >
             Personalizar página del equipo
           </Link>
           <Link
             href="/equipo/miembros"
             onClick={() => setOpen(false)}
-            className={`${mono.className} block px-4 py-2 text-xs uppercase tracking-wider text-white/60 hover:bg-white/5 hover:text-white`}
+            className="block px-4 py-2.5 text-sm text-ink-2 hover:bg-sunken hover:text-ink"
           >
             Miembros
           </Link>
