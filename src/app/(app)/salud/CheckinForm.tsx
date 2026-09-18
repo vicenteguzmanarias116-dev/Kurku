@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import MuscleMap from "./MuscleMap";
 import { saveCheckin } from "./actions";
-import { mono } from "../fonts";
+import { Card, Field, Input, Textarea, Button } from "../ui";
 
 type Existing = {
   sleep_hours: number | null;
@@ -13,9 +13,6 @@ type Existing = {
   notes: string | null;
   muscle_pain: Record<string, number> | null;
 } | null;
-
-const scaleInput =
-  "w-full border border-white/15 bg-black/30 px-3 py-2 text-sm text-white outline-none focus:border-cyan-300/60 focus:ring-1 focus:ring-cyan-300/40";
 
 export default function CheckinForm({
   athleteId,
@@ -53,58 +50,41 @@ export default function CheckinForm({
   }
 
   return (
-    <form onSubmit={submit} className="space-y-6 rounded-xl border border-white/10 bg-[#0D141E]/80 p-6">
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <label className="block">
-          <span className={`${mono.className} mb-1 block text-[11px] uppercase tracking-wider text-white/40`}>
-            Horas de sueño
-          </span>
-          <input
-            type="number"
-            step="0.5"
-            min={0}
-            max={16}
-            value={sleepHours}
-            onChange={(e) => setSleepHours(e.target.value)}
-            className={scaleInput}
-          />
-        </label>
+    <Card>
+      <form onSubmit={submit} className="space-y-6">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <Field label="Horas de sueño">
+            <Input
+              type="number"
+              step="0.5"
+              min={0}
+              max={16}
+              value={sleepHours}
+              onChange={(e) => setSleepHours(e.target.value)}
+            />
+          </Field>
 
-        <ScaleField label="Calidad del sueño (1-5)" value={sleepQuality} onChange={setSleepQuality} />
-        <ScaleField label="Ánimo (1-5)" value={mood} onChange={setMood} />
-        <ScaleField label="Fatiga/dolor general (1-5)" value={soreness} onChange={setSoreness} />
-      </div>
+          <ScaleField label="Calidad del sueño (1-5)" value={sleepQuality} onChange={setSleepQuality} />
+          <ScaleField label="Ánimo (1-5)" value={mood} onChange={setMood} />
+          <ScaleField label="Fatiga/dolor general (1-5)" value={soreness} onChange={setSoreness} />
+        </div>
 
-      <div>
-        <span className={`${mono.className} mb-2 block text-[11px] uppercase tracking-wider text-white/40`}>
-          Mapa de dolor muscular
-        </span>
-        <MuscleMap value={musclePain as never} onChange={(v) => setMusclePain(v as never)} />
-      </div>
+        <Field label="Mapa de dolor muscular">
+          <MuscleMap value={musclePain as never} onChange={(v) => setMusclePain(v as never)} />
+        </Field>
 
-      <label className="block">
-        <span className={`${mono.className} mb-1 block text-[11px] uppercase tracking-wider text-white/40`}>
-          Notas (opcional)
-        </span>
-        <textarea
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          rows={2}
-          className={`${scaleInput} resize-y`}
-        />
-      </label>
+        <Field label="Notas (opcional)">
+          <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={2} className="resize-y" />
+        </Field>
 
-      <div className="flex items-center gap-4">
-        <button
-          type="submit"
-          disabled={pending}
-          className="cut-corner bg-[#FF5A36] px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-[#05080D] transition hover:bg-[#ff7154] disabled:opacity-50"
-        >
-          {pending ? "Guardando…" : "Guardar check-in de hoy"}
-        </button>
-        {done && <span className="text-xs text-cyan-300">Guardado ✓</span>}
-      </div>
-    </form>
+        <div className="flex items-center gap-4">
+          <Button type="submit" variant="primary" disabled={pending}>
+            {pending ? "Guardando…" : "Guardar check-in de hoy"}
+          </Button>
+          {done && <span className="text-xs text-ok-text">Guardado ✓</span>}
+        </div>
+      </form>
+    </Card>
   );
 }
 
@@ -118,26 +98,23 @@ function ScaleField({
   onChange: (n: number) => void;
 }) {
   return (
-    <label className="block">
-      <span className={`${mono.className} mb-1 block text-[11px] uppercase tracking-wider text-white/40`}>
-        {label}
-      </span>
+    <Field label={label}>
       <div className="flex gap-1.5">
         {[1, 2, 3, 4, 5].map((n) => (
           <button
             type="button"
             key={n}
             onClick={() => onChange(n)}
-            className={`h-8 w-8 border text-sm transition ${
+            className={`h-9 w-9 rounded-lg border text-sm font-medium transition ${
               value === n
-                ? "border-[#FF5A36] bg-[#FF5A36] text-[#05080D]"
-                : "border-white/15 text-white/50 hover:border-white/40"
+                ? "border-brand-strong bg-brand-strong text-white"
+                : "border-line-strong text-ink-2 hover:border-ink-3"
             }`}
           >
             {n}
           </button>
         ))}
       </div>
-    </label>
+    </Field>
   );
 }

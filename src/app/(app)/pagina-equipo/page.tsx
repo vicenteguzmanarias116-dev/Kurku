@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { requireUser, isStaff, isAdmin } from "@/lib/auth";
-import { mono } from "../fonts";
 import PageHead from "../PageHead";
 import TeamGallery from "./TeamGallery";
 import ModuleToggles from "./ModuleToggles";
 import AnnouncementForm from "./AnnouncementForm";
+import { Card, Tabs, Empty } from "../ui";
 
 type Ann = {
   id: string;
@@ -77,14 +77,11 @@ export default async function PaginaEquipoPage({
   return (
     <div className="space-y-4">
       {editing && (
-        <div className="cut-corner flex flex-wrap items-center justify-between gap-3 border border-cyan-400/40 bg-cyan-400/[0.06] px-4 py-3 text-sm">
-          <span className={`${mono.className} text-xs uppercase tracking-wider text-cyan-300`}>
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-info/40 bg-info-soft px-4 py-3 text-sm">
+          <span className="text-xs font-semibold uppercase tracking-wide text-info-text">
             Modo personalización
           </span>
-          <Link
-            href="/pagina-equipo"
-            className={`${mono.className} text-xs uppercase tracking-wider text-white/60 hover:text-white`}
-          >
+          <Link href="/pagina-equipo" className="text-sm text-ink-2 hover:text-ink">
             Salir
           </Link>
         </div>
@@ -101,64 +98,54 @@ export default async function PaginaEquipoPage({
           subtitle="Avisos de regata, entrenamiento físico, nutrición o del club — lo último que publicó el staff."
         />
 
-        <div className={`${mono.className} flex gap-4 border-b border-white/10 text-xs uppercase tracking-wider`}>
-          <Link
-            href="/pagina-equipo"
-            className={`-mb-px border-b-2 pb-2 transition ${
-              activeTab === "avisos"
-                ? "border-[#FF5A36] text-white"
-                : "border-transparent text-white/40 hover:text-white/70"
-            }`}
-          >
-            Avisos
-          </Link>
-          <Link
-            href="/pagina-equipo?tab=archivos"
-            className={`-mb-px border-b-2 pb-2 transition ${
-              activeTab === "archivos"
-                ? "border-[#FF5A36] text-white"
-                : "border-transparent text-white/40 hover:text-white/70"
-            }`}
-          >
-            Archivos ({files.length})
-          </Link>
-        </div>
+        <Tabs
+          items={[
+            { label: "Avisos", href: "/pagina-equipo", active: activeTab === "avisos" },
+            {
+              label: `Archivos (${files.length})`,
+              href: "/pagina-equipo?tab=archivos",
+              active: activeTab === "archivos",
+            },
+          ]}
+        />
 
         {activeTab === "archivos" ? (
-          <ul className="divide-y divide-white/10 rounded-xl border border-white/10 bg-[#0D141E]/80">
-            {files.map((f) => (
-              <li key={f.url} className="flex items-center gap-3 px-5 py-3 text-sm">
-                {IMG_EXT.test(f.url) ? (
-                  <a href={f.url} target="_blank" rel="noopener noreferrer">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={f.url} alt="" className="h-10 w-10 shrink-0 rounded border border-white/10 object-cover" />
+          <Card className="p-0">
+            <ul className="divide-y divide-line">
+              {files.map((f) => (
+                <li key={f.url} className="flex items-center gap-3 px-5 py-3 text-sm">
+                  {IMG_EXT.test(f.url) ? (
+                    <a href={f.url} target="_blank" rel="noopener noreferrer">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={f.url} alt="" className="h-10 w-10 shrink-0 rounded border border-line object-cover" />
+                    </a>
+                  ) : (
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded border border-line text-brand-text">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4">
+                        <path d="M21.44 11.05 12.25 20.24a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+                      </svg>
+                    </span>
+                  )}
+                  <a
+                    href={f.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="min-w-0 flex-1 truncate text-brand-text hover:underline"
+                  >
+                    {fileName(f.url)}
                   </a>
-                ) : (
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded border border-white/10 text-cyan-300">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4">
-                      <path d="M21.44 11.05 12.25 20.24a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
-                    </svg>
+                  <span className="shrink-0 text-xs text-ink-3">
+                    {f.author} · {timeAgo(f.created_at)}
                   </span>
-                )}
-                <a
-                  href={f.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="min-w-0 flex-1 truncate text-cyan-300 hover:underline"
-                >
-                  {fileName(f.url)}
-                </a>
-                <span className={`${mono.className} shrink-0 text-[10px] uppercase tracking-wider text-white/30`}>
-                  {f.author} · {timeAgo(f.created_at)}
-                </span>
-              </li>
-            ))}
-            {!files.length && (
-              <li className="px-5 py-10 text-center text-sm text-white/30">
-                Sin archivos. Aparecen acá cuando el staff adjunta algo a un aviso.
-              </li>
-            )}
-          </ul>
+                </li>
+              ))}
+              {!files.length && (
+                <li>
+                  <Empty title="Sin archivos. Aparecen acá cuando el staff adjunta algo a un aviso." />
+                </li>
+              )}
+            </ul>
+          </Card>
         ) : (
           <>
         {isStaff(profile) && <AnnouncementForm />}
@@ -167,33 +154,29 @@ export default async function PaginaEquipoPage({
         {(items as Ann[] | null)?.map((a) => (
           <li
             key={a.id}
-            className="relative flex gap-3 rounded-xl border border-white/10 bg-[#0D141E]/80 p-5 text-sm transition hover:border-white/20"
+            className="relative flex gap-3 rounded-xl border border-line bg-surface p-5 text-sm transition hover:border-line-strong"
           >
             {a.profiles?.avatar_url ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={a.profiles.avatar_url}
                 alt=""
-                className="h-9 w-9 shrink-0 rounded-full border border-white/15 object-cover"
+                className="h-9 w-9 shrink-0 rounded-full border border-line object-cover"
               />
             ) : (
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-cyan-300/40 bg-cyan-300/10 text-sm font-bold text-cyan-300">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-soft text-sm font-bold text-brand-text">
                 {(a.profiles?.full_name || "?").charAt(0).toUpperCase()}
               </span>
             )}
             <div className="min-w-0 flex-1">
               <div className="flex items-baseline gap-2">
-                <span className="truncate font-semibold text-white/90">
+                <span className="truncate font-semibold text-ink">
                   {a.profiles?.full_name ?? "—"}
                 </span>
-                <span
-                  className={`${mono.className} shrink-0 text-[10px] uppercase tracking-wider text-white/30`}
-                >
-                  {timeAgo(a.created_at)}
-                </span>
+                <span className="shrink-0 text-xs text-ink-3">{timeAgo(a.created_at)}</span>
               </div>
               {a.body && (
-                <p className="mt-1 whitespace-pre-wrap text-white/70">{a.body}</p>
+                <p className="mt-1 whitespace-pre-wrap text-ink-2">{a.body}</p>
               )}
               {!!a.attachment_urls?.length && (
                 <div className="mt-3 flex flex-wrap gap-2">
@@ -204,7 +187,7 @@ export default async function PaginaEquipoPage({
                         <img
                           src={url}
                           alt=""
-                          className="h-28 w-28 rounded-lg border border-white/10 object-cover transition hover:opacity-90"
+                          className="h-28 w-28 rounded-lg border border-line object-cover transition hover:opacity-90"
                         />
                       </a>
                     ) : (
@@ -213,7 +196,7 @@ export default async function PaginaEquipoPage({
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`${mono.className} flex items-center gap-1.5 border border-white/15 bg-black/20 px-2.5 py-1.5 text-[11px] text-cyan-300 transition hover:border-cyan-300/60`}
+                        className="flex items-center gap-1.5 rounded-lg border border-line bg-sunken px-2.5 py-1.5 text-xs text-brand-text transition hover:border-brand/60"
                       >
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3 w-3">
                           <path d="M21.44 11.05 12.25 20.24a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
@@ -228,8 +211,11 @@ export default async function PaginaEquipoPage({
           </li>
         ))}
         {!items?.length && (
-          <li className="rounded-xl border border-dashed border-white/10 bg-white/[0.015] px-6 py-10 text-center text-sm text-white/30">
-            Todavía no hay avisos. {isStaff(profile) ? "Publica el primero arriba." : "Cuando el staff publique algo, aparece acá."}
+          <li>
+            <Empty
+              title="Todavía no hay avisos."
+              hint={isStaff(profile) ? "Publica el primero arriba." : "Cuando el staff publique algo, aparece acá."}
+            />
           </li>
         )}
         </ul>

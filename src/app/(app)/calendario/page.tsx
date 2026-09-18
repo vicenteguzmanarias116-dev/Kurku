@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { revalidatePath } from "next/cache";
 import { requireUser, isStaff } from "@/lib/auth";
-import { rajdhani, mono } from "../fonts";
+import { rajdhani } from "../fonts";
 import PageHead from "../PageHead";
+import { Input, Select, Textarea, Button } from "../ui";
 
 type EventRow = {
   id: string;
@@ -15,9 +16,6 @@ type EventRow = {
   plan_type: string | null;
   athletes: { full_name: string } | null;
 };
-
-const input =
-  "border border-white/15 bg-black/30 px-2.5 py-2 text-sm text-white outline-none focus:border-cyan-300/60 focus:ring-1 focus:ring-cyan-300/40";
 
 const PLAN_LABEL: Record<string, string> = {
   gym: "Gym",
@@ -142,53 +140,51 @@ export default async function CalendarioPage({
       <PageHead eyebrow="Regatas · Entrenos" title="Calendario" />
 
       {staff && (
-        <details className="rounded-xl border border-white/10 bg-[#0D141E]/80 p-5">
-          <summary
-            className={`${mono.className} cursor-pointer text-xs uppercase tracking-wider text-cyan-300`}
-          >
+        <details className="rounded-xl border border-line bg-surface p-5">
+          <summary className="cursor-pointer text-sm font-medium text-brand-text">
             Añadir evento / plan
           </summary>
           <form
             action={addEvent}
             className="mt-4 grid grid-cols-2 gap-3 text-sm sm:grid-cols-3"
           >
-            <input name="title" placeholder="Título" required className={input} />
-            <input name="starts_at" type="datetime-local" required className={input} />
-            <select name="kind" className={input}>
+            <Input name="title" placeholder="Título" required />
+            <Input name="starts_at" type="datetime-local" required />
+            <Select name="kind">
               <option value="training">Entrenamiento</option>
               <option value="regatta">Regata</option>
               <option value="other">Otro</option>
-            </select>
-            <select name="plan_type" className={input}>
+            </Select>
+            <Select name="plan_type">
               <option value="">Tipo de plan (opcional)</option>
               <option value="gym">Gym</option>
               <option value="bike">Bici</option>
               <option value="sailing">Vela</option>
               <option value="other">Otro</option>
-            </select>
-            <select name="athlete_id" className={input}>
+            </Select>
+            <Select name="athlete_id">
               <option value="">Para todo el equipo</option>
               {athletes?.map((a) => (
                 <option key={a.id} value={a.id}>
                   {a.full_name}
                 </option>
               ))}
-            </select>
-            <input name="location" placeholder="Lugar" className={input} />
-            <textarea
+            </Select>
+            <Input name="location" placeholder="Lugar" />
+            <Textarea
               name="plan_items"
               placeholder={"Detalle de la sesión, una línea por ejercicio/tramo:\nSentadilla 4x10\nZancadas 3x12\n..."}
               rows={3}
-              className={`${input} col-span-2 resize-y sm:col-span-3`}
+              className="col-span-2 resize-y sm:col-span-3"
             />
-            <input
+            <Input
               name="description"
               placeholder="Notas"
-              className={`${input} col-span-2 sm:col-span-2`}
+              className="col-span-2 sm:col-span-2"
             />
-            <button className="cut-corner bg-[#FF5A36] px-3 py-2 text-xs font-bold uppercase tracking-wide text-[#05080D] transition hover:bg-[#ff7154]">
+            <Button type="submit" variant="primary" size="sm">
               Añadir
-            </button>
+            </Button>
           </form>
         </details>
       )}
@@ -198,42 +194,42 @@ export default async function CalendarioPage({
           {label}
         </h2>
         <div className="flex items-center gap-2">
-          <div className={`${mono.className} flex border border-white/15 text-xs uppercase tracking-wide`}>
+          <div className="flex rounded-lg border border-line text-sm font-medium">
             <Link
               href={`/calendario?view=mes${sp.d ? `&d=${sp.d}` : ""}`}
-              className={`px-3 py-1.5 ${view === "mes" ? "bg-[#FF5A36] text-[#05080D]" : "text-white/50 hover:text-white"}`}
+              className={`rounded-l-lg px-3 py-1.5 ${view === "mes" ? "bg-brand-strong text-white" : "text-ink-2 hover:bg-sunken"}`}
             >
               Mes
             </Link>
             <Link
               href={`/calendario?view=semana${sp.d ? `&d=${sp.d}` : ""}`}
-              className={`px-3 py-1.5 ${view === "semana" ? "bg-[#FF5A36] text-[#05080D]" : "text-white/50 hover:text-white"}`}
+              className={`rounded-r-lg px-3 py-1.5 ${view === "semana" ? "bg-brand-strong text-white" : "text-ink-2 hover:bg-sunken"}`}
             >
               Semana
             </Link>
           </div>
-          <Link href={prevHref} className="border border-white/15 px-2.5 py-1.5 text-white/60 hover:text-white">
+          <Link href={prevHref} className="rounded-lg border border-line px-2.5 py-1.5 text-ink-2 hover:bg-sunken">
             ←
           </Link>
-          <Link href={todayHref} className={`${mono.className} border border-white/15 px-2.5 py-1.5 text-xs uppercase tracking-wide text-white/60 hover:text-white`}>
+          <Link href={todayHref} className="rounded-lg border border-line px-2.5 py-1.5 text-sm font-medium text-ink-2 hover:bg-sunken">
             Hoy
           </Link>
-          <Link href={nextHref} className="border border-white/15 px-2.5 py-1.5 text-white/60 hover:text-white">
+          <Link href={nextHref} className="rounded-lg border border-line px-2.5 py-1.5 text-ink-2 hover:bg-sunken">
             →
           </Link>
         </div>
       </div>
 
       {view === "mes" ? (
-        <div className="overflow-x-auto rounded-xl border border-white/10 bg-[#0D141E]/80 p-2 sm:p-4">
-          <div className={`${mono.className} grid grid-cols-7 gap-px text-center text-[10px] uppercase tracking-wider text-white/30`}>
+        <div className="overflow-x-auto rounded-xl border border-line bg-surface p-2 sm:p-4">
+          <div className="grid grid-cols-7 gap-px text-center text-xs text-ink-3">
             {["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"].map((d) => (
               <div key={d} className="py-1.5">
                 {d}
               </div>
             ))}
           </div>
-          <div className="grid grid-cols-7 gap-px bg-white/5 text-sm">
+          <div className="grid grid-cols-7 gap-px bg-line text-sm">
             {monthDays.map((d) => {
               const key = ymd(d);
               const dayEvents = byDay.get(key) ?? [];
@@ -242,10 +238,10 @@ export default async function CalendarioPage({
               return (
                 <div
                   key={key}
-                  className={`min-h-[90px] bg-[#0D141E] p-1.5 ${inMonth ? "" : "opacity-30"}`}
+                  className={`min-h-[90px] bg-surface p-1.5 ${inMonth ? "" : "opacity-40"}`}
                 >
                   <span
-                    className={`${mono.className} text-[11px] ${isToday ? "bg-[#FF5A36] px-1 text-[#05080D]" : "text-white/40"}`}
+                    className={`text-xs ${isToday ? "rounded bg-brand-strong px-1 text-white" : "text-ink-3"}`}
                   >
                     {d.getDate()}
                   </span>
@@ -254,7 +250,7 @@ export default async function CalendarioPage({
                       <DayChip key={e.id} e={e} />
                     ))}
                     {dayEvents.length > 3 && (
-                      <p className="text-[10px] text-white/30">+{dayEvents.length - 3} más</p>
+                      <p className="text-[10px] text-ink-3">+{dayEvents.length - 3} más</p>
                     )}
                   </div>
                 </div>
@@ -271,17 +267,17 @@ export default async function CalendarioPage({
             return (
               <div
                 key={key}
-                className={`rounded-lg border p-3 ${isToday ? "border-[#FF5A36]/40 bg-[#FF5A36]/[0.04]" : "border-white/10 bg-[#0D141E]/80"}`}
+                className={`rounded-lg border p-3 ${isToday ? "border-brand/40 bg-brand-soft" : "border-line bg-surface"}`}
               >
-                <p className={`${mono.className} text-[11px] uppercase tracking-wider text-white/40`}>
+                <p className="text-xs text-ink-3">
                   {d.toLocaleDateString("es-PE", { weekday: "short" })}{" "}
-                  <span className="text-white/70">{d.getDate()}</span>
+                  <span className="font-medium text-ink-2">{d.getDate()}</span>
                 </p>
                 <div className="mt-2 space-y-1.5">
                   {dayEvents.map((e) => (
                     <DayChip key={e.id} e={e} full />
                   ))}
-                  {!dayEvents.length && <p className="text-xs text-white/20">—</p>}
+                  {!dayEvents.length && <p className="text-xs text-ink-3/60">—</p>}
                 </div>
               </div>
             );
@@ -290,19 +286,19 @@ export default async function CalendarioPage({
       )}
 
       {staff && (
-        <details className="rounded-xl border border-white/10 bg-[#0D141E]/80 p-5">
-          <summary className={`${mono.className} cursor-pointer text-xs uppercase tracking-wider text-white/40`}>
+        <details className="rounded-xl border border-line bg-surface p-5">
+          <summary className="cursor-pointer text-sm font-medium text-ink-3">
             Borrar eventos
           </summary>
           <ul className="mt-3 space-y-2 text-sm">
             {(events as EventRow[] | null)?.map((e) => (
-              <li key={e.id} className="flex items-center justify-between gap-3 border-t border-white/10 pt-2 first:border-0 first:pt-0">
-                <span className="text-white/60">
+              <li key={e.id} className="flex items-center justify-between gap-3 border-t border-line pt-2 first:border-0 first:pt-0">
+                <span className="text-ink-2">
                   {e.starts_at.slice(0, 10)} · {e.title}
                 </span>
                 <form action={delEvent}>
                   <input type="hidden" name="id" value={e.id} />
-                  <button className="text-xs text-red-400 hover:underline">borrar</button>
+                  <button className="text-xs text-bad-text hover:underline">borrar</button>
                 </form>
               </li>
             ))}
@@ -318,16 +314,14 @@ function DayChip({ e, full = false }: { e: EventRow; full?: boolean }) {
   return (
     <Link
       href={`/calendario/${e.id}`}
-      className={`block truncate rounded px-1.5 py-1 text-[11px] leading-tight transition hover:brightness-125 ${
-        isRegatta
-          ? "bg-[#FF5A36]/20 text-[#FF5A36]"
-          : "bg-cyan-400/10 text-cyan-200"
+      className={`block truncate rounded px-1.5 py-1 text-[11px] leading-tight transition hover:brightness-95 ${
+        isRegatta ? "bg-brand-soft text-brand-text" : "bg-info-soft text-info-text"
       }`}
     >
       {!full && e.starts_at.slice(11, 16) + " "}
       {e.title}
       {e.plan_type && (
-        <span className="ml-1 opacity-60">· {PLAN_LABEL[e.plan_type]}</span>
+        <span className="ml-1 opacity-70">· {PLAN_LABEL[e.plan_type]}</span>
       )}
     </Link>
   );

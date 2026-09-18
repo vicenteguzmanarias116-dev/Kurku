@@ -1,8 +1,8 @@
 import { requireUser, isStaff } from "@/lib/auth";
-import { mono } from "../fonts";
 import PageHead from "../PageHead";
 import CheckinForm from "./CheckinForm";
 import ExportButton from "../ExportButton";
+import { Card, CardHeader, Empty } from "../ui";
 
 type CheckinRow = {
   athlete_id: string;
@@ -57,55 +57,50 @@ export default async function SaludPage() {
       )}
 
       {!myAthlete && !staff && (
-        <p className="text-sm text-white/30">
+        <p className="text-sm text-ink-3">
           Tu cuenta no está vinculada a un atleta todavía.
         </p>
       )}
 
       {staff && (
-        <div className="rounded-xl border border-white/10 bg-[#0D141E]/80 p-6">
-          <div className="mb-4 flex items-center justify-between">
-            <span className={`${mono.className} block text-[11px] uppercase tracking-widest text-cyan-300`}>
-              Equipo hoy
-            </span>
-            <ExportButton type="salud" label="Exportar historial CSV" />
-          </div>
+        <Card>
+          <CardHeader title="Equipo hoy" action={<ExportButton type="salud" label="Exportar historial CSV" />} />
           {!teamToday?.length ? (
-            <p className="text-sm text-white/30">Nadie llenó el check-in todavía.</p>
+            <Empty title="Nadie llenó el check-in todavía." />
           ) : (
             <div className="overflow-x-auto">
-            <table className="w-full min-w-[520px] text-sm">
-              <thead className={`${mono.className} text-left text-[11px] uppercase tracking-wider text-white/40`}>
-                <tr>
-                  <th className="py-1 font-normal">Atleta</th>
-                  <th className="font-normal">Sueño</th>
-                  <th className="font-normal">Ánimo</th>
-                  <th className="font-normal">Dolor gral.</th>
-                  <th className="font-normal">Zonas con dolor</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(teamToday as unknown as CheckinRow[]).map((c) => {
-                  const painCount = Object.values(c.muscle_pain ?? {}).length;
-                  return (
-                    <tr key={c.athlete_id} className="border-t border-white/10">
-                      <td className="py-2">{c.athletes?.full_name ?? "—"}</td>
-                      <td className="text-white/70">
-                        {c.sleep_hours ?? "—"}h · {c.sleep_quality ?? "—"}/5
-                      </td>
-                      <td className="text-white/70">{c.mood ?? "—"}/5</td>
-                      <td className="text-white/70">{c.soreness_overall ?? "—"}/5</td>
-                      <td className={painCount ? "text-[#FF5A36]" : "text-white/30"}>
-                        {painCount || "—"}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+              <table className="w-full min-w-[520px] text-sm">
+                <thead className="text-left text-xs text-ink-3">
+                  <tr>
+                    <th className="py-1 font-medium">Atleta</th>
+                    <th className="font-medium">Sueño</th>
+                    <th className="font-medium">Ánimo</th>
+                    <th className="font-medium">Dolor gral.</th>
+                    <th className="font-medium">Zonas con dolor</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(teamToday as unknown as CheckinRow[]).map((c) => {
+                    const painCount = Object.values(c.muscle_pain ?? {}).length;
+                    return (
+                      <tr key={c.athlete_id} className="border-t border-line">
+                        <td className="py-2">{c.athletes?.full_name ?? "—"}</td>
+                        <td className="text-ink-2">
+                          {c.sleep_hours ?? "—"}h · {c.sleep_quality ?? "—"}/5
+                        </td>
+                        <td className="text-ink-2">{c.mood ?? "—"}/5</td>
+                        <td className="text-ink-2">{c.soreness_overall ?? "—"}/5</td>
+                        <td className={painCount ? "text-brand-text" : "text-ink-3"}>
+                          {painCount || "—"}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           )}
-        </div>
+        </Card>
       )}
     </div>
   );

@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { requireUser } from "@/lib/auth";
-import { rajdhani, mono } from "../fonts";
+import { mono } from "../fonts";
 import PageHead from "../PageHead";
 import WelcomeModal from "../WelcomeModal";
+import { Card, CardHeader, Empty } from "../ui";
 
 type Load = {
   athlete_id: string;
@@ -12,9 +13,9 @@ type Load = {
 };
 
 function acwrColor(r: number) {
-  if (r > 1.5) return "text-red-400"; // sobrecarga
-  if (r < 0.8) return "text-amber-400"; // desentrenamiento
-  return "text-emerald-400";
+  if (r > 1.5) return "text-bad-text"; // sobrecarga
+  if (r < 0.8) return "text-warn-text"; // desentrenamiento
+  return "text-ok-text";
 }
 
 export default async function Dashboard({
@@ -85,135 +86,119 @@ export default async function Dashboard({
       <PageHead eyebrow="Flota · ILCA" title="Panel" />
 
       {remindersToday.length > 0 && (
-        <section className="rounded-xl border border-[#FF5A36]/30 bg-[#FF5A36]/[0.06] p-5">
-          <span className={`${mono.className} block text-[11px] uppercase tracking-widest text-[#FF5A36]`}>
+        <Card className="border-brand/30 bg-brand-soft">
+          <p className="text-xs font-semibold uppercase tracking-wide text-brand-text">
             Recordatorio · hoy
-          </span>
+          </p>
           <ul className="mt-2 space-y-1.5 text-sm">
             {remindersToday.map((e) => (
               <li key={e.id}>
-                <Link href={`/calendario/${e.id}`} className="text-white/90 hover:text-[#FF5A36]">
+                <Link href={`/calendario/${e.id}`} className="text-ink hover:text-brand-text">
                   🔔{" "}
                   {new Date(e.starts_at).toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit" })}
                   {" — "}
                   {e.title}
-                  {e.location && <span className="text-white/40"> · {e.location}</span>}
+                  {e.location && <span className="text-ink-3"> · {e.location}</span>}
                 </Link>
               </li>
             ))}
           </ul>
-        </section>
+        </Card>
       )}
 
       {alerts.length > 0 && (
-        <section className="rounded-xl border border-red-400/30 bg-red-400/[0.06] p-5">
-          <span className={`${mono.className} block text-[11px] uppercase tracking-widest text-red-400`}>
+        <Card className="border-bad/30 bg-bad-soft">
+          <p className="text-xs font-semibold uppercase tracking-wide text-bad-text">
             Alertas
-          </span>
-          <ul className="mt-2 space-y-1 text-sm text-red-200">
+          </p>
+          <ul className="mt-2 space-y-1 text-sm text-bad-text">
             {alerts.map((a, i) => (
               <li key={i}>⚠ {a}</li>
             ))}
           </ul>
-        </section>
+        </Card>
       )}
-      <section className="rounded-xl border border-white/10 bg-[#0D141E]/80 p-6">
-        <span
-          className={`${mono.className} block text-[11px] uppercase tracking-widest text-cyan-300`}
-        >
-          Rendimiento
-        </span>
-        <h2
-          className={`${rajdhani.className} mt-1 text-2xl font-bold uppercase tracking-tight`}
-        >
-          Carga de entrenamiento (ACWR)
-        </h2>
 
-        <div className="mt-5 max-w-xl overflow-x-auto">
-        <table className="w-full min-w-[360px] text-sm">
-          <thead
-            className={`${mono.className} text-left text-[11px] uppercase tracking-wider text-white/40`}
-          >
-            <tr>
-              <th className="py-1 font-normal">Atleta</th>
-              <th className="font-normal">Agudo</th>
-              <th className="font-normal">Crónico</th>
-              <th className="font-normal">ACWR</th>
-            </tr>
-          </thead>
-          <tbody>
-            {(loads as Load[] | null)?.map((l) => {
-              const acwr = l.chronic > 0 ? l.acute / l.chronic : 0;
-              return (
-                <tr key={l.athlete_id} className="border-t border-white/10">
-                  <td className="py-2">{l.full_name}</td>
-                  <td className="tabular-nums text-white/70">
-                    {l.acute.toFixed(0)}
-                  </td>
-                  <td className="tabular-nums text-white/70">
-                    {l.chronic.toFixed(0)}
-                  </td>
-                  <td className={`tabular-nums font-semibold ${acwrColor(acwr)}`}>
-                    {acwr ? acwr.toFixed(2) : "—"}
+      <Card>
+        <CardHeader title="Carga de entrenamiento (ACWR)" hint="Rendimiento" />
+
+        <div className="max-w-xl overflow-x-auto">
+          <table className="w-full min-w-[360px] text-sm">
+            <thead className="text-left text-xs text-ink-3">
+              <tr>
+                <th className="py-1 font-medium">Atleta</th>
+                <th className="font-medium">Agudo</th>
+                <th className="font-medium">Crónico</th>
+                <th className="font-medium">ACWR</th>
+              </tr>
+            </thead>
+            <tbody>
+              {(loads as Load[] | null)?.map((l) => {
+                const acwr = l.chronic > 0 ? l.acute / l.chronic : 0;
+                return (
+                  <tr key={l.athlete_id} className="border-t border-line">
+                    <td className="py-2">{l.full_name}</td>
+                    <td className={`${mono.className} tabular-nums text-ink-2`}>
+                      {l.acute.toFixed(0)}
+                    </td>
+                    <td className={`${mono.className} tabular-nums text-ink-2`}>
+                      {l.chronic.toFixed(0)}
+                    </td>
+                    <td className={`${mono.className} tabular-nums font-semibold ${acwrColor(acwr)}`}>
+                      {acwr ? acwr.toFixed(2) : "—"}
+                    </td>
+                  </tr>
+                );
+              })}
+              {!loads?.length && (
+                <tr>
+                  <td colSpan={4} className="py-3 text-ink-3">
+                    Sin datos todavía.
                   </td>
                 </tr>
-              );
-            })}
-            {!loads?.length && (
-              <tr>
-                <td colSpan={4} className="py-3 text-white/30">
-                  Sin datos todavía.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              )}
+            </tbody>
+          </table>
         </div>
-        <p className={`${mono.className} mt-3 text-[10px] uppercase tracking-wider text-white/30`}>
+        <p className="mt-3 text-xs text-ink-3">
           Verde 0.8–1.5 · Rojo &gt;1.5 sobrecarga · Ámbar &lt;0.8 poca carga
         </p>
-      </section>
+      </Card>
 
-      <section className="rounded-xl border border-white/10 bg-[#0D141E]/80 p-6">
-        <span
-          className={`${mono.className} block text-[11px] uppercase tracking-widest text-cyan-300`}
-        >
-          Agenda
-        </span>
-        <h2
-          className={`${rajdhani.className} mt-1 text-2xl font-bold uppercase tracking-tight`}
-        >
-          Próximo en el calendario
-        </h2>
-        <ul className="mt-5 space-y-3 text-sm">
-          {events?.map((e) => (
-            <li
-              key={e.id}
-              className="flex flex-wrap items-baseline gap-x-3 border-t border-white/10 pt-3 first:border-0 first:pt-0"
-            >
-              <span className={`${mono.className} text-xs uppercase tracking-wider text-cyan-300`}>
-                {new Date(e.starts_at).toLocaleDateString("es-ES", {
-                  day: "2-digit",
-                  month: "short",
-                })}
-              </span>
-              <span className="font-medium">{e.title}</span>
-              <span className="text-white/40">
-                {e.kind === "regatta" ? "· regata" : ""}
-                {e.location ? ` · ${e.location}` : ""}
-              </span>
-            </li>
-          ))}
-          {!events?.length && (
-            <li className="text-white/30">
-              Nada programado.{" "}
-              <Link href="/calendario" className="text-cyan-300 hover:underline">
+      <Card>
+        <CardHeader title="Próximo en el calendario" hint="Agenda" />
+        {!events?.length ? (
+          <Empty
+            title="Nada programado."
+            action={
+              <Link href="/calendario" className="text-sm text-brand-text hover:underline">
                 Añadir
               </Link>
-            </li>
-          )}
-        </ul>
-      </section>
+            }
+          />
+        ) : (
+          <ul className="space-y-3 text-sm">
+            {events.map((e) => (
+              <li
+                key={e.id}
+                className="flex flex-wrap items-baseline gap-x-3 border-t border-line pt-3 first:border-0 first:pt-0"
+              >
+                <span className="text-xs font-medium text-ink-3">
+                  {new Date(e.starts_at).toLocaleDateString("es-ES", {
+                    day: "2-digit",
+                    month: "short",
+                  })}
+                </span>
+                <span className="font-medium text-ink">{e.title}</span>
+                <span className="text-ink-3">
+                  {e.kind === "regatta" ? "· regata" : ""}
+                  {e.location ? ` · ${e.location}` : ""}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </Card>
     </div>
   );
 }
