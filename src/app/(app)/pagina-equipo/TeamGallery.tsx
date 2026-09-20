@@ -65,7 +65,7 @@ export default function TeamGallery({
               <button
                 onClick={() => remove(u)}
                 aria-label="Quitar foto"
-                className="absolute right-1.5 top-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white/80 opacity-0 backdrop-blur transition hover:bg-[#FF5A36] hover:text-[#05080D] group-hover:opacity-100"
+                className="absolute right-1.5 top-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white/80 opacity-0 backdrop-blur transition hover:bg-brand-strong hover:text-white group-hover:opacity-100"
               >
                 ×
               </button>
@@ -75,7 +75,7 @@ export default function TeamGallery({
 
         {editing && (
           <label
-            className={`flex cursor-pointer flex-col items-center justify-center gap-1 rounded-2xl border border-dashed border-white/15 bg-white/[0.02] text-center text-xs text-white/40 transition hover:border-cyan-300/50 hover:bg-cyan-300/[0.04] hover:text-cyan-300 ${
+            className={`flex cursor-pointer flex-col items-center justify-center gap-1 rounded-2xl border border-dashed border-line-strong bg-sunken text-center text-xs text-ink-3 transition hover:border-brand/60 hover:bg-brand-soft hover:text-brand-text ${
               urls.length === 0 ? "col-span-2 row-span-2" : ""
             }`}
           >

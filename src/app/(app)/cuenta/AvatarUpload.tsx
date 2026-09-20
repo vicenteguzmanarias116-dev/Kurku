@@ -52,14 +52,14 @@ export default function AvatarUpload({
         <img
           src={preview}
           alt=""
-          className="h-16 w-16 shrink-0 rounded-full border border-white/15 object-cover"
+          className="h-16 w-16 shrink-0 rounded-full border border-line object-cover"
         />
       ) : (
-        <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-[#FF5A36]/40 bg-[#FF5A36]/10 text-xl font-bold text-[#FF5A36]">
+        <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-brand-soft text-xl font-bold text-brand-text">
           ?
         </span>
       )}
-      <label className="cut-corner cursor-pointer border border-white/15 bg-black/30 px-3 py-2 text-xs uppercase tracking-wider text-white/70 transition hover:border-cyan-300/60">
+      <label className="cursor-pointer rounded-lg border border-line-strong bg-sunken px-3 py-2 text-sm text-ink-2 transition hover:border-brand/60">
         {status === "uploading" ? "Subiendo…" : "Cambiar foto"}
         <input
           type="file"
@@ -69,7 +69,7 @@ export default function AvatarUpload({
         />
       </label>
       {status === "error" && (
-        <p className="text-xs text-[#FF5A36]">No se pudo subir.</p>
+        <p className="text-xs text-bad-text">No se pudo subir.</p>
       )}
       <input type="hidden" name="avatar_url" value={url} />
     </div>

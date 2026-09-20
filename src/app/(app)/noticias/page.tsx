@@ -1,4 +1,5 @@
-import { rajdhani, mono } from "../fonts";
+import { rajdhani } from "../fonts";
+import { Card, Empty } from "../ui";
 
 type NewsItem = {
   title: string;
@@ -133,23 +134,17 @@ export default async function NoticiasPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h2
-          className={`${rajdhani.className} text-2xl font-bold uppercase tracking-tight`}
-        >
-          Noticias de vela
-        </h2>
-        <p className="mt-1 text-sm text-white/40">
+        <h2 className={`${rajdhani.className} text-2xl font-bold`}>Noticias de vela</h2>
+        <p className="mt-1 text-sm text-ink-3">
           Lo último del mundo de la vela, actualizado cada 30 minutos. Las
           noticias de dinghies (ILCA, Optimist, 420...) van primero.
         </p>
       </div>
 
       {news.length === 0 ? (
-        <div className="cut-corner border border-cyan-400/20 bg-[#0D141E] p-6">
-          <p className="text-sm text-white/30">
-            No se pudo cargar el feed de noticias en este momento.
-          </p>
-        </div>
+        <Card>
+          <Empty title="No se pudo cargar el feed de noticias en este momento." />
+        </Card>
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {news.map((n) => (
@@ -158,11 +153,11 @@ export default async function NoticiasPage() {
               href={n.link}
               target="_blank"
               rel="noopener noreferrer"
-              className={`cut-corner group flex flex-col overflow-hidden border bg-[#0D141E] transition hover:border-cyan-300/50 ${
-                n.isDinghy ? "border-[#FF5A36]/50" : "border-white/10"
+              className={`group flex flex-col overflow-hidden rounded-xl border bg-surface shadow-[0_1px_2px_rgba(16,24,40,.06)] transition hover:border-brand/50 ${
+                n.isDinghy ? "border-brand/50" : "border-line"
               }`}
             >
-              <div className="relative aspect-video w-full overflow-hidden bg-white/5">
+              <div className="relative aspect-video w-full overflow-hidden bg-sunken">
                 {n.image ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
@@ -171,7 +166,7 @@ export default async function NoticiasPage() {
                     className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center text-white/15">
+                  <div className="flex h-full w-full items-center justify-center text-ink-3">
                     <svg viewBox="0 0 24 24" className="h-10 w-10" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
                       <path d="M12 2v14" />
                       <path d="M12 4l7 9h-7z" />
@@ -180,20 +175,16 @@ export default async function NoticiasPage() {
                   </div>
                 )}
                 {n.isDinghy && (
-                  <span
-                    className={`${mono.className} absolute left-2 top-2 bg-[#FF5A36] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#05080D]`}
-                  >
+                  <span className="absolute left-2 top-2 rounded-full bg-brand-strong px-2 py-0.5 text-[10px] font-bold text-white">
                     Dinghy
                   </span>
                 )}
               </div>
               <div className="flex flex-1 flex-col p-4">
-                <p className="line-clamp-3 text-sm text-white/90 group-hover:text-cyan-300">
+                <p className="line-clamp-3 text-sm text-ink group-hover:text-brand-text">
                   {n.title}
                 </p>
-                <p
-                  className={`${mono.className} mt-auto pt-3 text-[11px] uppercase tracking-wider text-white/30`}
-                >
+                <p className="mt-auto pt-3 text-xs text-ink-3">
                   {n.source}
                   {n.source && n.pubDate ? " · " : ""}
                   {formatDate(n.pubDate)}

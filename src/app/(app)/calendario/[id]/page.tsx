@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireUser } from "@/lib/auth";
-import { rajdhani, mono } from "../../fonts";
+import { rajdhani } from "../../fonts";
+import { Card, Badge } from "../../ui";
 
 type EventDetail = {
   id: string;
@@ -47,41 +48,29 @@ export default async function EventDetailPage({
     <div className="space-y-6">
       <Link
         href="/calendario"
-        className={`${mono.className} inline-flex items-center gap-1 text-xs uppercase tracking-wider text-white/40 hover:text-cyan-300`}
+        className="inline-flex items-center gap-1 text-sm text-ink-3 hover:text-brand-text"
       >
         ← Volver al calendario
       </Link>
 
-      <div className="rounded-xl border border-white/10 bg-[#0D141E]/80 p-6 sm:p-8">
+      <Card className="sm:p-8">
         <div className="flex flex-wrap items-center gap-2">
-          <span
-            className={`${mono.className} border px-2 py-0.5 text-[10px] uppercase tracking-wider ${
-              isRegatta
-                ? "border-[#FF5A36]/40 text-[#FF5A36]"
-                : "border-cyan-400/40 text-cyan-300"
-            }`}
-          >
+          <Badge tone={isRegatta ? "brand" : "info"}>
             {isRegatta ? "Regata" : event.kind === "training" ? "Entrenamiento" : "Otro"}
-          </span>
+          </Badge>
           {event.plan_type && (
-            <span
-              className={`${mono.className} border border-white/15 px-2 py-0.5 text-[10px] uppercase tracking-wider text-white/50`}
-            >
-              {PLAN_LABEL[event.plan_type] ?? event.plan_type}
-            </span>
+            <Badge>{PLAN_LABEL[event.plan_type] ?? event.plan_type}</Badge>
           )}
           {event.athletes?.full_name && (
-            <span className={`${mono.className} text-[10px] uppercase tracking-wider text-white/30`}>
-              para {event.athletes.full_name}
-            </span>
+            <span className="text-xs text-ink-3">para {event.athletes.full_name}</span>
           )}
         </div>
 
-        <h1 className={`${rajdhani.className} mt-3 text-3xl font-bold uppercase leading-tight sm:text-4xl`}>
+        <h1 className={`${rajdhani.className} mt-3 text-3xl font-bold leading-tight sm:text-4xl`}>
           {event.title}
         </h1>
 
-        <p className="mt-2 text-sm text-white/50">
+        <p className="mt-2 text-sm text-ink-2">
           {date.toLocaleDateString("es-PE", {
             weekday: "long",
             day: "numeric",
@@ -94,20 +83,20 @@ export default async function EventDetailPage({
         </p>
 
         {event.description && (
-          <p className="mt-4 whitespace-pre-wrap text-sm text-white/70">
+          <p className="mt-4 whitespace-pre-wrap text-sm text-ink-2">
             {event.description}
           </p>
         )}
 
         {event.plan_items && event.plan_items.length > 0 && (
           <div className="mt-6">
-            <span className={`${mono.className} block text-[11px] uppercase tracking-widest text-cyan-300`}>
+            <p className="text-xs font-semibold uppercase tracking-wide text-brand-text">
               Detalle de la sesión
-            </span>
-            <ul className="mt-2 divide-y divide-white/10 border border-white/10">
+            </p>
+            <ul className="mt-2 divide-y divide-line rounded-lg border border-line">
               {event.plan_items.map((item, i) => (
                 <li key={i} className="flex items-center gap-3 px-4 py-2.5 text-sm">
-                  <span className={`${mono.className} w-6 shrink-0 text-white/30`}>
+                  <span className="w-6 shrink-0 text-ink-3">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   {item.label}
@@ -116,7 +105,7 @@ export default async function EventDetailPage({
             </ul>
           </div>
         )}
-      </div>
+      </Card>
     </div>
   );
 }

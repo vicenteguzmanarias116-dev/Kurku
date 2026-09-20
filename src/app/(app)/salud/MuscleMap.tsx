@@ -3,13 +3,13 @@
 type Level = 0 | 1 | 2 | 3;
 
 const COLORS: Record<Level, string> = {
-  0: "rgba(255,255,255,0.06)",
+  0: "#F1F3F5",
   1: "#eab308", // leve
   2: "#f97316", // moderado
   3: "#ef4444", // fuerte
 };
 const STROKE: Record<Level, string> = {
-  0: "rgba(255,255,255,0.15)",
+  0: "#98A2B3",
   1: "#eab308",
   2: "#f97316",
   3: "#ef4444",
@@ -63,7 +63,7 @@ function Figure({
   return (
     <svg viewBox="0 0 200 260" className="mx-auto h-72 w-auto">
       {/* silueta decorativa, no clickeable */}
-      <circle cx={100} cy={26} r={16} fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.15)" />
+      <circle cx={100} cy={26} r={16} fill="#F1F3F5" stroke="#98A2B3" />
       {zones.map((z) => {
         const level = (value[z.id] ?? 0) as Level;
         return (
@@ -119,26 +119,22 @@ export default function MuscleMap({
 
   return (
     <div>
-      <div className="grid grid-cols-1 gap-4 rounded-lg border border-white/10 bg-black/20 p-4 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 rounded-lg border border-line bg-sunken p-4 sm:grid-cols-2">
         <div>
-          <p className="mb-1 text-center text-[11px] uppercase tracking-wider text-white/30">
-            Frente
-          </p>
+          <p className="mb-1 text-center text-xs text-ink-3">Frente</p>
           <Figure zones={FRONT} value={value} onToggle={toggle} />
         </div>
         <div>
-          <p className="mb-1 text-center text-[11px] uppercase tracking-wider text-white/30">
-            Espalda
-          </p>
+          <p className="mb-1 text-center text-xs text-ink-3">Espalda</p>
           <Figure zones={BACK} value={value} onToggle={toggle} />
         </div>
       </div>
 
-      <div className="mt-3 flex flex-wrap items-center gap-4 text-xs text-white/50">
+      <div className="mt-3 flex flex-wrap items-center gap-4 text-xs text-ink-2">
         <Legend color={COLORS[1]} label="Fatiga leve" />
         <Legend color={COLORS[2]} label="Fatiga moderada" />
         <Legend color={COLORS[3]} label="Dolor fuerte" />
-        <span className="text-white/30">Click para marcar, click de nuevo para subir el nivel.</span>
+        <span className="text-ink-3">Click para marcar, click de nuevo para subir el nivel.</span>
       </div>
 
       {painEntries.length > 0 && (

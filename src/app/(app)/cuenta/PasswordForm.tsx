@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { Button } from "../ui";
 
 export default function PasswordForm({ email }: { email: string }) {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
@@ -26,7 +27,7 @@ export default function PasswordForm({ email }: { email: string }) {
 
   if (status === "sent") {
     return (
-      <p className="text-xs text-cyan-300">
+      <p className="text-xs text-ok-text">
         Te enviamos un link a {email} para elegir una contraseña nueva.
       </p>
     );
@@ -34,14 +35,10 @@ export default function PasswordForm({ email }: { email: string }) {
 
   return (
     <div>
-      {error && <p className="mb-2 text-xs text-[#FF5A36]">{error}</p>}
-      <button
-        onClick={send}
-        disabled={status === "sending"}
-        className="cut-corner border-2 border-cyan-300/60 px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-cyan-300 transition hover:bg-cyan-300 hover:text-[#05080D] disabled:opacity-60"
-      >
+      {error && <p className="mb-2 text-xs text-bad-text">{error}</p>}
+      <Button onClick={send} disabled={status === "sending"} variant="secondary">
         {status === "sending" ? "Enviando…" : "Cambiar contraseña"}
-      </button>
+      </Button>
     </div>
   );
 }

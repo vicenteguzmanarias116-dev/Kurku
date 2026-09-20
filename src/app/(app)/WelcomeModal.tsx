@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { rajdhani, mono } from "./fonts";
+import { rajdhani } from "./fonts";
 
 export default function WelcomeModal({ show }: { show: boolean }) {
   const router = useRouter();
@@ -18,32 +18,26 @@ export default function WelcomeModal({ show }: { show: boolean }) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-6">
-      <div className="cut-corner relative w-full max-w-md border border-cyan-400/20 bg-[#0D141E] p-8 text-[#EAF2F6]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-6">
+      <div className="relative w-full max-w-md rounded-2xl border border-line bg-surface p-7 text-ink shadow-lg">
         <button
           onClick={() => setOpen(false)}
           aria-label="Cerrar"
-          className="absolute right-4 top-4 text-white/40 hover:text-white"
+          className="absolute right-4 top-4 text-ink-3 hover:text-ink"
         >
           ✕
         </button>
-        <span
-          className={`${mono.className} block text-[11px] uppercase tracking-widest text-cyan-300`}
-        >
-          Equipo creado
-        </span>
-        <h2
-          className={`${rajdhani.className} mt-1 text-3xl font-bold uppercase leading-none`}
-        >
+        <p className="text-sm text-brand-text">Equipo creado</p>
+        <h2 className={`${rajdhani.className} mt-1 text-2xl font-bold`}>
           Bienvenido a Kurku
         </h2>
-        <p className="mt-4 text-sm text-white/60">
+        <p className="mt-3 text-sm text-ink-2">
           Gracias por darle una casa a tu equipo. Ya puedes sumar atletas,
           registrar entrenamientos y armar tu calendario.
         </p>
         <button
           onClick={() => setOpen(false)}
-          className="cut-corner mt-6 w-full bg-[#FF5A36] px-4 py-3 text-sm font-semibold uppercase tracking-wide text-[#05080D] transition hover:bg-[#ff7154]"
+          className="mt-6 w-full rounded-lg bg-brand-strong px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand"
         >
           Empezar
         </button>

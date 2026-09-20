@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { mono } from "../fonts";
 import { OPTIONAL_MODULES } from "../modules";
 import { setModules } from "./module-actions";
+import { Card } from "../ui";
 
 export default function ModuleToggles({
   initialHidden,
@@ -24,20 +24,12 @@ export default function ModuleToggles({
   }
 
   return (
-    <div className="rounded-xl border border-white/10 bg-[#0D141E]/80 p-5">
+    <Card>
       <div className="mb-1 flex items-center justify-between">
-        <span
-          className={`${mono.className} block text-[10px] uppercase tracking-widest text-white/40`}
-        >
-          Herramientas del equipo
-        </span>
-        {saving && (
-          <span className={`${mono.className} text-[10px] uppercase tracking-widest text-cyan-300`}>
-            Guardando…
-          </span>
-        )}
+        <span className="block text-xs font-medium text-ink-2">Herramientas del equipo</span>
+        {saving && <span className="text-xs text-brand-text">Guardando…</span>}
       </div>
-      <p className="mb-4 text-xs text-white/40">
+      <p className="mb-4 text-xs text-ink-3">
         Apaga las que tu equipo no usa. Desaparecen del menú para todos.
       </p>
 
@@ -49,12 +41,12 @@ export default function ModuleToggles({
               <button
                 type="button"
                 onClick={() => toggle(m.key)}
-                className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm text-white/80 transition hover:bg-white/5"
+                className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm text-ink-2 transition hover:bg-sunken"
               >
                 <span>{m.label}</span>
                 <span
                   className={`relative h-5 w-9 shrink-0 rounded-full transition ${
-                    on ? "bg-[#FF5A36]" : "bg-white/15"
+                    on ? "bg-brand-strong" : "bg-line-strong"
                   }`}
                 >
                   <span
@@ -68,6 +60,6 @@ export default function ModuleToggles({
           );
         })}
       </ul>
-    </div>
+    </Card>
   );
 }

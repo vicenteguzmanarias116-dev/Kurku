@@ -1,9 +1,10 @@
 import { notFound, redirect } from "next/navigation";
 import { requireUser, isStaff } from "@/lib/auth";
 import { deleteAthlete } from "../actions";
-import { rajdhani, mono } from "../../fonts";
+import { rajdhani } from "../../fonts";
 import AthleteFormClient from "../AthleteFormClient";
 import TrendChart from "./TrendChart";
+import { Card, CardHeader } from "../../ui";
 
 export default async function AthleteForm({
   params,
@@ -37,19 +38,14 @@ export default async function AthleteForm({
   return (
     <div className="max-w-2xl space-y-4">
       {!isNew && (
-        <div className="rounded-xl border border-white/10 bg-[#0D141E]/80 p-5">
-          <span className={`${mono.className} block text-[11px] uppercase tracking-widest text-cyan-300`}>
-            Tendencia
-          </span>
-          <h3 className={`${rajdhani.className} mt-1 mb-3 text-lg font-bold uppercase tracking-tight`}>
-            Sueño, ánimo y dolor (últimos check-ins)
-          </h3>
+        <Card>
+          <CardHeader title="Sueño, ánimo y dolor (últimos check-ins)" hint="Tendencia" />
           <TrendChart rows={checkins ?? []} />
-        </div>
+        </Card>
       )}
 
       <div className="max-w-md space-y-4">
-        <h2 className={`${rajdhani.className} text-2xl font-bold uppercase tracking-tight`}>
+        <h2 className={`${rajdhani.className} text-2xl font-bold`}>
           {isNew ? "Nuevo atleta" : staff ? "Editar atleta" : "Mis datos"}
         </h2>
         <AthleteFormClient id={id} athlete={a} />
@@ -57,7 +53,7 @@ export default async function AthleteForm({
         {!isNew && staff && (
           <form action={deleteAthlete}>
             <input type="hidden" name="id" value={id} />
-            <button className="text-sm text-red-400 hover:underline">
+            <button className="text-sm text-bad-text hover:underline">
               Eliminar atleta
             </button>
           </form>

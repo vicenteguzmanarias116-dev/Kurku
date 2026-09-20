@@ -1,8 +1,9 @@
 import { requireUser, isStaff } from "@/lib/auth";
-import { mono, rajdhani } from "../fonts";
+import { rajdhani } from "../fonts";
 import PageHead from "../PageHead";
 import { addInjury, setStatus } from "./actions";
 import ExportButton from "../ExportButton";
+import { Card, Select, Input, Button, Badge, Empty } from "../ui";
 
 type Injury = {
   id: string;
@@ -16,18 +17,15 @@ type Injury = {
   athletes: { full_name: string } | null;
 };
 
-const input =
-  "border border-white/15 bg-black/30 px-2.5 py-2 text-sm text-white outline-none focus:border-cyan-300/60 focus:ring-1 focus:ring-cyan-300/40";
-
 const STATUS_LABEL: Record<Injury["status"], string> = {
   activa: "Activa",
   recuperando: "Recuperando",
   de_alta: "De alta",
 };
-const STATUS_COLOR: Record<Injury["status"], string> = {
-  activa: "text-red-400 border-red-400/40",
-  recuperando: "text-amber-400 border-amber-400/40",
-  de_alta: "text-emerald-400 border-emerald-400/40",
+const STATUS_TONE: Record<Injury["status"], "bad" | "warn" | "ok"> = {
+  activa: "bad",
+  recuperando: "warn",
+  de_alta: "ok",
 };
 
 export default async function LesionesPage() {
@@ -65,50 +63,46 @@ export default async function LesionesPage() {
       </div>
 
       {staff && (
-        <details className="rounded-xl border border-white/10 bg-[#0D141E]/80 p-5">
-          <summary className={`${mono.className} cursor-pointer text-xs uppercase tracking-wider text-cyan-300`}>
+        <details className="rounded-xl border border-line bg-surface p-5">
+          <summary className="cursor-pointer text-sm font-medium text-brand-text">
             Registrar lesión
           </summary>
           <form action={addInjury} className="mt-4 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
-            <select name="athlete_id" required className={input}>
+            <Select name="athlete_id" required>
               <option value="">Atleta…</option>
               {athletes?.map((a) => (
                 <option key={a.id} value={a.id}>
                   {a.full_name}
                 </option>
               ))}
-            </select>
-            <input name="body_part" placeholder="Zona (ej. hombro derecho)" required className={input} />
-            <input name="severity" type="number" min={1} max={5} placeholder="Gravedad 1-5" className={input} />
-            <input name="reported_date" type="date" className={input} />
-            <input name="expected_return" type="date" placeholder="Retorno estimado" className={input} />
-            <input name="description" placeholder="Diagnóstico / detalle" className={`${input} col-span-2 sm:col-span-2`} />
-            <button className="cut-corner bg-[#FF5A36] px-3 py-2 text-xs font-bold uppercase tracking-wide text-[#05080D] transition hover:bg-[#ff7154]">
+            </Select>
+            <Input name="body_part" placeholder="Zona (ej. hombro derecho)" required />
+            <Input name="severity" type="number" min={1} max={5} placeholder="Gravedad 1-5" />
+            <Input name="reported_date" type="date" />
+            <Input name="expected_return" type="date" placeholder="Retorno estimado" />
+            <Input name="description" placeholder="Diagnóstico / detalle" className="col-span-2 sm:col-span-2" />
+            <Button type="submit" variant="primary" size="sm">
               Guardar
-            </button>
+            </Button>
           </form>
         </details>
       )}
 
-      <div className="rounded-xl border border-white/10 bg-[#0D141E]/80 p-6">
+      <Card>
         {!visible.length ? (
-          <p className="text-sm text-white/30">Sin lesiones registradas.</p>
+          <Empty title="Sin lesiones registradas." />
         ) : (
-          <ul className="divide-y divide-white/10">
+          <ul className="divide-y divide-line">
             {visible.map((inj) => (
               <li key={inj.id} className="flex flex-wrap items-center gap-3 py-3 first:pt-0 last:pb-0">
-                <span
-                  className={`${mono.className} border px-2 py-0.5 text-[10px] uppercase tracking-wider ${STATUS_COLOR[inj.status]}`}
-                >
-                  {STATUS_LABEL[inj.status]}
-                </span>
+                <Badge tone={STATUS_TONE[inj.status]}>{STATUS_LABEL[inj.status]}</Badge>
                 <span className="min-w-0 flex-1">
-                  <span className={`${rajdhani.className} font-bold`}>
+                  <span className={`${rajdhani.className} font-bold text-ink`}>
                     {staff ? `${inj.athletes?.full_name ?? "—"} · ` : ""}
                     {inj.body_part}
                   </span>
-                  {inj.description && <span className="text-white/40"> — {inj.description}</span>}
-                  <div className={`${mono.className} text-[10px] uppercase tracking-wider text-white/30`}>
+                  {inj.description && <span className="text-ink-2"> — {inj.description}</span>}
+                  <div className="text-xs text-ink-3">
                     reportada {inj.reported_date}
                     {inj.expected_return && ` · retorno estimado ${inj.expected_return}`}
                     {inj.severity && ` · gravedad ${inj.severity}/5`}
@@ -121,7 +115,7 @@ export default async function LesionesPage() {
                       <button
                         name="status"
                         value="recuperando"
-                        className="border border-amber-400/40 px-2 py-1 text-xs text-amber-400 hover:bg-amber-400/10"
+                        className="rounded-lg border border-warn/40 px-2 py-1 text-xs text-warn-text hover:bg-warn-soft"
                       >
                         marcar recuperando
                       </button>
@@ -129,7 +123,7 @@ export default async function LesionesPage() {
                     <button
                       name="status"
                       value="de_alta"
-                      className="border border-emerald-400/40 px-2 py-1 text-xs text-emerald-400 hover:bg-emerald-400/10"
+                      className="rounded-lg border border-ok/40 px-2 py-1 text-xs text-ok-text hover:bg-ok-soft"
                     >
                       dar de alta
                     </button>
@@ -139,7 +133,7 @@ export default async function LesionesPage() {
             ))}
           </ul>
         )}
-      </div>
+      </Card>
     </div>
   );
 }

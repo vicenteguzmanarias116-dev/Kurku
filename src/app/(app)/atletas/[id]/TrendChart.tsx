@@ -1,5 +1,3 @@
-import { mono } from "../../fonts";
-
 type Row = {
   checkin_date: string;
   sleep_quality: number | null;
@@ -9,8 +7,8 @@ type Row = {
 };
 
 const SERIES: { key: keyof Row; label: string; color: string }[] = [
-  { key: "sleep_quality", label: "Sueño", color: "#67e8f9" },
-  { key: "mood", label: "Ánimo", color: "#a3a3a3" },
+  { key: "sleep_quality", label: "Sueño", color: "#2563EB" },
+  { key: "mood", label: "Ánimo", color: "#64748B" },
   { key: "soreness_overall", label: "Dolor gral.", color: "#FF5A36" },
 ];
 
@@ -36,7 +34,7 @@ function pathFor(values: (number | null)[], color: string) {
 /** Últimos `days` check-ins de salud del atleta, como gráfico de tendencia. */
 export default function TrendChart({ rows }: { rows: Row[] }) {
   if (rows.length === 0) {
-    return <p className="text-sm text-white/30">Sin check-ins de salud todavía.</p>;
+    return <p className="text-sm text-ink-3">Sin check-ins de salud todavía.</p>;
   }
 
   const painCounts = rows.map((r) => Object.values(r.muscle_pain ?? {}).length);
@@ -50,7 +48,7 @@ export default function TrendChart({ rows }: { rows: Row[] }) {
         {[1, 3, 5].map((v) => {
           const y = H - PAD - ((v - 1) / 4) * (H - PAD * 2);
           return (
-            <line key={v} x1={PAD} x2={W - PAD} y1={y} y2={y} stroke="rgba(255,255,255,0.06)" />
+            <line key={v} x1={PAD} x2={W - PAD} y1={y} y2={y} stroke="#E4E7EB" />
           );
         })}
         {SERIES.map((s) => pathFor(rows.map((r) => r[s.key] as number | null), s.color))}
@@ -69,7 +67,7 @@ export default function TrendChart({ rows }: { rows: Row[] }) {
           );
         })}
       </svg>
-      <div className={`${mono.className} mt-2 flex flex-wrap items-center gap-4 text-[10px] uppercase tracking-wider text-white/40`}>
+      <div className="mt-2 flex flex-wrap items-center gap-4 text-xs text-ink-3">
         {SERIES.map((s) => (
           <span key={s.key} className="flex items-center gap-1.5">
             <span className="h-2 w-2 rounded-full" style={{ backgroundColor: s.color }} />
@@ -77,10 +75,10 @@ export default function TrendChart({ rows }: { rows: Row[] }) {
           </span>
         ))}
         <span className="flex items-center gap-1.5">
-          <span className="h-2 w-2 bg-[#FF5A36]/35" />
+          <span className="h-2 w-2 rounded-full bg-brand/50" />
           Zonas con dolor
         </span>
-        <span className="ml-auto text-white/25">
+        <span className="ml-auto">
           {rows[0]?.checkin_date} → {rows[rows.length - 1]?.checkin_date}
         </span>
       </div>

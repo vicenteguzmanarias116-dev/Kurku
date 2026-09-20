@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { requireUser } from "@/lib/auth";
-import { mono, rajdhani } from "../fonts";
+import { rajdhani } from "../fonts";
 import PageHead from "../PageHead";
 import Composer from "./Composer";
 
@@ -76,29 +76,27 @@ export default async function MensajesPage({
     <div className="space-y-6">
       <PageHead eyebrow="Privado" title="Mensajes" subtitle="Conversaciones 1 a 1 con cualquiera de tu equipo." />
 
-      <div className="grid grid-cols-1 overflow-hidden rounded-xl border border-white/10 bg-[#0D141E]/80 sm:grid-cols-[220px_1fr]">
-        <div className="divide-y divide-white/10 border-b border-white/10 sm:border-b-0 sm:border-r">
+      <div className="grid grid-cols-1 overflow-hidden rounded-xl border border-line bg-surface sm:grid-cols-[220px_1fr]">
+        <div className="divide-y divide-line border-b border-line sm:border-b-0 sm:border-r">
           {contacts.map((c) => {
             const n = unread.get(c.id) ?? 0;
             return (
               <Link
                 key={c.id}
                 href={`/mensajes?with=${c.id}`}
-                className={`flex items-center gap-2 px-4 py-3 text-sm transition hover:bg-white/5 ${
-                  activeId === c.id ? "bg-white/5" : ""
+                className={`flex items-center gap-2 px-4 py-3 text-sm transition hover:bg-sunken ${
+                  activeId === c.id ? "bg-sunken" : ""
                 }`}
               >
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-cyan-300/40 bg-cyan-300/10 text-xs font-bold text-cyan-300">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-soft text-xs font-bold text-brand-text">
                   {(c.full_name || "?").charAt(0).toUpperCase()}
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate">{c.full_name || "—"}</span>
-                  <span className={`${mono.className} block text-[10px] uppercase tracking-wider text-white/30`}>
-                    {ROLE_LABEL[c.role] ?? c.role}
-                  </span>
+                  <span className="block truncate text-ink">{c.full_name || "—"}</span>
+                  <span className="block text-xs text-ink-3">{ROLE_LABEL[c.role] ?? c.role}</span>
                 </span>
                 {n > 0 && (
-                  <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#FF5A36] px-1 text-[10px] font-bold text-[#05080D]">
+                  <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-strong px-1 text-[10px] font-bold text-white">
                     {n}
                   </span>
                 )}
@@ -106,22 +104,20 @@ export default async function MensajesPage({
             );
           })}
           {!contacts.length && (
-            <p className="px-4 py-3 text-sm text-white/30">Tu equipo no tiene más miembros.</p>
+            <p className="px-4 py-3 text-sm text-ink-3">Tu equipo no tiene más miembros.</p>
           )}
         </div>
 
         <div className="flex min-h-[420px] flex-col">
           {!active ? (
-            <div className="flex flex-1 items-center justify-center p-6 text-sm text-white/30">
+            <div className="flex flex-1 items-center justify-center p-6 text-sm text-ink-3">
               Elegí a alguien para empezar a escribirle.
             </div>
           ) : (
             <>
-              <div className="border-b border-white/10 px-4 py-3">
-                <p className={`${rajdhani.className} text-base font-bold`}>{active.full_name}</p>
-                <p className={`${mono.className} text-[10px] uppercase tracking-wider text-white/30`}>
-                  {ROLE_LABEL[active.role] ?? active.role}
-                </p>
+              <div className="border-b border-line px-4 py-3">
+                <p className={`${rajdhani.className} text-base font-bold text-ink`}>{active.full_name}</p>
+                <p className="text-xs text-ink-3">{ROLE_LABEL[active.role] ?? active.role}</p>
               </div>
 
               <div className="flex-1 space-y-2 overflow-y-auto p-4">
@@ -131,14 +127,12 @@ export default async function MensajesPage({
                     <div key={m.id} className={`flex ${mine ? "justify-end" : "justify-start"}`}>
                       <div
                         className={`max-w-[75%] rounded-lg px-3 py-2 text-sm ${
-                          mine ? "bg-[#FF5A36] text-[#05080D]" : "bg-white/10 text-white/90"
+                          mine ? "bg-brand-strong text-white" : "bg-sunken text-ink"
                         }`}
                       >
                         {m.body}
                         <div
-                          className={`${mono.className} mt-1 text-[9px] uppercase tracking-wider ${
-                            mine ? "text-black/50" : "text-white/30"
-                          }`}
+                          className={`mt-1 text-[10px] ${mine ? "text-white/70" : "text-ink-3"}`}
                         >
                           {new Date(m.created_at).toLocaleTimeString("es-PE", {
                             hour: "2-digit",
@@ -150,7 +144,7 @@ export default async function MensajesPage({
                   );
                 })}
                 {!thread.length && (
-                  <p className="text-sm text-white/30">Todavía no hay mensajes con {active.full_name}.</p>
+                  <p className="text-sm text-ink-3">Todavía no hay mensajes con {active.full_name}.</p>
                 )}
               </div>
 

@@ -48,9 +48,7 @@ export default function PhotoUpload({
 
   return (
     <div>
-      <span className="mb-1 block text-xs uppercase tracking-wider text-white/50">
-        Foto
-      </span>
+      <span className="mb-1 block text-xs font-medium text-ink-2">Foto</span>
       <label
         onDragOver={(e) => {
           e.preventDefault();
@@ -62,10 +60,8 @@ export default function PhotoUpload({
           setDragging(false);
           handleFile(e.dataTransfer.files?.[0]);
         }}
-        className={`flex cursor-pointer items-center gap-4 border border-dashed px-4 py-4 transition ${
-          dragging
-            ? "border-cyan-300 bg-cyan-400/5"
-            : "border-white/15 bg-black/30 hover:border-cyan-300/60"
+        className={`flex cursor-pointer items-center gap-4 rounded-lg border border-dashed px-4 py-4 transition ${
+          dragging ? "border-brand bg-brand-soft" : "border-line-strong bg-sunken hover:border-brand/60"
         }`}
       >
         {preview && (
@@ -73,10 +69,10 @@ export default function PhotoUpload({
           <img
             src={preview}
             alt=""
-            className="h-16 w-16 shrink-0 border border-white/15 object-cover"
+            className="h-16 w-16 shrink-0 rounded-lg border border-line object-cover"
           />
         )}
-        <span className="text-xs uppercase tracking-wider text-white/70">
+        <span className="text-sm text-ink-2">
           {status === "uploading" ? (
             "Subiendo…"
           ) : status === "done" || preview ? (
@@ -84,7 +80,7 @@ export default function PhotoUpload({
           ) : (
             <>
               Arrastra una imagen aquí o{" "}
-              <span className="text-cyan-300 underline">elige un archivo</span>
+              <span className="text-brand-text underline">elige un archivo</span>
             </>
           )}
         </span>
@@ -96,7 +92,7 @@ export default function PhotoUpload({
         />
       </label>
       {status === "error" && (
-        <p className="mt-1 text-xs text-[#FF5A36]">
+        <p className="mt-1 text-xs text-bad-text">
           No se pudo subir la imagen. Intenta de nuevo.
         </p>
       )}

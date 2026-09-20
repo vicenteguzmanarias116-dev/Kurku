@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { requireUser, isStaff } from "@/lib/auth";
-import { mono } from "../fonts";
 import PageHead from "../PageHead";
 import InviteLink from "./InviteLink";
 import ExportButton from "../ExportButton";
+import { Card, LinkButton, Empty } from "../ui";
 
 type Athlete = {
   id: string;
@@ -29,49 +29,39 @@ export default async function AtletasPage() {
         {staff && (
           <div className="mb-7 flex shrink-0 gap-2">
             <ExportButton type="atletas" />
-            <Link
-              href="/atletas/nuevo"
-              className={`${mono.className} cut-corner bg-[#FF5A36] px-4 py-2 text-xs font-bold uppercase tracking-wide text-[#05080D] transition hover:bg-[#ff7154]`}
-            >
+            <LinkButton href="/atletas/nuevo" variant="primary" size="sm">
               Nuevo atleta
-            </Link>
+            </LinkButton>
           </div>
         )}
       </div>
 
       {staff && profile?.team_id && <InviteLink teamId={profile.team_id} />}
 
-      <div className="overflow-x-auto rounded-xl border border-white/10 bg-[#0D141E]/80 p-6">
+      <Card className="overflow-x-auto">
         <table className="w-full min-w-[420px] text-sm">
-          <thead
-            className={`${mono.className} text-left text-[11px] uppercase tracking-wider text-white/40`}
-          >
+          <thead className="text-left text-xs text-ink-3">
             <tr>
-              <th className="py-1 font-normal">Nombre</th>
-              <th className="font-normal">Clase</th>
-              <th className="font-normal">Peso</th>
+              <th className="py-1 font-medium">Nombre</th>
+              <th className="font-medium">Clase</th>
+              <th className="font-medium">Peso</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             {(athletes as Athlete[] | null)?.map((a) => (
-              <tr key={a.id} className="border-t border-white/10">
+              <tr key={a.id} className="border-t border-line">
                 <td className="py-2.5">
                   {a.full_name}
-                  {!a.active && (
-                    <span className="ml-2 text-xs text-white/30">inactivo</span>
-                  )}
+                  {!a.active && <span className="ml-2 text-xs text-ink-3">inactivo</span>}
                 </td>
-                <td className="text-white/70">{a.boat_class ?? "—"}</td>
-                <td className="tabular-nums text-white/70">
+                <td className="text-ink-2">{a.boat_class ?? "—"}</td>
+                <td className="tabular-nums text-ink-2">
                   {a.weight_kg ? `${a.weight_kg} kg` : "—"}
                 </td>
                 <td className="text-right">
                   {staff && (
-                    <Link
-                      href={`/atletas/${a.id}`}
-                      className="text-cyan-300 hover:underline"
-                    >
+                    <Link href={`/atletas/${a.id}`} className="text-brand-text hover:underline">
                       editar
                     </Link>
                   )}
@@ -80,14 +70,14 @@ export default async function AtletasPage() {
             ))}
             {!athletes?.length && (
               <tr>
-                <td colSpan={4} className="py-3 text-white/30">
-                  Sin atletas todavía.
+                <td colSpan={4}>
+                  <Empty title="Sin atletas todavía." />
                 </td>
               </tr>
             )}
           </tbody>
         </table>
-      </div>
+      </Card>
     </div>
   );
 }
