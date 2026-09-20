@@ -47,6 +47,19 @@ const PATHS: Record<string, React.ReactNode> = {
       <path d="M2 20c0-3 2.7-5.5 6-5.5s6 2.5 6 5.5M12 20c0-3 2.7-5.5 6-5.5s4 2.5 4 5.5" />
     </>
   ),
+  mas: (
+    <>
+      <circle cx="5" cy="12" r="1.5" fill="currentColor" stroke="none" />
+      <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" />
+      <circle cx="19" cy="12" r="1.5" fill="currentColor" stroke="none" />
+    </>
+  ),
+  cuenta: (
+    <>
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8" />
+    </>
+  ),
 };
 
 export default function NavIcon({ name, className }: { name: string; className?: string }) {

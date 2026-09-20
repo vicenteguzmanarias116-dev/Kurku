@@ -4,9 +4,10 @@ import { requireUser, isAdmin } from "@/lib/auth";
 import { rajdhani } from "./fonts";
 import AccountMenu from "./AccountMenu";
 import HeaderSettings from "./HeaderSettings";
-import { OPTIONAL_MODULES } from "./modules";
+import { navFor } from "./modules";
 import HealthReminderModal from "./HealthReminderModal";
 import NavIcon from "./NavIcon";
+import BottomNav from "./BottomNav";
 
 export default async function AppLayout({
   children,
@@ -48,15 +49,7 @@ export default async function AppLayout({
     }
   }
 
-  const NAV = [
-    { href: "/pagina-equipo", label: "Página del equipo", key: "pagina-equipo" },
-    { href: "/dashboard", label: "Panel", key: "dashboard" },
-    ...OPTIONAL_MODULES.filter((m) => !hidden.has(m.key)).map((m) => ({
-      href: m.href,
-      label: m.label,
-      key: m.key,
-    })),
-  ];
+  const { primary, more } = navFor(profile.role, hidden);
 
   const navLink =
     "flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 transition hover:bg-sunken hover:text-ink";
@@ -101,12 +94,32 @@ export default async function AppLayout({
         <nav
           className={`${rajdhani.className} hidden gap-1 text-sm font-medium text-ink-2 lg:flex`}
         >
-          {NAV.map((n) => (
+          {primary.map((n) => (
             <Link key={n.href} href={n.href} className={navLink}>
               <NavIcon name={n.key} className="h-4 w-4 shrink-0" />
               {n.label}
             </Link>
           ))}
+          {more.length > 0 && (
+            <details className="group relative">
+              <summary className={`${navLink} list-none`}>
+                <NavIcon name="mas" className="h-4 w-4 shrink-0" />
+                Más
+              </summary>
+              <div className="absolute left-0 top-full z-30 mt-1 w-52 rounded-xl border border-line bg-surface py-1.5 shadow-lg">
+                {more.map((n) => (
+                  <Link
+                    key={n.href}
+                    href={n.href}
+                    className="flex items-center gap-2.5 px-3.5 py-2 text-sm text-ink-2 hover:bg-sunken"
+                  >
+                    <NavIcon name={n.key} className="h-4 w-4 shrink-0" />
+                    {n.label}
+                  </Link>
+                ))}
+              </div>
+            </details>
+          )}
         </nav>
 
         <div className="ml-auto flex items-center gap-3">
@@ -119,22 +132,9 @@ export default async function AppLayout({
         </div>
       </header>
 
-      <nav
-        className={`${rajdhani.className} flex gap-1 overflow-x-auto border-b border-line bg-surface px-4 py-2 text-sm font-medium text-ink-2 lg:hidden`}
-      >
-        {NAV.map((n) => (
-          <Link
-            key={n.href}
-            href={n.href}
-            className={`${navLink} shrink-0 whitespace-nowrap`}
-          >
-            <NavIcon name={n.key} className="h-4 w-4 shrink-0" />
-            {n.label}
-          </Link>
-        ))}
-      </nav>
+      <main className="flex-1 px-6 pb-24 pt-6 sm:px-10 lg:pb-10">{children}</main>
 
-      <main className="flex-1 px-6 pb-12 pt-6 sm:px-10">{children}</main>
+      <BottomNav primary={primary} more={more} />
 
       <HealthReminderModal show={needsHealthCheckin} />
     </div>
