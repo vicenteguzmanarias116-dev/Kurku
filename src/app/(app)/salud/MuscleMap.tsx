@@ -1,5 +1,8 @@
 "use client";
 
+import { useState } from "react";
+import { FRONT, BACK, SILHOUETTE, type Zone } from "./muscles";
+
 type Level = 0 | 1 | 2 | 3;
 
 const COLORS: Record<Level, string> = {
@@ -15,73 +18,44 @@ const STROKE: Record<Level, string> = {
   3: "#ef4444",
 };
 
-/** Bloques de un muñeco simplificado: no es anatomía real, son zonas
- * clickeables reconocibles (torso, brazos, piernas...) en dos vistas. */
-const FRONT: { id: string; label: string; x: number; y: number; w: number; h: number; rx?: number }[] = [
-  { id: "cuello", label: "Cuello", x: 90, y: 42, w: 20, h: 14 },
-  { id: "hombro_izq", label: "Hombro izquierdo", x: 48, y: 58, w: 26, h: 18, rx: 8 },
-  { id: "hombro_der", label: "Hombro derecho", x: 126, y: 58, w: 26, h: 18, rx: 8 },
-  { id: "pecho", label: "Pecho", x: 76, y: 58, w: 48, h: 34, rx: 6 },
-  { id: "biceps_izq", label: "Bíceps izquierdo", x: 38, y: 78, w: 18, h: 40, rx: 8 },
-  { id: "biceps_der", label: "Bíceps derecho", x: 144, y: 78, w: 18, h: 40, rx: 8 },
-  { id: "abdomen", label: "Abdomen", x: 80, y: 94, w: 40, h: 38, rx: 6 },
-  { id: "antebrazo_izq", label: "Antebrazo izquierdo", x: 34, y: 120, w: 16, h: 36, rx: 7 },
-  { id: "antebrazo_der", label: "Antebrazo derecho", x: 150, y: 120, w: 16, h: 36, rx: 7 },
-  { id: "cuadriceps_izq", label: "Cuádriceps izquierdo", x: 78, y: 134, w: 22, h: 56, rx: 8 },
-  { id: "cuadriceps_der", label: "Cuádriceps derecho", x: 100, y: 134, w: 22, h: 56, rx: 8 },
-  { id: "rodilla_izq", label: "Rodilla izquierda", x: 79, y: 192, w: 20, h: 12, rx: 5 },
-  { id: "rodilla_der", label: "Rodilla derecha", x: 101, y: 192, w: 20, h: 12, rx: 5 },
-  { id: "tibial_izq", label: "Tibial izquierdo", x: 80, y: 206, w: 18, h: 46, rx: 6 },
-  { id: "tibial_der", label: "Tibial derecho", x: 102, y: 206, w: 18, h: 46, rx: 6 },
-];
-
-const BACK: typeof FRONT = [
-  { id: "trapecio", label: "Trapecio", x: 78, y: 44, w: 44, h: 20, rx: 6 },
-  { id: "espalda_alta", label: "Espalda alta", x: 76, y: 64, w: 48, h: 32, rx: 6 },
-  { id: "triceps_izq", label: "Tríceps izquierdo", x: 38, y: 78, w: 18, h: 40, rx: 8 },
-  { id: "triceps_der", label: "Tríceps derecho", x: 144, y: 78, w: 18, h: 40, rx: 8 },
-  { id: "espalda_baja", label: "Espalda baja", x: 80, y: 96, w: 40, h: 34, rx: 6 },
-  { id: "antebrazo_izq_b", label: "Antebrazo izquierdo", x: 34, y: 120, w: 16, h: 36, rx: 7 },
-  { id: "antebrazo_der_b", label: "Antebrazo derecho", x: 150, y: 120, w: 16, h: 36, rx: 7 },
-  { id: "gluteo_izq", label: "Glúteo izquierdo", x: 78, y: 130, w: 22, h: 26, rx: 8 },
-  { id: "gluteo_der", label: "Glúteo derecho", x: 100, y: 130, w: 22, h: 26, rx: 8 },
-  { id: "isquios_izq", label: "Isquiotibial izquierdo", x: 78, y: 156, w: 22, h: 40, rx: 8 },
-  { id: "isquios_der", label: "Isquiotibial derecho", x: 100, y: 156, w: 22, h: 40, rx: 8 },
-  { id: "gemelo_izq", label: "Gemelo izquierdo", x: 80, y: 206, w: 18, h: 46, rx: 6 },
-  { id: "gemelo_der", label: "Gemelo derecho", x: 102, y: 206, w: 18, h: 46, rx: 6 },
-];
-
 function Figure({
   zones,
   value,
   onToggle,
 }: {
-  zones: typeof FRONT;
+  zones: Zone[];
   value: Record<string, Level>;
   onToggle: (id: string) => void;
 }) {
   return (
     <svg viewBox="0 0 200 260" className="mx-auto h-72 w-auto">
-      {/* silueta decorativa, no clickeable */}
-      <circle cx={100} cy={26} r={16} fill="#F1F3F5" stroke="#98A2B3" />
+      <path d={SILHOUETTE} fill="#F6F7F9" stroke="#E4E7EB" strokeWidth={1} pointerEvents="none" />
       {zones.map((z) => {
         const level = (value[z.id] ?? 0) as Level;
         return (
-          <rect
+          <ellipse
             key={z.id}
-            x={z.x}
-            y={z.y}
-            width={z.w}
-            height={z.h}
-            rx={z.rx ?? 4}
+            cx={z.cx}
+            cy={z.cy}
+            rx={z.rx}
+            ry={z.ry}
             fill={COLORS[level]}
             stroke={STROKE[level]}
             strokeWidth={1.5}
-            className="cursor-pointer transition-colors duration-150 hover:brightness-125"
+            role="button"
+            tabIndex={0}
+            aria-label={`${z.label}: ${level === 0 ? "sin dolor" : `nivel ${level}`}`}
+            className="cursor-pointer outline-none transition-colors duration-150 hover:brightness-125 focus-visible:stroke-brand-strong"
             onClick={() => onToggle(z.id)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onToggle(z.id);
+              }
+            }}
           >
             <title>{z.label}</title>
-          </rect>
+          </ellipse>
         );
       })}
     </svg>
@@ -104,6 +78,8 @@ export default function MuscleMap({
   value: Record<string, Level>;
   onChange: (next: Record<string, Level>) => void;
 }) {
+  const [side, setSide] = useState<"front" | "back">("front");
+
   function toggle(id: string) {
     const current = (value[id] ?? 0) as Level;
     const next = ((current + 1) % 4) as Level;
@@ -119,15 +95,23 @@ export default function MuscleMap({
 
   return (
     <div>
-      <div className="grid grid-cols-1 gap-4 rounded-lg border border-line bg-sunken p-4 sm:grid-cols-2">
-        <div>
-          <p className="mb-1 text-center text-xs text-ink-3">Frente</p>
-          <Figure zones={FRONT} value={value} onToggle={toggle} />
-        </div>
-        <div>
-          <p className="mb-1 text-center text-xs text-ink-3">Espalda</p>
-          <Figure zones={BACK} value={value} onToggle={toggle} />
-        </div>
+      <div className="mb-3 flex gap-1 border-b border-line">
+        {(["front", "back"] as const).map((s) => (
+          <button
+            key={s}
+            type="button"
+            onClick={() => setSide(s)}
+            className={`px-3 py-2 text-sm font-medium transition ${
+              side === s ? "border-b-2 border-brand-strong text-ink" : "text-ink-3 hover:text-ink"
+            }`}
+          >
+            {s === "front" ? "Frente" : "Espalda"}
+          </button>
+        ))}
+      </div>
+
+      <div className="rounded-lg border border-line bg-sunken p-4">
+        <Figure zones={side === "front" ? FRONT : BACK} value={value} onToggle={toggle} />
       </div>
 
       <div className="mt-3 flex flex-wrap items-center gap-4 text-xs text-ink-2">
