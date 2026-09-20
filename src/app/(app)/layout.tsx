@@ -5,7 +5,6 @@ import { rajdhani } from "./fonts";
 import AccountMenu from "./AccountMenu";
 import HeaderSettings from "./HeaderSettings";
 import { navFor } from "./modules";
-import HealthReminderModal from "./HealthReminderModal";
 import NavIcon from "./NavIcon";
 import BottomNav from "./BottomNav";
 
@@ -29,26 +28,6 @@ export default async function AppLayout({
     }>();
 
   const hidden = new Set(team?.hidden_modules ?? []);
-
-  let needsHealthCheckin = false;
-  if (profile.role === "athlete" && !hidden.has("salud")) {
-    const { data: myAthlete } = await supabase
-      .from("athletes")
-      .select("id")
-      .eq("profile_id", profile.id)
-      .maybeSingle();
-    if (myAthlete) {
-      const today = new Date().toISOString().slice(0, 10);
-      const { data: checkin } = await supabase
-        .from("health_checkins")
-        .select("id")
-        .eq("athlete_id", myAthlete.id)
-        .eq("checkin_date", today)
-        .maybeSingle();
-      needsHealthCheckin = !checkin;
-    }
-  }
-
   const { primary, more } = navFor(profile.role, hidden);
 
   const navLink =
@@ -135,8 +114,6 @@ export default async function AppLayout({
       <main className="flex-1 px-6 pb-24 pt-6 sm:px-10 lg:pb-10">{children}</main>
 
       <BottomNav primary={primary} more={more} />
-
-      <HealthReminderModal show={needsHealthCheckin} />
     </div>
   );
 }

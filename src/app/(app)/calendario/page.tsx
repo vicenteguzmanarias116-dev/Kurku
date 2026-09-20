@@ -4,6 +4,8 @@ import { requireUser, isStaff } from "@/lib/auth";
 import { rajdhani } from "../fonts";
 import PageHead from "../PageHead";
 import { Input, Select, Textarea, Button } from "../ui";
+import { getTodayCheckinStatus } from "../today";
+import Agenda, { type AgendaItem } from "./Agenda";
 
 type EventRow = {
   id: string;
@@ -91,10 +93,10 @@ export default async function CalendarioPage({
   const { supabase, profile } = await requireUser();
   const staff = isStaff(profile);
   const sp = await searchParams;
-  const view = sp.view === "semana" ? "semana" : "mes";
+  const view = sp.view === "semana" ? "semana" : sp.view === "mes" ? "mes" : "agenda";
   const anchor = sp.d && !Number.isNaN(Date.parse(sp.d)) ? new Date(sp.d) : new Date();
 
-  const [{ data: events }, { data: athletes }] = await Promise.all([
+  const [{ data: events }, { data: athletes }, checkin] = await Promise.all([
     supabase
       .from("events")
       .select(
@@ -104,6 +106,7 @@ export default async function CalendarioPage({
     staff
       ? supabase.from("athletes").select("id, full_name").eq("active", true).order("full_name")
       : Promise.resolve({ data: null }),
+    getTodayCheckinStatus(supabase, profile!),
   ]);
 
   const byDay = new Map<string, EventRow[]>();
@@ -120,6 +123,35 @@ export default async function CalendarioPage({
   const weekStart = mondayOf(anchor);
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
 
+  const agendaItems: AgendaItem[] = [];
+  if (view === "agenda") {
+    const today0 = new Date();
+    today0.setHours(0, 0, 0, 0);
+    const horizon = addDays(today0, 21);
+    for (const e of (events as EventRow[] | null) ?? []) {
+      const at = new Date(e.starts_at);
+      if (at < today0 || at >= horizon) continue;
+      if (!staff && e.athlete_id && e.athlete_id !== checkin.athleteId) continue;
+      agendaItems.push({
+        kind: "event",
+        id: e.id,
+        at: e.starts_at,
+        title: e.title,
+        planType: e.plan_type,
+        eventKind: e.kind,
+        href: `/calendario/${e.id}`,
+      });
+    }
+    if (checkin.athleteId) {
+      agendaItems.push({
+        kind: "checkin",
+        at: `${ymd(today0)}T08:00:00`,
+        done: checkin.done,
+        href: "/salud",
+      });
+    }
+  }
+
   const prevHref =
     view === "semana"
       ? `/calendario?view=semana&d=${ymd(addDays(weekStart, -7))}`
@@ -131,9 +163,11 @@ export default async function CalendarioPage({
   const todayHref = `/calendario?view=${view === "semana" ? "semana" : "mes"}`;
 
   const label =
-    view === "semana"
-      ? `${weekDays[0].toLocaleDateString("es-PE", { day: "numeric", month: "short" })} – ${weekDays[6].toLocaleDateString("es-PE", { day: "numeric", month: "short", year: "numeric" })}`
-      : monthStart.toLocaleDateString("es-PE", { month: "long", year: "numeric" });
+    view === "agenda"
+      ? "Próximos 21 días"
+      : view === "semana"
+        ? `${weekDays[0].toLocaleDateString("es-PE", { day: "numeric", month: "short" })} – ${weekDays[6].toLocaleDateString("es-PE", { day: "numeric", month: "short", year: "numeric" })}`
+        : monthStart.toLocaleDateString("es-PE", { month: "long", year: "numeric" });
 
   return (
     <div className="space-y-6">
@@ -196,8 +230,14 @@ export default async function CalendarioPage({
         <div className="flex items-center gap-2">
           <div className="flex rounded-lg border border-line text-sm font-medium">
             <Link
+              href="/calendario?view=agenda"
+              className={`rounded-l-lg px-3 py-1.5 ${view === "agenda" ? "bg-brand-strong text-white" : "text-ink-2 hover:bg-sunken"}`}
+            >
+              Agenda
+            </Link>
+            <Link
               href={`/calendario?view=mes${sp.d ? `&d=${sp.d}` : ""}`}
-              className={`rounded-l-lg px-3 py-1.5 ${view === "mes" ? "bg-brand-strong text-white" : "text-ink-2 hover:bg-sunken"}`}
+              className={`px-3 py-1.5 ${view === "mes" ? "bg-brand-strong text-white" : "text-ink-2 hover:bg-sunken"}`}
             >
               Mes
             </Link>
@@ -208,19 +248,25 @@ export default async function CalendarioPage({
               Semana
             </Link>
           </div>
-          <Link href={prevHref} className="rounded-lg border border-line px-2.5 py-1.5 text-ink-2 hover:bg-sunken">
-            ←
-          </Link>
-          <Link href={todayHref} className="rounded-lg border border-line px-2.5 py-1.5 text-sm font-medium text-ink-2 hover:bg-sunken">
-            Hoy
-          </Link>
-          <Link href={nextHref} className="rounded-lg border border-line px-2.5 py-1.5 text-ink-2 hover:bg-sunken">
-            →
-          </Link>
+          {view !== "agenda" && (
+            <>
+              <Link href={prevHref} className="rounded-lg border border-line px-2.5 py-1.5 text-ink-2 hover:bg-sunken">
+                ←
+              </Link>
+              <Link href={todayHref} className="rounded-lg border border-line px-2.5 py-1.5 text-sm font-medium text-ink-2 hover:bg-sunken">
+                Hoy
+              </Link>
+              <Link href={nextHref} className="rounded-lg border border-line px-2.5 py-1.5 text-ink-2 hover:bg-sunken">
+                →
+              </Link>
+            </>
+          )}
         </div>
       </div>
 
-      {view === "mes" ? (
+      {view === "agenda" ? (
+        <Agenda items={agendaItems} />
+      ) : view === "mes" ? (
         <div className="overflow-x-auto rounded-xl border border-line bg-surface p-2 sm:p-4">
           <div className="grid grid-cols-7 gap-px text-center text-xs text-ink-3">
             {["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"].map((d) => (
