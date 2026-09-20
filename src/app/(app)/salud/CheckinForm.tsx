@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import MuscleMap from "./MuscleMap";
 import { saveCheckin } from "./actions";
 import { Card, Field, Input, Textarea, Button } from "../ui";
+import { SLEEP, MOOD, SORE } from "./scale";
 
 type Existing = {
   sleep_hours: number | null;
@@ -22,8 +23,8 @@ export default function CheckinForm({
   existing: Existing;
 }) {
   const [sleepHours, setSleepHours] = useState(existing?.sleep_hours?.toString() ?? "");
-  const [sleepQuality, setSleepQuality] = useState(existing?.sleep_quality ?? 3);
-  const [mood, setMood] = useState(existing?.mood ?? 3);
+  const [sleepQuality, setSleepQuality] = useState(existing?.sleep_quality ?? 4);
+  const [mood, setMood] = useState(existing?.mood ?? 4);
   const [soreness, setSoreness] = useState(existing?.soreness_overall ?? 1);
   const [notes, setNotes] = useState(existing?.notes ?? "");
   const [musclePain, setMusclePain] = useState<Record<string, number>>(
@@ -64,9 +65,9 @@ export default function CheckinForm({
             />
           </Field>
 
-          <ScaleField label="Calidad del sueño (1-5)" value={sleepQuality} onChange={setSleepQuality} />
-          <ScaleField label="Ánimo (1-5)" value={mood} onChange={setMood} />
-          <ScaleField label="Fatiga/dolor general (1-5)" value={soreness} onChange={setSoreness} />
+          <ScaleField label="Calidad del sueño" words={SLEEP} value={sleepQuality} onChange={setSleepQuality} />
+          <ScaleField label="Ánimo" words={MOOD} value={mood} onChange={setMood} />
+          <ScaleField label="Fatiga/dolor general" words={SORE} value={soreness} onChange={setSoreness} />
         </div>
 
         <Field label="Mapa de dolor muscular">
@@ -90,22 +91,25 @@ export default function CheckinForm({
 
 function ScaleField({
   label,
+  words,
   value,
   onChange,
 }: {
   label: string;
+  words: string[];
   value: number;
   onChange: (n: number) => void;
 }) {
   return (
     <Field label={label}>
-      <div className="flex gap-1.5">
-        {[1, 2, 3, 4, 5].map((n) => (
+      <div className="flex gap-1">
+        {[1, 2, 3, 4, 5, 6, 7].map((n) => (
           <button
             type="button"
             key={n}
             onClick={() => onChange(n)}
-            className={`h-9 w-9 rounded-lg border text-sm font-medium transition ${
+            aria-label={words[n - 1]}
+            className={`h-8 flex-1 rounded-lg border text-xs font-medium transition ${
               value === n
                 ? "border-brand-strong bg-brand-strong text-white"
                 : "border-line-strong text-ink-2 hover:border-ink-3"
@@ -115,6 +119,7 @@ function ScaleField({
           </button>
         ))}
       </div>
+      <p className="mt-1.5 text-xs text-ink-2">{words[value - 1]}</p>
     </Field>
   );
 }

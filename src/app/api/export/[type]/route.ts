@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireUser, isStaff } from "@/lib/auth";
+import { SLEEP, MOOD, SORE, scaleWord } from "@/app/(app)/salud/scale";
 
 function toCsv(rows: Record<string, unknown>[]): string {
   if (!rows.length) return "";
@@ -67,9 +68,9 @@ export async function GET(_req: Request, { params }: { params: Promise<{ type: s
         fecha: r.checkin_date,
         atleta: (r.athletes as unknown as { full_name: string } | null)?.full_name ?? "",
         horas_sueno: r.sleep_hours ?? "",
-        calidad_sueno: r.sleep_quality ?? "",
-        animo: r.mood ?? "",
-        dolor_general: r.soreness_overall ?? "",
+        calidad_sueno: scaleWord(SLEEP, r.sleep_quality),
+        animo: scaleWord(MOOD, r.mood),
+        dolor_general: scaleWord(SORE, r.soreness_overall),
         zonas_con_dolor: Object.keys(r.muscle_pain ?? {}).join("; "),
       }));
       return csvResponse("salud.csv", rows);

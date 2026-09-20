@@ -24,7 +24,7 @@ function pathFor(values: (number | null)[], color: string) {
   values.forEach((v, i) => {
     if (v == null) return;
     const x = PAD + i * step;
-    const y = H - PAD - ((v - 1) / 4) * (H - PAD * 2); // escala 1-5
+    const y = H - PAD - ((v - 1) / 6) * (H - PAD * 2); // escala 1-7
     points.push(`${points.length ? "L" : "M"}${x.toFixed(1)},${y.toFixed(1)}`);
   });
   if (!points.length) return null;
@@ -44,9 +44,9 @@ export default function TrendChart({ rows }: { rows: Row[] }) {
   return (
     <div>
       <svg viewBox={`0 0 ${W} ${H + 24}`} className="w-full">
-        {/* líneas guía 1-5 */}
-        {[1, 3, 5].map((v) => {
-          const y = H - PAD - ((v - 1) / 4) * (H - PAD * 2);
+        {/* líneas guía 1-7 */}
+        {[1, 4, 7].map((v) => {
+          const y = H - PAD - ((v - 1) / 6) * (H - PAD * 2);
           return (
             <line key={v} x1={PAD} x2={W - PAD} y1={y} y2={y} stroke="#E4E7EB" />
           );

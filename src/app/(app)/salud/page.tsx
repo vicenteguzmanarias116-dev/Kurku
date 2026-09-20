@@ -3,6 +3,7 @@ import PageHead from "../PageHead";
 import CheckinForm from "./CheckinForm";
 import ExportButton from "../ExportButton";
 import { Card, CardHeader, Empty } from "../ui";
+import { SLEEP, MOOD, SORE, scaleWord } from "./scale";
 
 type CheckinRow = {
   athlete_id: string;
@@ -86,10 +87,10 @@ export default async function SaludPage() {
                       <tr key={c.athlete_id} className="border-t border-line">
                         <td className="py-2">{c.athletes?.full_name ?? "—"}</td>
                         <td className="text-ink-2">
-                          {c.sleep_hours ?? "—"}h · {c.sleep_quality ?? "—"}/5
+                          {c.sleep_hours ?? "—"}h · {scaleWord(SLEEP, c.sleep_quality)}
                         </td>
-                        <td className="text-ink-2">{c.mood ?? "—"}/5</td>
-                        <td className="text-ink-2">{c.soreness_overall ?? "—"}/5</td>
+                        <td className="text-ink-2">{scaleWord(MOOD, c.mood)}</td>
+                        <td className="text-ink-2">{scaleWord(SORE, c.soreness_overall)}</td>
                         <td className={painCount ? "text-brand-text" : "text-ink-3"}>
                           {painCount || "—"}
                         </td>
