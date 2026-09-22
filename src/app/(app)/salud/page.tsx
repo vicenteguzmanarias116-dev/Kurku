@@ -1,6 +1,7 @@
 import { requireUser, isStaff } from "@/lib/auth";
 import PageHead from "../PageHead";
 import CheckinForm from "./CheckinForm";
+import DemoCheckinForm from "./DemoCheckinForm";
 import ExportButton from "../ExportButton";
 import { Card, CardHeader, Empty } from "../ui";
 import { SLEEP, MOOD, SORE, scaleWord } from "./scale";
@@ -17,7 +18,7 @@ type CheckinRow = {
 };
 
 export default async function SaludPage() {
-  const { supabase, user, profile } = await requireUser();
+  const { supabase, user, profile, previewRole } = await requireUser();
   const staff = isStaff(profile);
   const today = new Date().toISOString().slice(0, 10);
 
@@ -57,7 +58,9 @@ export default async function SaludPage() {
         <CheckinForm athleteId={myAthlete.id} existing={myCheckin as CheckinRow | null} />
       )}
 
-      {!myAthlete && !staff && (
+      {!myAthlete && previewRole === "athlete" && <DemoCheckinForm />}
+
+      {!myAthlete && !staff && !previewRole && (
         <p className="text-sm text-ink-3">
           Tu cuenta no está vinculada a un atleta todavía.
         </p>
