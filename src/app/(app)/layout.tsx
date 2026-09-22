@@ -7,13 +7,21 @@ import HeaderSettings from "./HeaderSettings";
 import { navFor } from "./modules";
 import NavIcon from "./NavIcon";
 import BottomNav from "./BottomNav";
+import { clearPreviewRole } from "./preview-actions";
+
+const PREVIEW_LABEL: Record<string, string> = {
+  coach: "Coach",
+  fisico: "Preparador físico",
+  nutricionista: "Nutricionista",
+  athlete: "Atleta",
+};
 
 export default async function AppLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { supabase, profile } = await requireUser();
+  const { supabase, profile, realProfile, previewRole } = await requireUser();
   if (!profile?.team_id) redirect("/equipo/nuevo");
 
   const { data: team } = await supabase
@@ -102,7 +110,7 @@ export default async function AppLayout({
         </nav>
 
         <div className="ml-auto flex items-center gap-3">
-          {isAdmin(profile) && <HeaderSettings />}
+          {isAdmin(realProfile) && <HeaderSettings />}
           <AccountMenu
             fullName={profile?.full_name ?? null}
             role={profile?.role}
@@ -110,6 +118,20 @@ export default async function AppLayout({
           />
         </div>
       </header>
+
+      {previewRole && (
+        <form
+          action={clearPreviewRole}
+          className="flex items-center justify-between gap-3 bg-brand-strong px-6 py-2 text-sm text-white sm:px-10"
+        >
+          <span>
+            Vista previa: viendo como <strong>{PREVIEW_LABEL[previewRole]}</strong>
+          </span>
+          <button type="submit" className="underline underline-offset-2 hover:no-underline">
+            Salir de la vista previa
+          </button>
+        </form>
+      )}
 
       <main className="flex-1 px-6 pb-24 pt-6 sm:px-10 lg:pb-10">{children}</main>
 

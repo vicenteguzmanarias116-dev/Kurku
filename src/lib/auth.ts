@@ -1,5 +1,9 @@
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "./supabase/server";
+
+export const PREVIEW_ROLES = ["coach", "fisico", "nutricionista", "athlete"] as const;
+const PREVIEW_COOKIE = "kurku_preview_role";
 
 export type Profile = {
   id: string;
@@ -28,7 +32,25 @@ export async function requireUser() {
     console.error("[kurku] requireUser profile fetch failed", profileError);
   }
 
-  return { supabase, user, profile };
+  // vista previa: solo el admin real puede "verse" como otro rol, y solo
+  // para pintar la UI (el acceso real a los datos lo sigue decidiendo RLS
+  // con el rol de verdad, esto nunca toca la base).
+  let previewRole: Profile["role"] | null = null;
+  if (profile?.role === "admin") {
+    const cookieStore = await cookies();
+    const raw = cookieStore.get(PREVIEW_COOKIE)?.value;
+    if (raw && (PREVIEW_ROLES as readonly string[]).includes(raw)) {
+      previewRole = raw as Profile["role"];
+    }
+  }
+
+  return {
+    supabase,
+    user,
+    profile: previewRole && profile ? { ...profile, role: previewRole } : profile,
+    realProfile: profile,
+    previewRole,
+  };
 }
 
 export const isStaff = (p?: Profile | null) =>

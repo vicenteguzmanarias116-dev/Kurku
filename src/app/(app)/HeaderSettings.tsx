@@ -2,6 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { setPreviewRole } from "./preview-actions";
+
+const ROLE_LABEL: Record<string, string> = {
+  coach: "Coach",
+  fisico: "Preparador físico",
+  nutricionista: "Nutricionista",
+  athlete: "Atleta",
+};
 
 export default function HeaderSettings() {
   const [open, setOpen] = useState(false);
@@ -34,7 +42,7 @@ export default function HeaderSettings() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full z-30 mt-2 w-60 overflow-hidden rounded-xl border border-line bg-surface py-1.5 shadow-lg">
+        <div className="absolute right-0 top-full z-30 mt-2 w-64 overflow-hidden rounded-xl border border-line bg-surface py-1.5 shadow-lg">
           <div className="border-b border-line px-4 py-2.5">
             <p className="text-xs text-ink-3">Ajustes</p>
           </div>
@@ -52,6 +60,22 @@ export default function HeaderSettings() {
           >
             Miembros
           </Link>
+
+          <div className="border-t border-line px-4 py-2.5">
+            <p className="text-xs text-ink-3">Ver como (vista previa)</p>
+          </div>
+          {Object.entries(ROLE_LABEL).map(([role, label]) => (
+            <form key={role} action={setPreviewRole}>
+              <input type="hidden" name="role" value={role} />
+              <button
+                type="submit"
+                onClick={() => setOpen(false)}
+                className="block w-full px-4 py-2.5 text-left text-sm text-ink-2 hover:bg-sunken hover:text-ink"
+              >
+                {label}
+              </button>
+            </form>
+          ))}
         </div>
       )}
     </div>
