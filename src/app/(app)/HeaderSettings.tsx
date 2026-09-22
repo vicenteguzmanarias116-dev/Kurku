@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { setPreviewRole } from "./preview-actions";
 
 const ROLE_LABEL: Record<string, string> = {
   coach: "Coach",
@@ -65,16 +64,14 @@ export default function HeaderSettings() {
             <p className="text-xs text-ink-3">Ver como (vista previa)</p>
           </div>
           {Object.entries(ROLE_LABEL).map(([role, label]) => (
-            <form key={role} action={setPreviewRole}>
-              <input type="hidden" name="role" value={role} />
-              <button
-                type="submit"
-                onClick={() => setOpen(false)}
-                className="block w-full px-4 py-2.5 text-left text-sm text-ink-2 hover:bg-sunken hover:text-ink"
-              >
-                {label}
-              </button>
-            </form>
+            <Link
+              key={role}
+              href={`/api/preview-role?role=${role}`}
+              onClick={() => setOpen(false)}
+              className="block px-4 py-2.5 text-sm text-ink-2 hover:bg-sunken hover:text-ink"
+            >
+              {label}
+            </Link>
           ))}
         </div>
       )}

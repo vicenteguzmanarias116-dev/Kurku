@@ -7,7 +7,6 @@ import HeaderSettings from "./HeaderSettings";
 import { navFor } from "./modules";
 import NavIcon from "./NavIcon";
 import BottomNav from "./BottomNav";
-import { clearPreviewRole } from "./preview-actions";
 
 const PREVIEW_LABEL: Record<string, string> = {
   coach: "Coach",
@@ -120,17 +119,14 @@ export default async function AppLayout({
       </header>
 
       {previewRole && (
-        <form
-          action={clearPreviewRole}
-          className="flex items-center justify-between gap-3 bg-brand-strong px-6 py-2 text-sm text-white sm:px-10"
-        >
+        <div className="flex items-center justify-between gap-3 bg-brand-strong px-6 py-2 text-sm text-white sm:px-10">
           <span>
             Vista previa: viendo como <strong>{PREVIEW_LABEL[previewRole]}</strong>
           </span>
-          <button type="submit" className="underline underline-offset-2 hover:no-underline">
+          <Link href="/api/preview-role" className="underline underline-offset-2 hover:no-underline">
             Salir de la vista previa
-          </button>
-        </form>
+          </Link>
+        </div>
       )}
 
       <main className="flex-1 px-6 pb-24 pt-6 sm:px-10 lg:pb-10">{children}</main>
