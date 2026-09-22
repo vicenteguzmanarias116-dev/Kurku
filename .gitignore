@@ -43,3 +43,8 @@ next-env.d.ts
 .vercel
 .env*
 supabase/.temp/
+
+# Fotos personales sueltas en la raiz (no pertenecen al repo, ojo:
+# esto NO afecta a public/hero/*.jpg que si esta trackeado)
+/*.jpeg
+/*.jpg
