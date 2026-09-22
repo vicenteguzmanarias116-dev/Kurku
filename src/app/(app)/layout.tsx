@@ -42,7 +42,7 @@ export default async function AppLayout({
 
   return (
     <div className="flex flex-1 flex-col bg-canvas text-ink">
-      <header className="flex items-center gap-6 border-b border-line bg-surface px-6 py-3 sm:px-10">
+      <header className="relative z-20 flex items-center gap-6 border-b border-line bg-surface px-6 py-3 sm:px-10">
         <div className="group relative flex shrink-0 items-center">
           <Link
             href="/dashboard"
