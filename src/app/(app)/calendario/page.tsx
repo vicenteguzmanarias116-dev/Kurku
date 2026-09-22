@@ -6,6 +6,7 @@ import PageHead from "../PageHead";
 import { Input, Select, Textarea, Button } from "../ui";
 import { getTodayCheckinStatus } from "../today";
 import Agenda, { type AgendaItem } from "./Agenda";
+import { PLAN_TYPES, PLAN_LABEL } from "./planTypes";
 
 type EventRow = {
   id: string;
@@ -17,13 +18,6 @@ type EventRow = {
   athlete_id: string | null;
   plan_type: string | null;
   athletes: { full_name: string } | null;
-};
-
-const PLAN_LABEL: Record<string, string> = {
-  gym: "Gym",
-  bike: "Bici",
-  sailing: "Vela",
-  other: "Otro",
 };
 
 async function addEvent(formData: FormData) {
@@ -191,10 +185,11 @@ export default async function CalendarioPage({
             </Select>
             <Select name="plan_type">
               <option value="">Tipo de plan (opcional)</option>
-              <option value="gym">Gym</option>
-              <option value="bike">Bici</option>
-              <option value="sailing">Vela</option>
-              <option value="other">Otro</option>
+              {PLAN_TYPES.map((p) => (
+                <option key={p.value} value={p.value}>
+                  {p.emoji} {p.label}
+                </option>
+              ))}
             </Select>
             <Select name="athlete_id">
               <option value="">Para todo el equipo</option>

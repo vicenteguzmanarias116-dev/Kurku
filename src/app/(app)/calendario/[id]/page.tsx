@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { requireUser } from "@/lib/auth";
 import { rajdhani } from "../../fonts";
 import { Card, Badge } from "../../ui";
+import { PLAN_LABEL } from "../planTypes";
 
 type EventDetail = {
   id: string;
@@ -14,13 +15,6 @@ type EventDetail = {
   plan_type: string | null;
   plan_items: { label: string }[] | null;
   athletes: { full_name: string } | null;
-};
-
-const PLAN_LABEL: Record<string, string> = {
-  gym: "Gym",
-  bike: "Bici",
-  sailing: "Vela",
-  other: "Otro",
 };
 
 export default async function EventDetailPage({
