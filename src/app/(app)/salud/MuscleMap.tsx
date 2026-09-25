@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FRONT, BACK, SILHOUETTE, type Zone } from "./muscles";
+import { FRONT, BACK, SILHOUETTE, DEFINITION_FRONT, DEFINITION_BACK, type Zone } from "./muscles";
 
 type Level = 0 | 1 | 2 | 3;
 
@@ -20,32 +20,32 @@ const STROKE: Record<Level, string> = {
 
 function Figure({
   zones,
+  definition,
   value,
   onToggle,
 }: {
   zones: Zone[];
+  definition: string;
   value: Record<string, Level>;
   onToggle: (id: string) => void;
 }) {
   return (
-    <svg viewBox="0 0 200 260" className="mx-auto h-72 w-auto">
-      <path d={SILHOUETTE} fill="#F6F7F9" stroke="#E4E7EB" strokeWidth={1} pointerEvents="none" />
+    <svg viewBox="0 0 200 280" className="mx-auto h-80 w-auto">
+      <path d={SILHOUETTE} fill="#F6F7F9" stroke="#D8DCE1" strokeWidth={1} pointerEvents="none" />
       {zones.map((z) => {
         const level = (value[z.id] ?? 0) as Level;
         return (
-          <ellipse
+          <path
             key={z.id}
-            cx={z.cx}
-            cy={z.cy}
-            rx={z.rx}
-            ry={z.ry}
+            d={z.d}
             fill={COLORS[level]}
             stroke={STROKE[level]}
-            strokeWidth={1.5}
+            strokeWidth={1.25}
+            strokeLinejoin="round"
             role="button"
             tabIndex={0}
             aria-label={`${z.label}: ${level === 0 ? "sin dolor" : `nivel ${level}`}`}
-            className="cursor-pointer outline-none transition-colors duration-150 hover:brightness-125 focus-visible:stroke-brand-strong"
+            className="cursor-pointer outline-none transition-colors duration-150 hover:brightness-110 focus-visible:stroke-brand-strong"
             onClick={() => onToggle(z.id)}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
@@ -55,9 +55,17 @@ function Figure({
             }}
           >
             <title>{z.label}</title>
-          </ellipse>
+          </path>
         );
       })}
+      <path
+        d={definition}
+        fill="none"
+        stroke="#C4CAD1"
+        strokeWidth={0.75}
+        strokeLinecap="round"
+        pointerEvents="none"
+      />
     </svg>
   );
 }
@@ -111,7 +119,12 @@ export default function MuscleMap({
       </div>
 
       <div className="rounded-lg border border-line bg-sunken p-4">
-        <Figure zones={side === "front" ? FRONT : BACK} value={value} onToggle={toggle} />
+        <Figure
+          zones={side === "front" ? FRONT : BACK}
+          definition={side === "front" ? DEFINITION_FRONT : DEFINITION_BACK}
+          value={value}
+          onToggle={toggle}
+        />
       </div>
 
       <div className="mt-3 flex flex-wrap items-center gap-4 text-xs text-ink-2">
