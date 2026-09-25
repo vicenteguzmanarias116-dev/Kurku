@@ -1,0 +1,199 @@
+<template>
+  <style>
+    #root[data-composition-id="01-hook"] {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      container-type: size;
+      --hf-cream: #f8f4ef;
+      --hf-ink: #2b2730;
+      --hf-outline: #1e1e1e;
+      --hf-coral: #d9713c;
+    }
+
+    #root[data-composition-id="01-hook"] .hf-bg {
+      position: absolute;
+      inset: 0;
+      background: var(--hf-cream);
+    }
+
+    #root[data-composition-id="01-hook"] .hf-text {
+      position: absolute;
+      left: 50%;
+      top: 36cqh;
+      transform: translateX(-50%);
+      width: 84cqw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2.4cqw;
+    }
+
+    #root[data-composition-id="01-hook"] .hf-line {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      column-gap: 1.4cqw;
+      row-gap: 0.6cqw;
+      font-family: serif;
+      font-weight: 700;
+      color: var(--hf-ink);
+      letter-spacing: -0.01em;
+      line-height: 1.08;
+      text-align: center;
+    }
+
+    #root[data-composition-id="01-hook"] #hf-line1,
+    #root[data-composition-id="01-hook"] #hf-line2 {
+      font-size: 6.6cqw;
+      max-width: 52cqw;
+    }
+
+    #root[data-composition-id="01-hook"] #hf-line3 {
+      font-size: 7.4cqw;
+    }
+
+    #root[data-composition-id="01-hook"] .hf-word {
+      display: inline-block;
+      transform-origin: 50% 50%;
+      will-change: transform;
+    }
+
+    #root[data-composition-id="01-hook"] .hf-accent {
+      color: var(--hf-coral);
+    }
+
+    #root[data-composition-id="01-hook"] .hf-rule {
+      width: 8cqw;
+      height: 0.5cqw;
+      border-radius: 9999px;
+      background: var(--hf-coral);
+      transform-origin: 0% 50%;
+      will-change: transform;
+    }
+
+    #root[data-composition-id="01-hook"] .hf-badge {
+      position: absolute;
+      top: 9cqh;
+      right: 10cqw;
+      width: 12cqw;
+      height: 12cqw;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 0.3cqw solid var(--hf-outline);
+      box-shadow: 0.4cqw 0.4cqw 0 rgba(26, 26, 26, 0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transform-origin: 50% 50%;
+      will-change: transform;
+    }
+
+    #root[data-composition-id="01-hook"] .hf-badge-num {
+      font-family: serif;
+      font-weight: 700;
+      font-size: 4.4cqw;
+      color: var(--hf-coral);
+      line-height: 1;
+    }
+
+    #root[data-composition-id="01-hook"] .hf-badge-label {
+      font-family: sans-serif;
+      font-weight: 600;
+      font-size: 1.3cqw;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--hf-ink);
+    }
+  </style>
+
+  <div data-hf-id="hf-zimr" id="root" data-composition-id="01-hook" data-width="1080" data-height="1920" data-start="0" data-duration="5.172">
+    <div data-hf-id="hf-c4qx" class="hf-bg clip" data-start="0" data-duration="5.172" data-track-index="0"></div>
+
+    <div data-hf-id="hf-epho" class="hf-badge clip" id="hf-badge" data-start="0" data-duration="5.172" data-track-index="1">
+      <span data-hf-id="hf-6nkw" class="hf-badge-num">20</span>
+      <span data-hf-id="hf-jc4r" class="hf-badge-label">chats</span>
+    </div>
+
+    <div data-hf-id="hf-jb37" class="hf-text clip" data-start="0" data-duration="5.172" data-track-index="2">
+      <div data-hf-id="hf-j4e1" class="hf-line" id="hf-line1">
+        <span data-hf-id="hf-tq8w" class="hf-word" id="hf-w-1-1">¿Bookear</span>
+        <span data-hf-id="hf-sffo" class="hf-word" id="hf-w-1-2">un</span>
+        <span data-hf-id="hf-jttc" class="hf-word" id="hf-w-1-3">proveedor</span>
+      </div>
+      <div data-hf-id="hf-n2i2" class="hf-line" id="hf-line2">
+        <span data-hf-id="hf-dwg5" class="hf-word" id="hf-w-2-1">para</span>
+        <span data-hf-id="hf-mxdn" class="hf-word" id="hf-w-2-2">tu</span>
+        <span data-hf-id="hf-0b7z" class="hf-word" id="hf-w-2-3">fiesta</span>
+      </div>
+      <div data-hf-id="hf-r0m3" class="hf-line" id="hf-line3">
+        <span data-hf-id="hf-jf00" class="hf-word" id="hf-w-3-1">¿te</span>
+        <span data-hf-id="hf-j9di" class="hf-word" id="hf-w-3-2">toma</span>
+        <span data-hf-id="hf-1glg" class="hf-word hf-accent" id="hf-w-3-3">veinte</span>
+        <span data-hf-id="hf-o5vm" class="hf-word" id="hf-w-3-4">chats</span>
+        <span data-hf-id="hf-0shp" class="hf-word" id="hf-w-3-5">de</span>
+        <span data-hf-id="hf-r2ng" class="hf-word" id="hf-w-3-6">WhatsApp?</span>
+      </div>
+      <div data-hf-id="hf-6l1c" class="hf-rule" id="hf-rule"></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+
+      // Spring-pop-entrance primitive: smooth settle for word reveals (power3.out, no overshoot).
+      function popIn(target, start, opts) {
+        opts = opts || {};
+        tl.fromTo(
+          target,
+          { scale: opts.fromScale || 0.3, opacity: 0, y: opts.y || 14 },
+          {
+            scale: 1,
+            opacity: 1,
+            y: 0,
+            duration: opts.duration || 0.4,
+            ease: opts.ease || "power3.out",
+          },
+          start,
+        );
+      }
+
+      // Scene 1 (0.0-1.8s): "¿Bookear un proveedor" builds word by word.
+      popIn("#hf-w-1-1", 0.0);
+      popIn("#hf-w-1-2", 0.28);
+      popIn("#hf-w-1-3", 0.5);
+
+      // Scene 2 (1.8-3.4s): "para tu fiesta" continues the same per-word rhythm.
+      popIn("#hf-w-2-1", 1.8);
+      popIn("#hf-w-2-2", 2.08);
+      popIn("#hf-w-2-3", 2.3);
+
+      // Scene 3 (3.4-4.672s): "¿te toma veinte chats de WhatsApp?" — "veinte" gets a
+      // deliberate spring-pop (rare bouncy variant) to land the payoff number.
+      popIn("#hf-w-3-1", 3.4);
+      popIn("#hf-w-3-2", 3.48);
+      popIn("#hf-w-3-3", 3.62, { fromScale: 0, duration: 0.5, ease: "back.out(1.6)" });
+      popIn("#hf-w-3-4", 3.84);
+      popIn("#hf-w-3-5", 3.92);
+      popIn("#hf-w-3-6", 4.06);
+
+      // Supporting accent — the "20" count badge lands beside the payoff number, then holds.
+      popIn("#hf-badge", 3.62, { fromScale: 0, duration: 0.5, ease: "back.out(1.6)" });
+
+      // Quiet settle rule under the block once the question is complete — no exit tween.
+      tl.fromTo(
+        "#hf-rule",
+        { scaleX: 0, opacity: 0 },
+        { scaleX: 1, opacity: 1, duration: 0.3, ease: "power2.out" },
+        4.3,
+      );
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["01-hook"] = tl;
+      tl.seek(0);
+    })();
+  </script>
+</template>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1080, height=1920">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js" integrity="sha384-sG0Hv1tP1lZCk9KQmrIbY/XNwi+OY84GQqhMscbnsoBFqAz8KNCil1kvfL3Hbbk2" crossorigin="anonymous"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #F8F4EF;
+      }
+      .scene {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-lyk9" id="root" data-composition-id="main" data-start="0" data-duration="54.761" data-width="1080" data-height="1920">
+      <div data-hf-id="hf-gu0f" id="el-01-hook" class="scene" data-composition-id="01-hook" data-composition-src="compositions/frames/01-hook.html" data-start="0" data-duration="5.172" data-track-index="0"></div>
+      <audio data-hf-id="hf-fe7c" id="el-01-hook-voice" src="assets/voice/01.wav" data-start="0" data-duration="4.672" data-track-index="10" data-volume="1"></audio>
+
+      <div data-hf-id="hf-1ak8" id="el-02-problema" class="scene" data-composition-id="02-problema" data-composition-src="compositions/frames/02-problema.html" data-start="4.672" data-duration="7.647" data-track-index="1"></div>
+      <audio data-hf-id="hf-l96a" id="el-02-problema-voice" src="assets/voice/02.wav" data-start="4.672" data-duration="7.147" data-track-index="10" data-volume="1"></audio>
+
+      <div data-hf-id="hf-u1jt" id="el-03-solucion" class="scene" data-composition-id="03-solucion" data-composition-src="compositions/frames/03-solucion.html" data-start="11.818999999999999" data-duration="9.109" data-track-index="0"></div>
+      <audio data-hf-id="hf-gq5c" id="el-03-solucion-voice" src="assets/voice/03.wav" data-start="11.818999999999999" data-duration="9.109" data-track-index="10" data-volume="1"></audio>
+
+      <div data-hf-id="hf-oorn" id="el-04-paso1" class="scene" data-composition-id="04-paso1" data-composition-src="compositions/frames/04-paso1.html" data-start="20.927999999999997" data-duration="5.269" data-track-index="1"></div>
+      <audio data-hf-id="hf-8uc4" id="el-04-paso1-voice" src="assets/voice/04.wav" data-start="20.927999999999997" data-duration="5.269" data-track-index="10" data-volume="1"></audio>
+
+      <div data-hf-id="hf-1ca4" id="el-05-paso2" class="scene" data-composition-id="05-paso2" data-composition-src="compositions/frames/05-paso2.html" data-start="26.196999999999996" data-duration="8.841" data-track-index="0"></div>
+      <audio data-hf-id="hf-i6yk" id="el-05-paso2-voice" src="assets/voice/05.wav" data-start="26.196999999999996" data-duration="8.341" data-track-index="10" data-volume="1"></audio>
+
+      <div data-hf-id="hf-cg5n" id="el-06-paso3" class="scene" data-composition-id="06-paso3" data-composition-src="compositions/frames/06-paso3.html" data-start="34.538" data-duration="8.405" data-track-index="1"></div>
+      <audio data-hf-id="hf-6dou" id="el-06-paso3-voice" src="assets/voice/06.wav" data-start="34.538" data-duration="8.405" data-track-index="10" data-volume="1"></audio>
+
+      <div data-hf-id="hf-3g8u" id="el-07-mas" class="scene" data-composition-id="07-mas" data-composition-src="compositions/frames/07-mas.html" data-start="42.943" data-duration="6.473" data-track-index="0"></div>
+      <audio data-hf-id="hf-pod7" id="el-07-mas-voice" src="assets/voice/07.wav" data-start="42.943" data-duration="5.973" data-track-index="10" data-volume="1"></audio>
+
+      <div data-hf-id="hf-tucl" id="el-08-cierre" class="scene" data-composition-id="08-cierre" data-composition-src="compositions/frames/08-cierre.html" data-start="48.916" data-duration="5.845" data-track-index="1"></div>
+      <audio data-hf-id="hf-63tw" id="el-08-cierre-voice" src="assets/voice/08.wav" data-start="48.916" data-duration="5.845" data-track-index="10" data-volume="1"></audio>
+
+      <!-- SFX -->
+      <audio data-hf-id="hf-fs1e" id="el-sfx-0" src="assets/sfx/click.mp3" data-start="34.538" data-duration="0.37" data-track-index="20" data-volume="0.35"></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+      // ── frame transitions (injected by transitions.mjs) ──
+      (function () { var tl = window.__timelines["main"];
+        tl.to("#el-01-hook", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 4.672);
+        tl.fromTo("#el-02-problema", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 4.672);
+        tl.addLabel("hf:transition:01-hook:02-problema:crossfade", 4.672);
+        tl.to("#el-02-problema", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 11.819);
+        tl.fromTo("#el-03-solucion", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 11.819);
+        tl.addLabel("hf:transition:02-problema:03-solucion:crossfade", 11.819);
+        tl.to("#el-05-paso2", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 34.538);
+        tl.fromTo("#el-06-paso3", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 34.538);
+        tl.addLabel("hf:transition:05-paso2:06-paso3:crossfade", 34.538);
+        tl.to("#el-07-mas", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 48.916);
+        tl.fromTo("#el-08-cierre", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 48.916);
+        tl.addLabel("hf:transition:07-mas:08-cierre:crossfade", 48.916);
+        tl.to({}, { duration: 54.761 }, 0); // full-span anchor — main.duration() == composition total (Studio master duration)
+      })();
+    </script>
+  </body>
+</html>

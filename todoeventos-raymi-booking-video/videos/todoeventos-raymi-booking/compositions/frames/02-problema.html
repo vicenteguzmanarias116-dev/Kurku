@@ -1,0 +1,168 @@
+<template>
+  <style>
+    #root {
+      position: relative;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      font-family: sans-serif;
+    }
+    .clip { position: absolute; }
+
+    /* — background ground (full-bleed, its own clip layer, never on #root) — */
+    .p02-bg-ground {
+      inset: 0;
+      background: #F8F4EF;
+      overflow: hidden;
+    }
+    .p02-bg-grid {
+      position: absolute;
+      inset: -4px;
+      background-image:
+        repeating-linear-gradient(0deg, rgba(43,39,48,0.07) 0 2px, transparent 2px 96px),
+        repeating-linear-gradient(90deg, rgba(43,39,48,0.07) 0 2px, transparent 2px 96px);
+    }
+    .p02-bg-glow {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(46% 30% at 22% 24%, rgba(217,113,60,0.14) 0%, transparent 70%),
+        radial-gradient(50% 32% at 78% 62%, rgba(195,177,221,0.16) 0%, transparent 70%);
+    }
+    .p02-dim {
+      position: absolute;
+      inset: 0;
+      background: #2B2730;
+      opacity: 0;
+    }
+
+    /* — connector layer (supporting, broken lines) — */
+    .p02-connectors { inset: 0; }
+    .p02-connectors path {
+      fill: none;
+      stroke: #2B2730;
+      stroke-width: 5;
+      stroke-linecap: round;
+      stroke-dasharray: 15 14;
+      opacity: 0;
+    }
+
+    /* — channel icons (foreground subject) — */
+    .p02-icon {
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      border: 4px solid #1E1E1E;
+      box-shadow: 8px 8px 0 rgba(26,26,26,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-origin: 50% 50%;
+    }
+    .p02-icon svg { width: 148px; height: 148px; overflow: visible; }
+    #p02-chat  { left: 140px; top: 380px;  background: #D9713C; }
+    #p02-sheet { left: 620px; top: 760px;  background: #C3B1DD; }
+    #p02-phone { left: 380px; top: 1180px; background: #ECB89E; }
+
+    /* — closing point: the question mark — */
+    .p02-qmark {
+      left: 460px;
+      top: 858px;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: #F8F4EF;
+      border: 4px solid #1E1E1E;
+      box-shadow: 6px 6px 0 rgba(26,26,26,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-origin: 50% 50%;
+    }
+    .p02-qmark span {
+      font-family: serif;
+      font-weight: 700;
+      font-size: 92px;
+      line-height: 1;
+      color: #2B2730;
+    }
+  </style>
+
+  <div data-hf-id="hf-f2pg" id="root" data-composition-id="02-problema" data-start="0" data-duration="7.647" data-width="1080" data-height="1920">
+
+    <div data-hf-id="hf-b934" class="clip p02-bg-ground" data-start="0" data-duration="7.647" data-track-index="0">
+      <div data-hf-id="hf-c0c3" class="p02-bg-grid"></div>
+      <div data-hf-id="hf-x0t8" class="p02-bg-glow"></div>
+      <div data-hf-id="hf-ga8f" class="p02-dim"></div>
+    </div>
+
+    <svg data-hf-id="hf-78lf" class="clip p02-connectors" data-start="0" data-duration="7.647" data-track-index="1" viewBox="0 0 1080 1920">
+      <path data-hf-id="hf-42bi" id="p02-line1" d="M280,520 L520,690 L760,900" />
+      <path data-hf-id="hf-a2tn" id="p02-line2" d="M760,900 L640,1120 L520,1320" />
+    </svg>
+
+    <div data-hf-id="hf-aqif" id="p02-chat" class="clip p02-icon" data-start="0" data-duration="7.647" data-track-index="2">
+      <svg data-hf-id="hf-rzuv" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <path data-hf-id="hf-pufz" d="M12,20 h96 a10,10 0 0 1 10,10 v52 a10,10 0 0 1 -10,10 h-64 l-22,20 v-20 h-10 a10,10 0 0 1 -10,-10 v-52 a10,10 0 0 1 10,-10 z" fill="#F8F4EF" stroke="#2B2730" stroke-width="6" stroke-linejoin="round" />
+        <circle data-hf-id="hf-scpm" cx="42" cy="56" r="6" fill="#2B2730" />
+        <circle data-hf-id="hf-9rgs" cx="62" cy="56" r="6" fill="#2B2730" />
+        <circle data-hf-id="hf-0adi" cx="82" cy="56" r="6" fill="#2B2730" />
+      </svg>
+    </div>
+
+    <div data-hf-id="hf-v0tf" id="p02-sheet" class="clip p02-icon" data-start="2.0" data-duration="5.647" data-track-index="3">
+      <svg data-hf-id="hf-txlz" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <rect data-hf-id="hf-gunq" x="15" y="15" width="90" height="90" rx="12" fill="#F8F4EF" stroke="#2B2730" stroke-width="6" />
+        <line data-hf-id="hf-6s9w" x1="45" y1="15" x2="45" y2="105" stroke="#2B2730" stroke-width="4" />
+        <line data-hf-id="hf-3q5o" x1="75" y1="15" x2="75" y2="105" stroke="#2B2730" stroke-width="4" />
+        <line data-hf-id="hf-urcm" x1="15" y1="45" x2="105" y2="45" stroke="#2B2730" stroke-width="4" />
+        <line data-hf-id="hf-484e" x1="15" y1="75" x2="105" y2="75" stroke="#2B2730" stroke-width="4" />
+      </svg>
+    </div>
+
+    <div data-hf-id="hf-y8u3" id="p02-phone" class="clip p02-icon" data-start="4.0" data-duration="3.647" data-track-index="4">
+      <svg data-hf-id="hf-tjay" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <g data-hf-id="hf-jngg" transform="rotate(-45 60 60)">
+          <circle data-hf-id="hf-audc" cx="25" cy="60" r="18" fill="#F8F4EF" stroke="#2B2730" stroke-width="6" />
+          <circle data-hf-id="hf-ebet" cx="95" cy="60" r="18" fill="#F8F4EF" stroke="#2B2730" stroke-width="6" />
+          <rect data-hf-id="hf-02gk" x="35" y="50" width="50" height="20" rx="10" fill="#F8F4EF" stroke="#2B2730" stroke-width="6" />
+        </g>
+      </svg>
+    </div>
+
+    <div data-hf-id="hf-nvrw" class="clip p02-qmark" data-start="5.6" data-duration="2.047" data-track-index="5">
+      <span data-hf-id="hf-d0e2">?</span>
+    </div>
+
+  </div>
+
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+      window.__timelines["02-problema"] = tl;
+
+      // Scene 1 (0.0-2.0s) — dim ground + chat icon enters top-left (WhatsApp)
+      tl.fromTo(".p02-dim", { opacity: 0 }, { opacity: 0.4, duration: 0.6, ease: "power3.out" }, 0);
+      tl.fromTo("#p02-chat", { scale: 0, opacity: 0, y: 24 }, { scale: 1, opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0.1);
+
+      // Scene 2 (2.0-4.0s) — spreadsheet icon enters center-right (Excel) + broken line connects
+      tl.fromTo("#p02-sheet", { scale: 0, opacity: 0, y: 24 }, { scale: 1, opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 2.0);
+      tl.fromTo("#p02-line1", { opacity: 0 }, { opacity: 0.45, duration: 0.5, ease: "power2.out" }, 2.15);
+
+      // Scene 3 (4.0-6.0s) — phone icon enters bottom (por telefono) + second broken line
+      tl.fromTo("#p02-phone", { scale: 0, opacity: 0, y: 24 }, { scale: 1, opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 4.0);
+      tl.fromTo("#p02-line2", { opacity: 0 }, { opacity: 0.45, duration: 0.5, ease: "power2.out" }, 4.15);
+
+      // closing-in: the three icons ease slightly toward the center, never touching
+      tl.to("#p02-chat", { x: 26, y: 18, duration: 0.8, ease: "power3.out" }, 5.0);
+      tl.to("#p02-sheet", { x: -22, y: 10, duration: 0.8, ease: "power3.out" }, 5.0);
+      tl.to("#p02-phone", { x: 8, y: -26, duration: 0.8, ease: "power3.out" }, 5.0);
+
+      // closing point: a question mark, in place of a central avatar — hold to end
+      tl.fromTo(".p02-qmark", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "power3.out" }, 5.6);
+
+      tl.seek(0);
+    })();
+  </script>
+</template>

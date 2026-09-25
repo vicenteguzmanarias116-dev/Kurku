@@ -1,0 +1,283 @@
+<template>
+  <style>
+    #root {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      container-type: size;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #2b2730;
+    }
+
+    #root .clip {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* ---- background ground (full-bleed, never on #root) ---- */
+    #root .p2-bg {
+      background: #f8f4ef;
+    }
+    #root .p2-bg::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(38cqw 30cqh at 12% 8%, rgba(140, 105, 190, 0.14), transparent 60%),
+        radial-gradient(34cqw 26cqh at 88% 20%, rgba(195, 177, 221, 0.16), transparent 60%),
+        radial-gradient(46cqw 30cqh at 50% 96%, rgba(236, 184, 158, 0.14), transparent 60%);
+    }
+    #root .p2-bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.05;
+      background-image:
+        radial-gradient(rgba(43, 39, 48, 0.9) 1px, transparent 1px),
+        radial-gradient(rgba(43, 39, 48, 0.9) 1px, transparent 1px);
+      background-size: 7px 7px, 11px 11px;
+      background-position: 0 0, 4px 5px;
+      mix-blend-mode: multiply;
+    }
+
+    /* ---- top chat-thread hint (background role, quiet) ---- */
+    #root .p2-hint {
+      display: flex;
+      justify-content: center;
+      padding-top: 6.5cqh;
+    }
+    #root .p2-hint-inner {
+      display: flex;
+      align-items: center;
+      gap: 1.6cqw;
+      opacity: 0;
+    }
+    #root .p2-hint-tag {
+      background: #4b3170;
+      border: 0.2cqw solid #1e1e1e;
+      border-radius: 9999px;
+      padding: 0.9cqh 3.2cqw;
+      font-weight: 700;
+      font-size: 2.2cqw;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #f8f4ef;
+    }
+    #root .p2-hint-dots {
+      display: flex;
+      gap: 0.9cqw;
+    }
+    #root .p2-hint-dots span {
+      width: 1.6cqw;
+      height: 1.6cqw;
+      border-radius: 50%;
+      background: #2b2730;
+      opacity: 0.35;
+    }
+
+    /* ---- card stack ---- */
+    #root .p2-stack {
+      position: absolute;
+      top: 17cqh;
+      left: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3.2cqh;
+    }
+
+    #root .p2-stack .p2-card {
+      position: relative;
+      inset: auto;
+      width: 88cqw;
+      background: #ffffff;
+      border: 0.22cqw solid #1e1e1e;
+      border-radius: 2rem;
+      box-shadow: 1cqw 1cqw 0 rgba(26, 26, 26, 0.08);
+      padding: 3cqh 5cqw;
+      opacity: 0;
+    }
+
+    #root .p2-card-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 3.2cqw;
+    }
+
+    #root .p2-card-icon {
+      flex: none;
+      width: 15cqw;
+      height: 15cqw;
+      border-radius: 50%;
+      border: 0.22cqw solid #1e1e1e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 700;
+      font-size: 6.5cqw;
+      color: #2b2730;
+    }
+    #root .p2-card--catering .p2-card-icon { background: #eebfa7; }
+    #root .p2-card--dj .p2-card-icon { background: #ebb397; }
+    #root .p2-card--deco .p2-card-icon { background: #c3b1dd; }
+
+    #root .p2-card-text {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6cqh;
+    }
+    #root .p2-card-label {
+      font-size: 2.4cqw;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #4b3170;
+    }
+    #root .p2-card-name {
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 700;
+      font-size: 5cqw;
+      line-height: 1.1;
+      color: #2b2730;
+    }
+
+    #root .p2-card-badges {
+      display: flex;
+      gap: 2cqw;
+      margin-top: 2.6cqh;
+    }
+    #root .p2-badge {
+      display: inline-flex;
+      align-items: center;
+      border: 0.2cqw solid #1e1e1e;
+      border-radius: 9999px;
+      padding: 1cqh 3cqw;
+      font-weight: 600;
+      font-size: 2.1cqw;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0;
+    }
+    #root .p2-badge--price {
+      background: #f8f4ef;
+      color: #2b2730;
+    }
+    #root .p2-badge--ok {
+      background: #d9713c;
+      color: #ffffff;
+    }
+  </style>
+
+  <div data-hf-id="hf-c39h" id="root" data-composition-id="05-paso2" data-start="0" data-duration="8.841" data-width="1080" data-height="1920">
+    <div data-hf-id="hf-qf6f" class="clip p2-bg" data-start="0" data-duration="8.841" data-track-index="0"></div>
+
+    <div data-hf-id="hf-teog" class="clip p2-hint" data-start="0" data-duration="8.841" data-track-index="1">
+      <div data-hf-id="hf-yr9z" class="p2-hint-inner">
+        <div data-hf-id="hf-9u2z" class="p2-hint-tag">Raymi</div>
+        <div data-hf-id="hf-f31p" class="p2-hint-dots"><span data-hf-id="hf-uckh"></span><span data-hf-id="hf-l73p"></span><span data-hf-id="hf-me0s"></span></div>
+      </div>
+    </div>
+
+    <div data-hf-id="hf-mvcx" class="p2-stack">
+      <div data-hf-id="hf-5mau" class="clip p2-card p2-card--catering" data-start="0" data-duration="8.841" data-track-index="2">
+        <div data-hf-id="hf-ev4f" class="p2-card-top">
+          <div data-hf-id="hf-2sc2" class="p2-card-icon">C</div>
+          <div data-hf-id="hf-m8ur" class="p2-card-text">
+            <div data-hf-id="hf-bxrh" class="p2-card-label">Catering</div>
+            <div data-hf-id="hf-qq2g" class="p2-card-name">Fiesta &amp; Sabor</div>
+          </div>
+        </div>
+        <div data-hf-id="hf-8axm" class="p2-card-badges">
+          <div data-hf-id="hf-6pp9" class="p2-badge p2-badge--price">$— / evento</div>
+          <div data-hf-id="hf-k0ut" class="p2-badge p2-badge--ok">Disponible</div>
+        </div>
+      </div>
+
+      <div data-hf-id="hf-ydli" class="clip p2-card p2-card--dj" data-start="0" data-duration="8.841" data-track-index="3">
+        <div data-hf-id="hf-g8bz" class="p2-card-top">
+          <div data-hf-id="hf-z7kt" class="p2-card-icon">J</div>
+          <div data-hf-id="hf-5kfn" class="p2-card-text">
+            <div data-hf-id="hf-2c2a" class="p2-card-label">DJ / Música</div>
+            <div data-hf-id="hf-8uso" class="p2-card-name">DJ Momento</div>
+          </div>
+        </div>
+        <div data-hf-id="hf-7t6m" class="p2-card-badges">
+          <div data-hf-id="hf-o3ox" class="p2-badge p2-badge--price">$— / evento</div>
+          <div data-hf-id="hf-ppc9" class="p2-badge p2-badge--ok">Disponible</div>
+        </div>
+      </div>
+
+      <div data-hf-id="hf-m5oo" class="clip p2-card p2-card--deco" data-start="0" data-duration="8.841" data-track-index="4">
+        <div data-hf-id="hf-fu0y" class="p2-card-top">
+          <div data-hf-id="hf-4rv7" class="p2-card-icon">D</div>
+          <div data-hf-id="hf-564m" class="p2-card-text">
+            <div data-hf-id="hf-sru9" class="p2-card-label">Decoración</div>
+            <div data-hf-id="hf-g73g" class="p2-card-name">Detalles Deco</div>
+          </div>
+        </div>
+        <div data-hf-id="hf-87hn" class="p2-card-badges">
+          <div data-hf-id="hf-pam0" class="p2-badge p2-badge--price">$— / evento</div>
+          <div data-hf-id="hf-qw9c" class="p2-badge p2-badge--ok">Disponible</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+
+      // t0 — background + chat hint settle in quietly (continuity from Frame 4)
+      tl.fromTo("#root .p2-hint-inner", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power2.out" }, 0);
+
+      // Scene 1 (0.0-2.5s) — "Raymi filtra el catálogo": catering card rises into its slot immediately
+      tl.fromTo(
+        "#root .p2-card--catering",
+        { opacity: 0, y: 70, scale: 0.94 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" },
+        0
+      );
+
+      // Scene 2 (2.5-5.5s) — "te muestra proveedores que calzan": DJ + decoración cascade in below
+      tl.fromTo(
+        "#root .p2-card--dj",
+        { opacity: 0, y: 70, scale: 0.94 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" },
+        2.5
+      );
+      tl.fromTo(
+        "#root .p2-card--deco",
+        { opacity: 0, y: 70, scale: 0.94 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" },
+        3.1
+      );
+
+      // Scene 3 (5.5-8.341s) — "precio y disponibilidad, ahí mismo": badges reveal per card, then hold
+      tl.fromTo(
+        "#root .p2-card--catering .p2-badge",
+        { opacity: 0, y: 12, scale: 0.85 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "power3.out", stagger: 0.08 },
+        5.6
+      );
+      tl.fromTo(
+        "#root .p2-card--dj .p2-badge",
+        { opacity: 0, y: 12, scale: 0.85 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "power3.out", stagger: 0.08 },
+        6.1
+      );
+      tl.fromTo(
+        "#root .p2-card--deco .p2-badge",
+        { opacity: 0, y: 12, scale: 0.85 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "power3.out", stagger: 0.08 },
+        6.6
+      );
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["05-paso2"] = tl;
+      tl.seek(0);
+    })();
+  </script>
+</template>

@@ -4,6 +4,7 @@ import type { Profile } from "@/lib/auth";
 // Las que no están acá (Página del equipo, Panel, Miembros) van siempre.
 export const OPTIONAL_MODULES = [
   { key: "atletas", href: "/atletas", label: "Atletas" },
+  { key: "rutina", href: "/rutina", label: "Rutina" },
   { key: "entrenamientos", href: "/entrenamientos", label: "Entrenamientos" },
   { key: "calendario", href: "/calendario", label: "Calendario" },
   { key: "salud", href: "/salud", label: "Salud" },
@@ -16,6 +17,7 @@ export type NavItem = { key: string; href: string; label: string };
 
 const ATHLETE_PRIMARY: NavItem[] = [
   { key: "dashboard", href: "/dashboard", label: "Hoy" },
+  { key: "rutina", href: "/rutina", label: "Rutina" },
   { key: "calendario", href: "/calendario", label: "Calendario" },
   { key: "pagina-equipo", href: "/pagina-equipo", label: "Equipo" },
   { key: "mensajes", href: "/mensajes", label: "Mensajes" },
@@ -33,6 +35,7 @@ const STAFF_PRIMARY: NavItem[] = [
   { key: "pagina-equipo", href: "/pagina-equipo", label: "Equipo" },
 ];
 const STAFF_MORE: NavItem[] = [
+  { key: "rutina", href: "/rutina", label: "Rutina" },
   { key: "salud", href: "/salud", label: "Salud" },
   { key: "lesiones", href: "/lesiones", label: "Lesiones" },
   { key: "entrenamientos", href: "/entrenamientos", label: "Entrenamientos" },

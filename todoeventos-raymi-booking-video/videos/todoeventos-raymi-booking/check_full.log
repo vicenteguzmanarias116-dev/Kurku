@@ -1,0 +1,130 @@
+﻿◆  Checking todoeventos-raymi-booking
+node.exe : [INFO] [Compiler] Fetched 11 font face(s) for "Roboto" from Google Fonts (cached to 
+C:\Users\vicen\.cache\hyperframes\fonts\roboto)
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([INFO] [Compile...s\fonts\roboto):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[INFO] [Compiler] Fetched 7 font face(s) for "EB Garamond" from Google Fonts (cached to 
+C:\Users\vicen\.cache\hyperframes\fonts\eb-garamond)
+[INFO] [Compiler] Fetched 7 font face(s) for "EB Garamond" from Google Fonts (cached to 
+C:\Users\vicen\.cache\hyperframes\fonts\eb-garamond)
+[INFO] [Compiler] Fetched 11 font face(s) for "Inter" from Google Fonts (cached to 
+C:\Users\vicen\.cache\hyperframes\fonts\inter)
+[INFO] [Compiler] Fetched 11 font face(s) for "Inter" from Google Fonts (cached to 
+C:\Users\vicen\.cache\hyperframes\fonts\inter)
+[INFO] [Compiler] Injected deterministic @font-face rules for 5 requested font families
+[hyperframes] browserGpuMode probe → hardware (WebGL renderer vendor="Google Inc. (Intel)" renderer="ANGLE (Intel, 
+Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)")
+
+Lint
+  ⚠ studio_missing_editable_id: <div class="hf-bg" data-start="0" data-track-index="0"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.
+    C:\Users\vicen\OneDrive\Escritorio\vela-team\todoeventos-raymi-booking-video\videos\todoeventos-raymi-booking\compositions\frames\01-hook.html [data-composition-id] t=0s
+    Fix: Add a stable, human-readable id such as id="hero-title" or id="scene-1-card" to every timeline-visible element you want agents or Studio to edit.
+  ⚠ studio_missing_editable_id: <div class="hf-text" data-start="0" data-track-index="2"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.
+    C:\Users\vicen\OneDrive\Escritorio\vela-team\todoeventos-raymi-booking-video\videos\todoeventos-raymi-booking\compositions\frames\01-hook.html [data-composition-id] t=0s
+    Fix: Add a stable, human-readable id such as id="hero-title" or id="scene-1-card" to every timeline-visible element you want agents or Studio to edit.
+  ⚠ studio_missing_editable_id: <div class="p02-bg-ground" data-start="0" data-track-index="0"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.
+    C:\Users\vicen\OneDrive\Escritorio\vela-team\todoeventos-raymi-booking-video\videos\todoeventos-raymi-booking\compositions\frames\02-problema.html [data-composition-id] t=0s
+    Fix: Add a stable, human-readable id such as id="hero-title" or id="scene-1-card" to every timeline-visible element you want agents or Studio to edit.
+  ⚠ studio_missing_editable_id: <svg class="p02-connectors" data-start="0" data-track-index="1"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.
+    C:\Users\vicen\OneDrive\Escritorio\vela-team\todoeventos-raymi-booking-video\videos\todoeventos-raymi-booking\compositions\frames\02-problema.html [data-composition-id] t=0s
+    Fix: Add a stable, human-readable id such as id="hero-title" or id="scene-1-card" to every timeline-visible element you want agents or Studio to edit.
+  ⚠ studio_missing_editable_id: <div class="p02-qmark" data-start="5.6" data-track-index="5"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.
+    C:\Users\vicen\OneDrive\Escritorio\vela-team\todoeventos-raymi-booking-video\videos\todoeventos-raymi-booking\compositions\frames\02-problema.html [data-composition-id] t=0s
+    Fix: Add a stable, human-readable id such as id="hero-title" or id="scene-1-card" to every timeline-visible element you want agents or Studio to edit.
+  ⚠ studio_missing_editable_id: <div class="p1-bg" data-start="0" data-track-index="0"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.
+    C:\Users\vicen\OneDrive\Escritorio\vela-team\todoeventos-raymi-booking-video\videos\todoeventos-raymi-booking\compositions\frames\04-paso1.html [data-composition-id] t=0s
+    Fix: Add a stable, human-readable id such as id="hero-title" or id="scene-1-card" to every timeline-visible element you want agents or Studio to edit.
+  ⚠ studio_missing_editable_id: <div class="p1-floats" data-start="0" data-track-index="1"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.
+    C:\Users\vicen\OneDrive\Escritorio\vela-team\todoeventos-raymi-booking-video\videos\todoeventos-raymi-booking\compositions\frames\04-paso1.html [data-composition-id] t=0s
+    Fix: Add a stable, human-readable id such as id="hero-title" or id="scene-1-card" to every timeline-visible element you want agents or Studio to edit.
+  ⚠ studio_missing_editable_id: <div class="p1-label-row" data-start="0" data-track-index="2"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.
+    C:\Users\vicen\OneDrive\Escritorio\vela-team\todoeventos-raymi-booking-video\videos\todoeventos-raymi-booking\compositions\frames\04-paso1.html [data-composition-id] t=0s
+    Fix: Add a stable, human-readable id such as id="hero-title" or id="scene-1-card" to every timeline-visible element you want agents or Studio to edit.
+  ⚠ studio_missing_editable_id: <div class="p1-bubble-row" data-start="0" data-track-index="3"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.
+    C:\Users\vicen\OneDrive\Escritorio\vela-team\todoeventos-raymi-booking-video\videos\todoeventos-raymi-booking\compositions\frames\04-paso1.html [data-composition-id] t=0s
+    Fix: Add a stable, human-readable id such as id="hero-title" or id="scene-1-card" to every timeline-visible element you want agents or Studio to edit.
+  ⚠ studio_missing_editable_id: <div class="p2-bg" data-start="0" data-track-index="0"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.
+    C:\Users\vicen\OneDrive\Escritorio\vela-team\todoeventos-raymi-booking-video\videos\todoeventos-raymi-booking\compositions\frames\05-paso2.html [data-composition-id] t=0s
+    Fix: Add a stable, human-readable id such as id="hero-title" or id="scene-1-card" to every timeline-visible element you want agents or Studio to edit.
+  ⚠ studio_missing_editable_id: <div class="p2-hint" data-start="0" data-track-index="1"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.
+    C:\Users\vicen\OneDrive\Escritorio\vela-team\todoeventos-raymi-booking-video\videos\todoeventos-raymi-booking\compositions\frames\05-paso2.html [data-composition-id] t=0s
+    Fix: Add a stable, human-readable id such as id="hero-title" or id="scene-1-card" to every timeline-visible element you want agents or Studio to edit.
+  ⚠ studio_missing_editable_id: <div class="p2-card" data-start="0" data-track-index="2"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.
+    C:\Users\vicen\OneDrive\Escritorio\vela-team\todoeventos-raymi-booking-video\videos\todoeventos-raymi-booking\compositions\frames\05-paso2.html [data-composition-id] t=0s
+    Fix: Add a stable, human-readable id such as id="hero-title" or id="scene-1-card" to every timeline-visible element you want agents or Studio to edit.
+  ⚠ studio_missing_editable_id: <div class="p2-card" data-start="0" data-track-index="3"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.
+    C:\Users\vicen\OneDrive\Escritorio\vela-team\todoeventos-raymi-booking-video\videos\todoeventos-raymi-booking\compositions\frames\05-paso2.html [data-composition-id] t=0s
+    Fix: Add a stable, human-readable id such as id="hero-title" or id="scene-1-card" to every timeline-visible element you want agents or Studio to edit.
+  ⚠ studio_missing_editable_id: <div class="p2-card" data-start="0" data-track-index="4"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.
+    C:\Users\vicen\OneDrive\Escritorio\vela-team\todoeventos-raymi-booking-video\videos\todoeventos-raymi-booking\compositions\frames\05-paso2.html [data-composition-id] t=0s
+    Fix: Add a stable, human-readable id such as id="hero-title" or id="scene-1-card" to every timeline-visible element you want agents or Studio to edit.
+  ⚠ studio_missing_editable_id: <div class="p3-bg" data-start="0" data-track-index="0"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.
+    C:\Users\vicen\OneDrive\Escritorio\vela-team\todoeventos-raymi-booking-video\videos\todoeventos-raymi-booking\compositions\frames\06-paso3.html [data-composition-id] t=0s
+    Fix: Add a stable, human-readable id such as id="hero-title" or id="scene-1-card" to every timeline-visible element you want agents or Studio to edit.
+  ⚠ studio_missing_editable_id: <div class="p3-label-row" data-start="0" data-track-index="1"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.
+    C:\Users\vicen\OneDrive\Escritorio\vela-team\todoeventos-raymi-booking-video\videos\todoeventos-raymi-booking\compositions\frames\06-paso3.html [data-composition-id] t=0s
+    Fix: Add a stable, human-readable id such as id="hero-title" or id="scene-1-card" to every timeline-visible element you want agents or Studio to edit.
+  ⚠ studio_missing_editable_id: <div data-start="0" data-track-index="2"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.
+    C:\Users\vicen\OneDrive\Escritorio\vela-team\todoeventos-raymi-booking-video\videos\todoeventos-raymi-booking\compositions\frames\06-paso3.html [data-composition-id] t=0s
+    Fix: Add a stable, human-readable id such as id="hero-title" or id="scene-1-card" to every timeline-visible element you want agents or Studio to edit.
+  ⚠ studio_missing_editable_id: <div class="mas-bg" data-start="0" data-track-index="0"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.
+    C:\Users\vicen\OneDrive\Escritorio\vela-team\todoeventos-raymi-booking-video\videos\todoeventos-raymi-booking\compositions\frames\07-mas.html [data-composition-id] t=0s
+    Fix: Add a stable, human-readable id such as id="hero-title" or id="scene-1-card" to every timeline-visible element you want agents or Studio to edit.
+  ⚠ studio_missing_editable_id: <div class="mas-content" data-start="0" data-track-index="1"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.
+    C:\Users\vicen\OneDrive\Escritorio\vela-team\todoeventos-raymi-booking-video\videos\todoeventos-raymi-booking\compositions\frames\07-mas.html [data-composition-id] t=0s
+    Fix: Add a stable, human-readable id such as id="hero-title" or id="scene-1-card" to every timeline-visible element you want agents or Studio to edit.
+  ⚠ studio_missing_editable_id: <div class="mas-icon" data-start="0" data-track-index="2"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.
+    C:\Users\vicen\OneDrive\Escritorio\vela-team\todoeventos-raymi-booking-video\videos\todoeventos-raymi-booking\compositions\frames\07-mas.html [data-composition-id] t=0s
+    Fix: Add a stable, human-readable id such as id="hero-title" or id="scene-1-card" to every timeline-visible element you want agents or Studio to edit.
+  ⚠ studio_missing_editable_id: <div class="mas-icon" data-start="2.5" data-track-index="3"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.
+    C:\Users\vicen\OneDrive\Escritorio\vela-team\todoeventos-raymi-booking-video\videos\todoeventos-raymi-booking\compositions\frames\07-mas.html [data-composition-id] t=0s
+    Fix: Add a stable, human-readable id such as id="hero-title" or id="scene-1-card" to every timeline-visible element you want agents or Studio to edit.
+  ⚠ studio_missing_editable_id: <div class="mas-icon" data-start="4.5" data-track-index="4"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.
+    C:\Users\vicen\OneDrive\Escritorio\vela-team\todoeventos-raymi-booking-video\videos\todoeventos-raymi-booking\compositions\frames\07-mas.html [data-composition-id] t=0s
+    Fix: Add a stable, human-readable id such as id="hero-title" or id="scene-1-card" to every timeline-visible element you want agents or Studio to edit.
+  ⚠ studio_missing_editable_id: <div class="c08-bg" data-start="0" data-track-index="0"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.
+    C:\Users\vicen\OneDrive\Escritorio\vela-team\todoeventos-raymi-booking-video\videos\todoeventos-raymi-booking\compositions\frames\08-cierre.html [data-composition-id] t=0s
+    Fix: Add a stable, human-readable id such as id="hero-title" or id="scene-1-card" to every timeline-visible element you want agents or Studio to edit.
+  ⚠ studio_missing_editable_id: <div class="c08-content" data-start="0" data-track-index="1"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.
+    C:\Users\vicen\OneDrive\Escritorio\vela-team\todoeventos-raymi-booking-video\videos\todoeventos-raymi-booking\compositions\frames\08-cierre.html [data-composition-id] t=0s
+    Fix: Add a stable, human-readable id such as id="hero-title" or id="scene-1-card" to every timeline-visible element you want agents or Studio to edit.
+  0 error(s), 24 warning(s), 0 info(s)
+
+Runtime
+  ◇ 0 errors, 0 warnings
+
+Layout
+  ⚠ t=12.1-12.22s (2 samples) content_overlap #bg > div:nth-of-type(5) inside span.half.half-right "GLOW" — Two text blocks overlap and may render unreadable.
+        Fix: Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.
+  ℹ t=9.13s container_overflow div.p02-bg-grid inside div[data-start="0"] overflowed left 4px, right 4px, top 4px, bottom 4px — Element extends outside a clipping layout container.
+        Fix: Resize/reposition the child or container, or mark intentional overflow with data-layout-allow-overflow.
+  ℹ t=33.47s text_occluded div.p2-hint-tag inside div.p2-stack > div:nth-of-type(2) "Raymi" — Text is hidden beneath an opaque element.
+        Fix: Give the text its own zone, raise its stacking order above the covering element, or mark intentional layering with data-layout-allow-occlusion.
+  ℹ t=34.8s content_overlap div.p2-stack > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) inside #p3-card-1 > div:nth-of-type(1) "$— / EVENTO" — Two text blocks overlap and may render unreadable.
+        Fix: Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.
+  ℹ t=34.8s content_overlap div.p2-stack > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(2) inside #p3-card-2 > div:nth-of-type(2) > div:nth-of-type(1) "DJ Momento" — Two text blocks overlap and may render unreadable.
+        Fix: Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.
+  ℹ t=34.8s content_overlap div.p2-stack > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(2) inside #p3-card-2 > div:nth-of-type(2) > div:nth-of-type(2) "DJ Momento" — Two text blocks overlap and may render unreadable.
+        Fix: Give each block its own zone, or mark intentional layering with data-layout-allow-overlap.
+  0 error(s), 1 warning(s), 5 info(s)
+
+Motion
+  ◇ 0 errors, 0 warnings
+
+Contrast
+  ✗ div > div:nth-of-type(3) > div > div:nth-of-type(1) > div:nth-of-type(2) 1.16:1 (need 4.5:1, t=15.211s)
+    Try rgb(103,101,99); source compositions/frames/03-solucion.html
+  ✗ div > div:nth-of-type(3) > div > div:nth-of-type(1) > div:nth-of-type(6) 1.13:1 (need 4.5:1, t=15.211s)
+    Try rgb(105,103,101); source compositions/frames/03-solucion.html
+  ✗ div > div:nth-of-type(3) > div > div:nth-of-type(1) > div:nth-of-type(8) 2.74:1 (need 4.5:1, t=15.211s)
+    Try rgb(47,46,45); source compositions/frames/03-solucion.html
+  0 error(s), 3 warning(s), 0 info(s)
+
+Snapshots
+  ◇ disabled
+
+◇  Check passed

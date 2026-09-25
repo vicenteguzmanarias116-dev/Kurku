@@ -15,6 +15,13 @@ const PATHS: Record<string, React.ReactNode> = {
     </>
   ),
   entrenamientos: <path d="M22 12h-4l-3 9-6-18-3 9H2" />,
+  rutina: (
+    <>
+      <path d="M6.5 6.5 3 10l3.5 3.5M17.5 6.5 21 10l-3.5 3.5" />
+      <path d="M9 10h6" />
+      <path d="M4.5 8v4M19.5 8v4" />
+    </>
+  ),
   calendario: (
     <>
       <rect x="3" y="4" width="18" height="18" rx="2" />

@@ -1,0 +1,230 @@
+<template>
+<div data-hf-id="hf-kark" id="root" data-composition-id="08-cierre" data-width="1080" data-height="1920">
+<style>
+  #root {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    container-type: size;
+    container-name: c08;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  /* ---- background / atmosphere ---- */
+  .c08-bg {
+    position: absolute;
+    inset: 0;
+    background: #F8F4EF;
+  }
+  .c08-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(6cqw);
+  }
+  .c08-glow-a { top: -10cqh; left: -10cqw; width: 60cqw; height: 40cqh; background: #E39771; opacity: 0.14; }
+  .c08-glow-b { bottom: -12cqh; right: -14cqw; width: 55cqw; height: 38cqh; background: #8C69BE; opacity: 0.12; }
+  .c08-glow-c { top: 36cqh; left: 20cqw; width: 40cqw; height: 26cqh; background: #EBB397; opacity: 0.10; }
+
+  .c08-pill {
+    position: absolute;
+    border: 0.2cqw solid #1E1E1E;
+    box-shadow: none;
+  }
+  .c08-pill-1 { top: 4cqh;  left: 6cqw;  width: 15cqw; height: 5.5cqh; border-radius: 9999px; background: #D9713C; transform: rotate(-18deg); }
+  .c08-pill-2 { top: 6cqh;  right: 6cqw; width: 10cqw; height: 10cqw; border-radius: 50%;    background: #EBB397; transform: rotate(10deg); }
+  .c08-pill-3 { top: 23cqh; left: 4cqw;  width: 9cqw;  height: 9cqw;  border-radius: 50%;    background: #C3B1DD; transform: rotate(-8deg); }
+  .c08-pill-4 { top: 20cqh; right: 4cqw; width: 16cqw; height: 4.5cqh; border-radius: 9999px; background: #E39771; transform: rotate(14deg); }
+  .c08-pill-5 { top: 60cqh; left: 6cqw;  width: 12cqw; height: 5cqh;  border-radius: 9999px; background: #ECB89E; transform: rotate(-12deg); }
+  .c08-pill-6 { top: 58cqh; right: 8cqw; width: 9cqw;  height: 9cqw;  border-radius: 50%;    background: #EEBFA7; transform: rotate(22deg); }
+
+  .c08-grain {
+    position: absolute;
+    inset: 0;
+    opacity: 0.05;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+  }
+
+  /* ---- content ---- */
+  .c08-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15cqh 6cqw 22cqh;
+  }
+
+  .c08-phrase {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.4cqh;
+    max-width: 86cqw;
+  }
+
+  .c08-line {
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 700;
+    text-align: center;
+    color: #2B2730;
+    margin: 0;
+  }
+
+  .c08-line1 { font-size: 5.4cqw; line-height: 1.08; letter-spacing: -0.01em; }
+  .c08-line2 { font-size: 4.6cqw; line-height: 1.1; color: #8C69BE; }
+  .c08-line3 { font-size: 4.6cqw; line-height: 1.1; }
+
+  .c08-word {
+    display: inline-block;
+    will-change: transform, filter, opacity;
+  }
+
+  .c08-strikewrap {
+    position: relative;
+    display: inline-block;
+  }
+  .c08-strike {
+    position: absolute;
+    left: -3%;
+    right: -3%;
+    top: 50%;
+    height: 0.45cqw;
+    margin-top: -0.225cqw;
+    background: #D9713C;
+    border-radius: 9999px;
+    transform-origin: left center;
+  }
+
+  .c08-signature {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.6cqh;
+  }
+
+  .c08-accentline {
+    width: 7cqw;
+    height: 0.4cqh;
+    min-height: 4px;
+    border-radius: 9999px;
+    background: #D9713C;
+    will-change: transform, opacity;
+  }
+
+  .c08-wordmark {
+    display: inline-flex;
+    align-items: center;
+    padding: 1.6cqh 4.4cqw;
+    border-radius: 9999px;
+    border: 0.2cqw solid #1E1E1E;
+    background: #4B3170;
+    color: #FFFFFF;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 3cqw;
+    box-shadow: 0.3cqw 0.3cqw 0 rgba(26,26,26,0.08);
+    will-change: transform, opacity;
+  }
+</style>
+
+<div data-hf-id="hf-5xsh" class="clip c08-bg" data-start="0" data-duration="5.845" data-track-index="0">
+  <div data-hf-id="hf-u1z4" class="c08-glow c08-glow-a"></div>
+  <div data-hf-id="hf-4xgr" class="c08-glow c08-glow-b"></div>
+  <div data-hf-id="hf-0zcq" class="c08-glow c08-glow-c"></div>
+  <div data-hf-id="hf-86es" class="c08-pill c08-pill-1"></div>
+  <div data-hf-id="hf-guan" class="c08-pill c08-pill-2"></div>
+  <div data-hf-id="hf-cw6m" class="c08-pill c08-pill-3"></div>
+  <div data-hf-id="hf-nro9" class="c08-pill c08-pill-4"></div>
+  <div data-hf-id="hf-n00g" class="c08-pill c08-pill-5"></div>
+  <div data-hf-id="hf-vnwb" class="c08-pill c08-pill-6"></div>
+  <svg data-hf-id="hf-icyy" class="c08-grain" xmlns="http://www.w3.org/2000/svg">
+    <filter data-hf-id="hf-5wmy" id="c08-noise">
+      <feturbulence data-hf-id="hf-iyv9" type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" result="noise" />
+      <fecolormatrix data-hf-id="hf-g284" in="noise" type="saturate" values="0" />
+    </filter>
+    <rect data-hf-id="hf-nxpr" width="100%" height="100%" filter="url(#c08-noise)" />
+  </svg>
+</div>
+
+<div data-hf-id="hf-ubya" class="clip c08-content" data-start="0" data-duration="5.845" data-track-index="1">
+  <div data-hf-id="hf-30tf" class="c08-phrase">
+    <div data-hf-id="hf-bl56" class="c08-line c08-line1" id="c08-line1">
+      <span data-hf-id="hf-e6tc" class="c08-word">Bookear</span>
+      <span data-hf-id="hf-5oje" class="c08-word">un</span>
+      <span data-hf-id="hf-i69l" class="c08-word">proveedor</span>
+      <span data-hf-id="hf-zj56" class="c08-word">en</span>
+      <span data-hf-id="hf-l85d" class="c08-word">TodoEventos</span>
+    </div>
+    <div data-hf-id="hf-kd5z" class="c08-line c08-line2" id="c08-line2">es una charla con Raymi</div>
+    <div data-hf-id="hf-kl2s" class="c08-line c08-line3" id="c08-line3">No un
+      <span data-hf-id="hf-tash" class="c08-strikewrap">trámite<span data-hf-id="hf-dm2r" class="c08-strike" id="c08-strike"></span></span>
+    </div>
+  </div>
+  <div data-hf-id="hf-crqq" class="c08-signature">
+    <div data-hf-id="hf-icr6" class="c08-accentline" id="c08-accentline"></div>
+    <div data-hf-id="hf-3be0" class="c08-wordmark" id="c08-wordmark">TodoEventos</div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var tl = gsap.timeline({ paused: true });
+
+  // Scene 1 (0.0-3.0s): "Bookear un proveedor en TodoEventos" — per-word reveal, centered.
+  gsap.utils.toArray("#c08-line1 .c08-word").forEach(function (el, i) {
+    tl.fromTo(
+      el,
+      { opacity: 0, y: 16, filter: "blur(8px)" },
+      { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.4, ease: "power2.out" },
+      0.05 + i * 0.09
+    );
+  });
+
+  // Scene 2 (3.0-5.0s): "es una charla con Raymi" — adds below, accent morado.
+  tl.fromTo(
+    "#c08-line2",
+    { opacity: 0, y: 20, scale: 0.9 },
+    { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "power3.out" },
+    3.0
+  );
+
+  // Scene 3 (5.0-5.845s): "No un trámite" — lands, strikes "trámite", spring-pops the wordmark.
+  tl.fromTo(
+    "#c08-line3",
+    { opacity: 0, y: 20, scale: 0.9 },
+    { opacity: 1, y: 0, scale: 1, duration: 0.25, ease: "power3.out" },
+    5.0
+  );
+
+  tl.fromTo(
+    "#c08-strike",
+    { scaleX: 0 },
+    { scaleX: 1, duration: 0.2, ease: "power2.out" },
+    5.25
+  );
+
+  tl.fromTo(
+    "#c08-accentline",
+    { opacity: 0, scaleX: 0 },
+    { opacity: 1, scaleX: 1, duration: 0.3, ease: "power3.out" },
+    5.45
+  );
+
+  tl.fromTo(
+    "#c08-wordmark",
+    { opacity: 0, scale: 0 },
+    { opacity: 1, scale: 1, duration: 0.3, ease: "power3.out" },
+    5.45
+  );
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines["08-cierre"] = tl;
+})();
+</script>
+</div>
+</template>
