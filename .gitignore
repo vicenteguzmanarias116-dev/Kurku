@@ -48,3 +48,6 @@ supabase/.temp/
 # esto NO afecta a public/hero/*.jpg que si esta trackeado)
 /*.jpeg
 /*.jpg
+
+# Nunca mezclar con otros proyectos (TodoEventos, etc.)
+todoeventos-raymi-booking-video/
