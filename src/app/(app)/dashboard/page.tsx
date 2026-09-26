@@ -199,7 +199,13 @@ async function AthleteHome({
     .maybeSingle();
   const myAthleteId = myAthlete?.id;
 
-  const [{ data: todayEvents }, checkin] = await Promise.all([
+  const weekday = new Date().getDay();
+  const dow = (new Date().getDay() + 6) % 7;
+  const monday = new Date();
+  monday.setDate(monday.getDate() - dow);
+  const weekStart = monday.toISOString().slice(0, 10);
+
+  const [{ data: todayEvents }, checkin, { data: routine }, { data: checkRow }] = await Promise.all([
     supabase
       .from("events")
       .select("id, title, kind, starts_at, location, athlete_id, plan_type, plan_items")
@@ -207,7 +213,30 @@ async function AthleteHome({
       .lt("starts_at", `${tomorrow}T00:00:00`)
       .order("starts_at"),
     getTodayCheckinStatus(supabase, profile),
+    myAthleteId
+      ? supabase.from("routines").select("title, days").eq("athlete_id", myAthleteId).maybeSingle()
+      : Promise.resolve({ data: null }),
+    myAthleteId
+      ? supabase
+          .from("routine_checks")
+          .select("done_indexes")
+          .eq("athlete_id", myAthleteId)
+          .eq("week_start", weekStart)
+          .eq("weekday", weekday)
+          .maybeSingle()
+      : Promise.resolve({ data: null }),
   ]);
+
+  type RoutineDay = {
+    kind: "gym" | "other" | "rest";
+    title: string;
+    focus?: string;
+    notes?: string;
+    exercises?: unknown[];
+  };
+  const todayPlan = (routine?.days as Record<string, RoutineDay> | undefined)?.[String(weekday)];
+  const doneCount = checkRow?.done_indexes?.length ?? 0;
+  const totalEx = todayPlan?.exercises?.length ?? 0;
 
   const sessionsToday = ((todayEvents as (EventItem & { athlete_id: string | null })[] | null) ?? []).filter(
     (e) => !e.athlete_id || e.athlete_id === myAthleteId,
@@ -217,6 +246,30 @@ async function AthleteHome({
     <div className="space-y-6">
       <WelcomeModal show={welcome} />
       <PageHead eyebrow={new Date().toLocaleDateString("es-PE", { weekday: "long", day: "numeric", month: "long" })} title="Hoy" />
+
+      {todayPlan && (
+        <Card className="border-brand/30 bg-brand-soft">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-brand-text">Rutina</p>
+              <p className={`${rajdhani.className} text-xl font-bold text-ink`}>{todayPlan.title}</p>
+              <p className="mt-0.5 text-sm text-ink-2">
+                {todayPlan.kind === "gym"
+                  ? totalEx
+                    ? `${doneCount} de ${totalEx} ejercicios hechos`
+                    : todayPlan.focus
+                  : todayPlan.notes || "Día libre"}
+              </p>
+            </div>
+            <Link
+              href="/rutina"
+              className="shrink-0 rounded-lg bg-brand-strong px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand"
+            >
+              {todayPlan.kind === "gym" ? "Abrir" : "Ver"}
+            </Link>
+          </div>
+        </Card>
+      )}
 
       <Card>
         <CardHeader title="Tu entrenamiento de hoy" />
