@@ -8,55 +8,41 @@ import {
   BODY_BACK,
   HAIR_FRONT,
   HAIR_BACK,
-  VIEWBOX,
+  FRONT_VIEWBOX,
+  BACK_VIEWBOX,
   type Zone,
 } from "./muscles";
 
 type Level = 0 | 1 | 2 | 3;
 
 const COLORS: Record<Level, string> = {
-  0: "#F7F8FA",
+  0: "#3f4140",
   1: "#eab308", // leve
   2: "#f97316", // moderado
   3: "#ef4444", // fuerte
 };
-const STROKE: Record<Level, string> = {
-  0: "#C4CAD1",
-  1: "#eab308",
-  2: "#f97316",
-  3: "#ef4444",
-};
-const BODY = "#C4CAD1";
-const HAIR = "#A5ACB5";
+const BODY = "#bebebe";
+const HAIR = "#6f6f6f";
 
 function Figure({
   zones,
+  viewBox,
   body,
   hair,
   value,
   onToggle,
 }: {
   zones: Zone[];
+  viewBox: string;
   body: string;
   hair: string;
   value: Record<string, Level>;
   onToggle: (id: string) => void;
 }) {
   return (
-    <svg viewBox={VIEWBOX} className="mx-auto h-[34rem] w-auto">
+    <svg viewBox={viewBox} className="mx-auto h-[34rem] w-auto">
       <path d={body} fill={BODY} pointerEvents="none" />
       <path d={hair} fill={HAIR} pointerEvents="none" />
-      {zones.map((z) => (
-        <path
-          key={`halo-${z.id}`}
-          d={z.d}
-          fill={BODY}
-          stroke={BODY}
-          strokeWidth={5}
-          strokeLinejoin="round"
-          pointerEvents="none"
-        />
-      ))}
       {zones.map((z) => {
         const level = (value[z.id] ?? 0) as Level;
         return (
@@ -64,13 +50,10 @@ function Figure({
             key={z.id}
             d={z.d}
             fill={COLORS[level]}
-            stroke={STROKE[level]}
-            strokeWidth={1}
-            strokeLinejoin="round"
             role="button"
             tabIndex={0}
             aria-label={`${z.label}: ${level === 0 ? "sin dolor" : `nivel ${level}`}`}
-            className="cursor-pointer outline-none transition-colors duration-150 hover:brightness-110 focus-visible:stroke-brand-strong"
+            className="cursor-pointer outline-none transition-colors duration-150 hover:brightness-150 focus-visible:stroke-brand-strong focus-visible:stroke-[3]"
             onClick={() => onToggle(z.id)}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
@@ -138,6 +121,7 @@ export default function MuscleMap({
       <div className="rounded-lg border border-line bg-surface p-4">
         <Figure
           zones={side === "front" ? FRONT : BACK}
+          viewBox={side === "front" ? FRONT_VIEWBOX : BACK_VIEWBOX}
           body={side === "front" ? BODY_FRONT : BODY_BACK}
           hair={side === "front" ? HAIR_FRONT : HAIR_BACK}
           value={value}
@@ -158,7 +142,7 @@ export default function MuscleMap({
             <li
               key={id}
               className="flex items-center gap-1.5 border px-2 py-1 text-xs"
-              style={{ borderColor: STROKE[level as Level], color: COLORS[level as Level] }}
+              style={{ borderColor: COLORS[level as Level], color: COLORS[level as Level] }}
             >
               {label(id)}
             </li>
