@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { requireUser, isStaff } from "@/lib/auth";
 import { rajdhani } from "../fonts";
 import PageHead from "../PageHead";
-import { Input, Select, Textarea, Button } from "../ui";
+import { Card, Field, Input, Select, Textarea, Button, LinkButton } from "../ui";
 import { getTodayCheckinStatus } from "../today";
 import Agenda, { type AgendaItem } from "./Agenda";
 import { PLAN_TYPES, PLAN_LABEL } from "./planTypes";
@@ -38,7 +39,7 @@ async function addEvent(formData: FormData) {
     team_id: profile!.team_id,
     kind,
     title: String(formData.get("title") || "").trim(),
-    starts_at: new Date(String(formData.get("starts_at"))).toISOString(),
+    starts_at: new Date(String(formData.get("starts_at")) + "Z").toISOString(),
     location: String(formData.get("location") || "") || null,
     description: String(formData.get("description") || "") || null,
     athlete_id: String(formData.get("athlete_id") || "") || null,
@@ -49,6 +50,8 @@ async function addEvent(formData: FormData) {
   const { error } = await supabase.from("events").insert(row);
   if (error) throw new Error(error.message);
   revalidatePath("/calendario");
+  const back = String(formData.get("back") || "");
+  redirect(back.startsWith("/calendario") ? back : "/calendario");
 }
 
 async function delEvent(formData: FormData) {
@@ -82,7 +85,7 @@ function mondayOf(d: Date) {
 export default async function CalendarioPage({
   searchParams,
 }: {
-  searchParams: Promise<{ view?: string; d?: string }>;
+  searchParams: Promise<{ view?: string; d?: string; new?: string }>;
 }) {
   const { supabase, profile } = await requireUser();
   const staff = isStaff(profile);
@@ -109,6 +112,10 @@ export default async function CalendarioPage({
     if (!byDay.has(key)) byDay.set(key, []);
     byDay.get(key)!.push(e);
   }
+
+  const baseHref = `/calendario?view=${view}${sp.d ? `&d=${sp.d}` : ""}`;
+  const newHref = (day: string) => `${baseHref}&new=${day}`;
+  const newDate = staff && sp.new && /^\d{4}-\d{2}-\d{2}$/.test(sp.new) ? sp.new : null;
 
   const monthStart = startOfMonth(anchor);
   const gridStart = mondayOf(monthStart);
@@ -167,55 +174,80 @@ export default async function CalendarioPage({
     <div className="space-y-6">
       <PageHead eyebrow="Regatas · Entrenos" title="Calendario" />
 
-      {staff && (
-        <details className="rounded-xl border border-line bg-surface p-5">
-          <summary className="cursor-pointer text-sm font-medium text-brand-text">
-            Añadir evento / plan
-          </summary>
-          <form
-            action={addEvent}
-            className="mt-4 grid grid-cols-2 gap-3 text-sm sm:grid-cols-3"
-          >
-            <Input name="title" placeholder="Título" required />
-            <Input name="starts_at" type="datetime-local" required />
-            <Select name="kind">
-              <option value="training">Entrenamiento</option>
-              <option value="regatta">Regata</option>
-              <option value="other">Otro</option>
-            </Select>
-            <Select name="plan_type">
-              <option value="">Tipo de plan (opcional)</option>
-              {PLAN_TYPES.map((p) => (
-                <option key={p.value} value={p.value}>
-                  {p.emoji} {p.label}
-                </option>
-              ))}
-            </Select>
-            <Select name="athlete_id">
-              <option value="">Para todo el equipo</option>
-              {athletes?.map((a) => (
-                <option key={a.id} value={a.id}>
-                  {a.full_name}
-                </option>
-              ))}
-            </Select>
-            <Input name="location" placeholder="Lugar" />
-            <Textarea
-              name="plan_items"
-              placeholder={"Detalle de la sesión, una línea por ejercicio/tramo:\nSentadilla 4x10\nZancadas 3x12\n..."}
-              rows={3}
-              className="col-span-2 resize-y sm:col-span-3"
-            />
-            <Input
-              name="description"
-              placeholder="Notas"
-              className="col-span-2 sm:col-span-2"
-            />
-            <Button type="submit" variant="primary" size="sm">
-              Añadir
-            </Button>
-          </form>
-        </details>
+      {newDate && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <Link href={baseHref} aria-label="Cerrar" className="absolute inset-0 bg-ink/40" />
+          <Card className="relative max-h-[90vh] w-full max-w-lg overflow-y-auto">
+            <div className="mb-4 flex items-start justify-between gap-3">
+              <div>
+                <h2 className={`${rajdhani.className} text-xl font-bold`}>Nuevo evento</h2>
+                <p className="text-sm capitalize text-ink-3">
+                  {new Date(newDate + "T12:00:00").toLocaleDateString("es-PE", {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </p>
+              </div>
+              <Link href={baseHref} aria-label="Cerrar" className="text-ink-3 hover:text-ink">
+                ✕
+              </Link>
+            </div>
+            <form action={addEvent} className="space-y-3 text-sm">
+              <input type="hidden" name="back" value={baseHref} />
+              <Input name="title" placeholder="Añade un título" required autoFocus />
+              <div className="grid grid-cols-2 gap-3">
+                <Field label="Fecha y hora">
+                  <Input name="starts_at" type="datetime-local" defaultValue={`${newDate}T09:00`} required />
+                </Field>
+                <Field label="Tipo">
+                  <Select name="kind">
+                    <option value="training">Entrenamiento</option>
+                    <option value="regatta">Regata</option>
+                    <option value="other">Otro</option>
+                  </Select>
+                </Field>
+                <Field label="Tipo de plan">
+                  <Select name="plan_type">
+                    <option value="">Ninguno</option>
+                    {PLAN_TYPES.map((p) => (
+                      <option key={p.value} value={p.value}>
+                        {p.emoji} {p.label}
+                      </option>
+                    ))}
+                  </Select>
+                </Field>
+                <Field label="Para">
+                  <Select name="athlete_id">
+                    <option value="">Todo el equipo</option>
+                    {athletes?.map((a) => (
+                      <option key={a.id} value={a.id}>
+                        {a.full_name}
+                      </option>
+                    ))}
+                  </Select>
+                </Field>
+              </div>
+              <Input name="location" placeholder="Lugar" />
+              <Textarea
+                name="plan_items"
+                placeholder={"Detalle de la sesión, una línea por ejercicio/tramo:\nSentadilla 4x10\nZancadas 3x12"}
+                rows={3}
+                className="resize-y"
+              />
+              <Input name="description" placeholder="Notas" />
+              <div className="flex justify-end gap-2 pt-1">
+                <LinkButton href={baseHref} variant="ghost">
+                  Cancelar
+                </LinkButton>
+                <Button type="submit" variant="primary">
+                  Guardar
+                </Button>
+              </div>
+            </form>
+          </Card>
+        </div>
       )}
 
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -223,6 +255,11 @@ export default async function CalendarioPage({
           {label}
         </h2>
         <div className="flex items-center gap-2">
+          {staff && (
+            <LinkButton href={newHref(ymd(new Date()))} variant="primary" size="sm">
+              + Crear
+            </LinkButton>
+          )}
           <div className="flex rounded-lg border border-line text-sm font-medium">
             <Link
               href="/calendario?view=agenda"
@@ -279,14 +316,17 @@ export default async function CalendarioPage({
               return (
                 <div
                   key={key}
-                  className={`min-h-[90px] bg-surface p-1.5 ${inMonth ? "" : "opacity-40"}`}
+                  className={`relative min-h-[90px] bg-surface p-1.5 ${staff ? "hover:bg-sunken" : ""} ${inMonth ? "" : "opacity-40"}`}
                 >
+                  {staff && (
+                    <Link href={newHref(key)} aria-label={`Crear evento el ${key}`} className="absolute inset-0" />
+                  )}
                   <span
-                    className={`text-xs ${isToday ? "rounded bg-brand-strong px-1 text-white" : "text-ink-3"}`}
+                    className={`pointer-events-none relative text-xs ${isToday ? "rounded bg-brand-strong px-1 text-white" : "text-ink-3"}`}
                   >
                     {d.getDate()}
                   </span>
-                  <div className="mt-1 space-y-1">
+                  <div className="pointer-events-none relative mt-1 space-y-1">
                     {dayEvents.slice(0, 3).map((e) => (
                       <DayChip key={e.id} e={e} />
                     ))}
@@ -308,13 +348,16 @@ export default async function CalendarioPage({
             return (
               <div
                 key={key}
-                className={`rounded-lg border p-3 ${isToday ? "border-brand/40 bg-brand-soft" : "border-line bg-surface"}`}
+                className={`relative rounded-lg border p-3 ${isToday ? "border-brand/40 bg-brand-soft" : "border-line bg-surface"}`}
               >
-                <p className="text-xs text-ink-3">
+                {staff && (
+                  <Link href={newHref(key)} aria-label={`Crear evento el ${key}`} className="absolute inset-0 rounded-lg" />
+                )}
+                <p className="pointer-events-none relative text-xs text-ink-3">
                   {d.toLocaleDateString("es-PE", { weekday: "short" })}{" "}
                   <span className="font-medium text-ink-2">{d.getDate()}</span>
                 </p>
-                <div className="mt-2 space-y-1.5">
+                <div className="pointer-events-none relative mt-2 space-y-1.5">
                   {dayEvents.map((e) => (
                     <DayChip key={e.id} e={e} full />
                   ))}
@@ -355,7 +398,7 @@ function DayChip({ e, full = false }: { e: EventRow; full?: boolean }) {
   return (
     <Link
       href={`/calendario/${e.id}`}
-      className={`block truncate rounded px-1.5 py-1 text-[11px] leading-tight transition hover:brightness-95 ${
+      className={`pointer-events-auto relative block truncate rounded px-1.5 py-1 text-[11px] leading-tight transition hover:brightness-95 ${
         isRegatta ? "bg-brand-soft text-brand-text" : "bg-info-soft text-info-text"
       }`}
     >
