@@ -1,37 +1,62 @@
 "use client";
 
 import { useState } from "react";
-import { FRONT, BACK, SILHOUETTE, DEFINITION_FRONT, DEFINITION_BACK, type Zone } from "./muscles";
+import {
+  FRONT,
+  BACK,
+  BODY_FRONT,
+  BODY_BACK,
+  HAIR_FRONT,
+  HAIR_BACK,
+  VIEWBOX,
+  type Zone,
+} from "./muscles";
 
 type Level = 0 | 1 | 2 | 3;
 
 const COLORS: Record<Level, string> = {
-  0: "#F1F3F5",
+  0: "#F7F8FA",
   1: "#eab308", // leve
   2: "#f97316", // moderado
   3: "#ef4444", // fuerte
 };
 const STROKE: Record<Level, string> = {
-  0: "#98A2B3",
+  0: "#C4CAD1",
   1: "#eab308",
   2: "#f97316",
   3: "#ef4444",
 };
+const BODY = "#C4CAD1";
+const HAIR = "#A5ACB5";
 
 function Figure({
   zones,
-  definition,
+  body,
+  hair,
   value,
   onToggle,
 }: {
   zones: Zone[];
-  definition: string;
+  body: string;
+  hair: string;
   value: Record<string, Level>;
   onToggle: (id: string) => void;
 }) {
   return (
-    <svg viewBox="0 0 200 280" className="mx-auto h-80 w-auto">
-      <path d={SILHOUETTE} fill="#F6F7F9" stroke="#D8DCE1" strokeWidth={1} pointerEvents="none" />
+    <svg viewBox={VIEWBOX} className="mx-auto h-[34rem] w-auto">
+      <path d={body} fill={BODY} pointerEvents="none" />
+      <path d={hair} fill={HAIR} pointerEvents="none" />
+      {zones.map((z) => (
+        <path
+          key={`halo-${z.id}`}
+          d={z.d}
+          fill={BODY}
+          stroke={BODY}
+          strokeWidth={5}
+          strokeLinejoin="round"
+          pointerEvents="none"
+        />
+      ))}
       {zones.map((z) => {
         const level = (value[z.id] ?? 0) as Level;
         return (
@@ -40,7 +65,7 @@ function Figure({
             d={z.d}
             fill={COLORS[level]}
             stroke={STROKE[level]}
-            strokeWidth={1.25}
+            strokeWidth={1}
             strokeLinejoin="round"
             role="button"
             tabIndex={0}
@@ -58,14 +83,6 @@ function Figure({
           </path>
         );
       })}
-      <path
-        d={definition}
-        fill="none"
-        stroke="#C4CAD1"
-        strokeWidth={0.75}
-        strokeLinecap="round"
-        pointerEvents="none"
-      />
     </svg>
   );
 }
@@ -118,10 +135,11 @@ export default function MuscleMap({
         ))}
       </div>
 
-      <div className="rounded-lg border border-line bg-sunken p-4">
+      <div className="rounded-lg border border-line bg-surface p-4">
         <Figure
           zones={side === "front" ? FRONT : BACK}
-          definition={side === "front" ? DEFINITION_FRONT : DEFINITION_BACK}
+          body={side === "front" ? BODY_FRONT : BODY_BACK}
+          hair={side === "front" ? HAIR_FRONT : HAIR_BACK}
           value={value}
           onToggle={toggle}
         />
