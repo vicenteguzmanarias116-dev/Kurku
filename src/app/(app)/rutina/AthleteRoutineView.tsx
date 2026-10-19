@@ -3,7 +3,7 @@
 import { useMemo, useState, useTransition } from "react";
 import { rajdhani } from "../fonts";
 import { Card, Button } from "../ui";
-import { toggleCheck, logWeight, deleteLog, completeSession } from "./actions";
+import { toggleCheck, clearChecks, logWeight, deleteLog, completeSession } from "./actions";
 import { WEEKDAY_SHORT, WEEKDAY_LABEL, type Days, type InfoSection, type LogEntry } from "./types";
 
 const todayIdx = () => new Date().getDay();
@@ -44,6 +44,11 @@ export default function AthleteRoutineView({
     const next = doneIdx.includes(i) ? doneIdx.filter((x) => x !== i) : [...doneIdx, i];
     setChecks((prev) => ({ ...prev, [current]: next }));
     startTransition(() => toggleCheck(current, i));
+  }
+
+  function resetDay() {
+    setChecks((prev) => ({ ...prev, [current]: [] }));
+    startTransition(() => clearChecks(current));
   }
 
   function openLogFor(i: number) {
@@ -249,10 +254,15 @@ export default function AthleteRoutineView({
             })}
           </ol>
 
-          <div className="mt-5 flex items-center gap-3">
+          <div className="mt-5 flex flex-wrap items-center gap-3">
             <Button variant="primary" onClick={finishSession} disabled={pending}>
               Terminé la sesión de hoy
             </Button>
+            {doneIdx.length > 0 && (
+              <button type="button" onClick={resetDay} className="text-sm text-ink-3 underline hover:text-ink">
+                Desmarcar todo
+              </button>
+            )}
             {sessionMsg && <span className="text-xs font-medium text-ok-text">{sessionMsg}</span>}
           </div>
         </Card>

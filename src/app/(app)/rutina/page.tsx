@@ -23,7 +23,7 @@ export default async function RutinaPage() {
 
     return (
       <div className="space-y-6">
-        <PageHead eyebrow="Físico" title="Rutina" subtitle="Armá la rutina semanal de cada atleta." />
+        <PageHead eyebrow="Físico" title="Rutina" subtitle="Arma la rutina semanal de cada atleta." />
         <Card>
           {!athletes?.length ? (
             <Empty title="Todavía no hay atletas en el equipo." />
@@ -70,12 +70,19 @@ export default async function RutinaPage() {
     .eq("athlete_id", athlete.id)
     .maybeSingle<{ title: string; subtitle: string | null; days: Days; info: InfoSection[] }>();
 
-  if (!routine) {
+  const hasContent =
+    !!routine &&
+    (routine.info?.length > 0 ||
+      Object.values(routine.days ?? {}).some(
+        (d) => d && (d.kind === "gym" ? (d.exercises?.length ?? 0) > 0 : d.title.trim() !== ""),
+      ));
+
+  if (!routine || !hasContent) {
     return (
       <div className="space-y-6">
         <PageHead eyebrow="Físico" title="Rutina" />
         <Card>
-          <Empty title="Tu coach todavía no armó tu rutina." hint="Cuando la publique, va a aparecer acá." />
+          <Empty title="Tu coach todavía no armó tu rutina." hint="Cuando la publique, va a aparecer aquí." />
         </Card>
       </div>
     );

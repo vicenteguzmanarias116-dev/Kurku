@@ -2,6 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { requireUser, isStaff } from "@/lib/auth";
 import RoutineEditor from "../RoutineEditor";
 import type { Days, InfoSection } from "../types";
+import { ROUTINE_TEMPLATE } from "../template";
 
 export default async function EditRoutinePage({
   params,
@@ -26,16 +27,28 @@ export default async function EditRoutinePage({
     .eq("athlete_id", athleteId)
     .maybeSingle<{ title: string; subtitle: string | null; days: Days; info: InfoSection[] }>();
 
+  // sin rutina, o rutina vacía (sin ejercicios ni secciones): se ofrece la plantilla
+  const hasContent =
+    !!routine &&
+    (routine.info?.length > 0 ||
+      Object.values(routine.days ?? {}).some((d) => d?.kind === "gym" && (d.exercises?.length ?? 0) > 0));
+  const isNew = !hasContent;
+
   return (
     <RoutineEditor
       athleteId={athleteId}
       athleteName={athlete.full_name}
-      initial={{
-        title: routine?.title ?? "Mi rutina",
-        subtitle: routine?.subtitle ?? "",
-        days: routine?.days ?? {},
-        info: routine?.info ?? [],
-      }}
+      isNew={isNew}
+      initial={
+        isNew
+          ? { ...ROUTINE_TEMPLATE, title: routine?.title ?? ROUTINE_TEMPLATE.title }
+          : {
+              title: routine.title,
+              subtitle: routine.subtitle ?? "",
+              days: routine.days,
+              info: routine.info ?? [],
+            }
+      }
     />
   );
 }

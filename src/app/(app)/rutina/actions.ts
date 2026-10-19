@@ -43,7 +43,7 @@ async function myAthleteId(supabase: Awaited<ReturnType<typeof requireUser>>["su
 export async function toggleCheck(weekday: number, index: number) {
   const { supabase, user } = await requireUser();
   const athleteId = await myAthleteId(supabase, user.id);
-  if (!athleteId) throw new Error("No sos un atleta.");
+  if (!athleteId) throw new Error("Tu cuenta no está vinculada a un atleta.");
 
   const ws = weekStart();
   const { data: existing } = await supabase
@@ -69,10 +69,25 @@ export async function toggleCheck(weekday: number, index: number) {
   revalidatePath("/rutina");
 }
 
+export async function clearChecks(weekday: number) {
+  const { supabase, user } = await requireUser();
+  const athleteId = await myAthleteId(supabase, user.id);
+  if (!athleteId) throw new Error("Tu cuenta no está vinculada a un atleta.");
+
+  const { error } = await supabase
+    .from("routine_checks")
+    .upsert(
+      { athlete_id: athleteId, week_start: weekStart(), weekday, done_indexes: [] },
+      { onConflict: "athlete_id,week_start,weekday" },
+    );
+  if (error) throw new Error(error.message);
+  revalidatePath("/rutina");
+}
+
 export async function logWeight(weekday: number, index: number, kg: number, reps: number) {
   const { supabase, user } = await requireUser();
   const athleteId = await myAthleteId(supabase, user.id);
-  if (!athleteId) throw new Error("No sos un atleta.");
+  if (!athleteId) throw new Error("Tu cuenta no está vinculada a un atleta.");
 
   const { error } = await supabase.from("exercise_logs").insert({
     athlete_id: athleteId,
