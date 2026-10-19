@@ -10,7 +10,7 @@ const ROLE_LABEL: Record<string, string> = {
   athlete: "Atleta",
 };
 
-export default function HeaderSettings() {
+export default function HeaderSettings({ up = false }: { up?: boolean }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -41,7 +41,7 @@ export default function HeaderSettings() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full z-30 mt-2 w-64 overflow-hidden rounded-xl border border-line bg-surface py-1.5 shadow-lg">
+        <div className={`absolute ${up ? "bottom-full left-0 mb-2" : "right-0 top-full mt-2"} z-30 w-64 overflow-hidden rounded-xl border border-line bg-surface py-1.5 shadow-lg`}>
           <div className="border-b border-line px-4 py-2.5">
             <p className="text-xs text-ink-3">Ajustes</p>
           </div>

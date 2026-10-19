@@ -16,10 +16,12 @@ export default function AccountMenu({
   fullName,
   role,
   avatarUrl,
+  up = false,
 }: {
   fullName: string | null;
   role: string | undefined;
   avatarUrl: string | null;
+  up?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -55,7 +57,7 @@ export default function AccountMenu({
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full z-30 mt-2 w-52 overflow-hidden rounded-xl border border-line bg-surface py-1.5 shadow-lg">
+        <div className={`absolute ${up ? "bottom-full left-0 mb-2" : "right-0 top-full mt-2"} z-30 w-52 overflow-hidden rounded-xl border border-line bg-surface py-1.5 shadow-lg`}>
           <div className="border-b border-line px-4 py-2.5">
             <p className="truncate text-sm font-medium text-ink">{fullName}</p>
             {role && (
