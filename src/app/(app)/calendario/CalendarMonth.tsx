@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import EventDialog, { type EventLite } from "./EventDialog";
 import { PLAN_LABEL } from "./planTypes";
+import { chipClass } from "./eventColors";
 
 type Day = { key: string; num: number; inMonth: boolean; isToday: boolean };
 
@@ -90,6 +91,10 @@ export default function CalendarMonth({
         </div>
         <div className="grid select-none grid-cols-7 gap-px bg-line text-sm">
           {days.map((d) => {
+            // días de otros meses: casilla vacía, sin número, eventos ni click
+            if (!d.inMonth) {
+              return <div key={d.key} aria-hidden className="min-h-[90px] bg-sunken sm:min-h-[110px]" />;
+            }
             const dayEvents = byDay.get(d.key) ?? [];
             const selected = sel && d.key >= sel.from && d.key <= sel.to;
             return (
@@ -99,7 +104,7 @@ export default function CalendarMonth({
                 onPointerEnter={() => dragging && setHover(d.key)}
                 className={`relative min-h-[90px] p-1.5 transition-colors duration-100 sm:min-h-[110px] ${
                   selected ? "bg-brand-soft ring-1 ring-inset ring-brand" : "bg-surface"
-                } ${canCreate && !selected ? "hover:bg-sunken" : ""} ${d.inMonth ? "" : "opacity-40"}`}
+                } ${canCreate && !selected ? "hover:bg-sunken" : ""}`}
               >
                 {canCreate && (
                   <button
@@ -141,16 +146,14 @@ export default function CalendarMonth({
 }
 
 function Chip({ e }: { e: EventLite }) {
-  const isRegatta = e.kind === "regatta";
   const body = (
     <>
-      {e.starts_at.slice(11, 16)} {e.title}
+      {!e.all_day && `${e.starts_at.slice(11, 16)} `}
+      {e.title}
       {e.plan_type && <span className="ml-1 opacity-70">· {PLAN_LABEL[e.plan_type]}</span>}
     </>
   );
-  const cls = `pointer-events-auto relative block truncate rounded px-1.5 py-1 text-[11px] leading-tight transition hover:brightness-95 ${
-    isRegatta ? "bg-brand-soft text-brand-text" : "bg-info-soft text-info-text"
-  }`;
+  const cls = `pointer-events-auto relative block truncate rounded px-1.5 py-1 text-[11px] leading-tight transition hover:brightness-95 ${chipClass(e.color, e.kind)}`;
   return (
     <Link href={`/calendario/${e.id}`} onPointerDown={(ev) => ev.stopPropagation()} className={cls}>
       {body}

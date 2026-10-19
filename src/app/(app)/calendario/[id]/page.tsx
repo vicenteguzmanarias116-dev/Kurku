@@ -4,6 +4,7 @@ import { requireUser } from "@/lib/auth";
 import { rajdhani } from "../../fonts";
 import { Card, Badge } from "../../ui";
 import { PLAN_LABEL } from "../planTypes";
+import { isEventColor, EVENT_COLORS } from "../eventColors";
 
 type EventDetail = {
   id: string;
@@ -14,6 +15,8 @@ type EventDetail = {
   description: string | null;
   plan_type: string | null;
   plan_items: { label: string }[] | null;
+  all_day?: boolean;
+  color?: string | null;
   athletes: { full_name: string } | null;
 };
 
@@ -27,9 +30,7 @@ export default async function EventDetailPage({
 
   const { data: event } = await supabase
     .from("events")
-    .select(
-      "id, kind, title, starts_at, location, description, plan_type, plan_items, athletes(full_name)",
-    )
+    .select("*, athletes(full_name)")
     .eq("id", id)
     .single<EventDetail>();
 
@@ -48,6 +49,9 @@ export default async function EventDetailPage({
       </Link>
 
       <Card className="sm:p-8">
+        {isEventColor(event.color) && (
+          <div className={`mb-4 h-1.5 w-16 rounded-full ${EVENT_COLORS[event.color].dot}`} />
+        )}
         <div className="flex flex-wrap items-center gap-2">
           <Badge tone={isRegatta ? "brand" : "info"}>
             {isRegatta ? "Regata" : event.kind === "training" ? "Entrenamiento" : "Otro"}
@@ -70,9 +74,15 @@ export default async function EventDetailPage({
             day: "numeric",
             month: "long",
             year: "numeric",
-          })}{" "}
-          ·{" "}
-          {date.toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit" })}
+            timeZone: "UTC",
+          })}
+          {!event.all_day && (
+            <>
+              {" "}
+              ·{" "}
+              {date.toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" })}
+            </>
+          )}
           {event.location && <> · {event.location}</>}
         </p>
 

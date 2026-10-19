@@ -42,20 +42,27 @@ export default async function CalendarioPage({
   const anchor = sp.d && !Number.isNaN(Date.parse(sp.d)) ? new Date(sp.d) : new Date();
 
   const [{ data: events }, { data: athletes }] = await Promise.all([
-    supabase
-      .from("events")
-      .select("id, kind, title, starts_at, plan_type")
-      .order("starts_at"),
+    supabase.from("events").select("*").order("starts_at"),
     staff
       ? supabase.from("athletes").select("id, full_name").eq("active", true).order("full_name")
       : Promise.resolve({ data: null }),
   ]);
-  const list = (events ?? []) as EventLite[];
+  const list: EventLite[] = (events ?? []).map((e) => ({
+    id: e.id,
+    title: e.title,
+    kind: e.kind,
+    starts_at: e.starts_at,
+    plan_type: e.plan_type,
+    all_day: e.all_day ?? false,
+    color: e.color ?? null,
+  }));
 
   const monthStart = new Date(anchor.getFullYear(), anchor.getMonth(), 1);
   const gridStart = mondayOf(monthStart);
   const todayKey = ymd(new Date());
-  const days = Array.from({ length: 42 }, (_, i) => {
+  const lastOfMonth = new Date(monthStart.getFullYear(), monthStart.getMonth() + 1, 0);
+  const weeks = Math.ceil((((monthStart.getDay() + 6) % 7) + lastOfMonth.getDate()) / 7);
+  const days = Array.from({ length: weeks * 7 }, (_, i) => {
     const d = addDays(gridStart, i);
     return {
       key: ymd(d),
@@ -95,7 +102,7 @@ export default async function CalendarioPage({
         </div>
       </div>
 
-      <CalendarMonth key={days[10].key} days={days} events={list} canCreate={staff} athletes={athletes ?? []} />
+      <CalendarMonth key={days.find((d) => d.inMonth)!.key} days={days} events={list} canCreate={staff} athletes={athletes ?? []} />
 
       {staff && (
         <details className="rounded-xl border border-line bg-surface p-5">

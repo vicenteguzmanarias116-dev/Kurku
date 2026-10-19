@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { rajdhani } from "../fonts";
 import { Field, Input, Select, Textarea, Button } from "../ui";
 import { PLAN_TYPES } from "./planTypes";
+import { EVENT_COLORS } from "./eventColors";
 import { addEvents } from "./actions";
 
 export type EventLite = {
@@ -12,6 +13,8 @@ export type EventLite = {
   kind: string;
   starts_at: string;
   plan_type: string | null;
+  all_day?: boolean;
+  color?: string | null;
 };
 
 const dayCount = (from: string, to: string) =>
@@ -99,8 +102,8 @@ export default function EventDialog({
             <Field label="Hasta">
               <Input name="date_to" type="date" value={to} min={from} onChange={(e) => setTo(e.target.value)} required />
             </Field>
-            <Field label="Hora">
-              <Input name="time" type="time" defaultValue="09:00" required />
+            <Field label="Hora (opcional)">
+              <Input name="time" type="time" />
             </Field>
           </div>
           {n > 1 && (
@@ -142,13 +145,35 @@ export default function EventDialog({
             </Field>
           </div>
 
-          <Textarea
-            name="plan_items"
-            placeholder={"Detalle de la sesión, una línea por ejercicio:\nSentadilla 4x10\nZancadas 3x12"}
-            rows={3}
-            className="resize-y"
-          />
-          <Input name="description" placeholder="Notas" />
+          <fieldset>
+            <legend className="mb-1.5 text-xs font-medium text-ink-2">Color</legend>
+            <div className="flex flex-wrap gap-2">
+              <label className="cursor-pointer">
+                <input type="radio" name="color" value="" defaultChecked className="peer sr-only" />
+                <span
+                  title="Automático (según el tipo)"
+                  className="flex h-7 w-7 items-center justify-center rounded-full border border-dashed border-line-strong text-[10px] text-ink-3 peer-checked:ring-2 peer-checked:ring-ink peer-checked:ring-offset-2 peer-focus-visible:ring-2 peer-focus-visible:ring-brand-strong peer-focus-visible:ring-offset-2"
+                >
+                  Auto
+                </span>
+              </label>
+              {Object.entries(EVENT_COLORS).map(([key, c]) => (
+                <label key={key} className="cursor-pointer">
+                  <input type="radio" name="color" value={key} className="peer sr-only" />
+                  <span
+                    title={c.label}
+                    className={`block h-7 w-7 rounded-full ${c.dot} peer-checked:ring-2 peer-checked:ring-ink peer-checked:ring-offset-2 peer-focus-visible:ring-2 peer-focus-visible:ring-brand-strong peer-focus-visible:ring-offset-2`}
+                  >
+                    <span className="sr-only">{c.label}</span>
+                  </span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+
+          <Field label="Notas">
+            <Textarea name="description" rows={3} placeholder="Detalles, ejercicios, lo que el equipo necesite saber" className="resize-y" />
+          </Field>
 
           {error && <p role="alert" className="text-bad-text">{error}</p>}
 
