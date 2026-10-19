@@ -79,7 +79,7 @@ export default function AthleteRoutineView({
   }
 
   function finishSession() {
-    if (!day || day.kind !== "gym") return;
+    if (!day || day.kind !== "gym" || !allDone) return;
     startTransition(async () => {
       await completeSession(day.title);
       setSessionMsg("¡Avisado! Tu coach ya lo sabe.");
@@ -87,7 +87,10 @@ export default function AthleteRoutineView({
     });
   }
 
-  const progress = day?.exercises?.length ? (doneIdx.length / day.exercises.length) * 100 : 0;
+  const total = day?.exercises?.length ?? 0;
+  const doneCount = doneIdx.filter((i) => i < total).length;
+  const allDone = total > 0 && doneCount === total;
+  const progress = total ? (doneCount / total) * 100 : 0;
 
   return (
     <div>
@@ -255,9 +258,14 @@ export default function AthleteRoutineView({
           </ol>
 
           <div className="mt-5 flex flex-wrap items-center gap-3">
-            <Button variant="primary" onClick={finishSession} disabled={pending}>
+            <Button variant="primary" onClick={finishSession} disabled={pending || !allDone}>
               Terminé la sesión de hoy
             </Button>
+            {!allDone && total > 0 && (
+              <span className="text-xs text-ink-3">
+                Marca todos los ejercicios para terminar ({doneCount}/{total})
+              </span>
+            )}
             {doneIdx.length > 0 && (
               <button type="button" onClick={resetDay} className="text-sm text-ink-3 underline hover:text-ink">
                 Desmarcar todo
