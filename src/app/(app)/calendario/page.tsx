@@ -5,8 +5,6 @@ import { requireUser, isStaff } from "@/lib/auth";
 import { rajdhani } from "../fonts";
 import PageHead from "../PageHead";
 import { Card, Field, Input, Select, Textarea, Button, LinkButton } from "../ui";
-import { getTodayCheckinStatus } from "../today";
-import Agenda, { type AgendaItem } from "./Agenda";
 import { PLAN_TYPES, PLAN_LABEL } from "./planTypes";
 
 type EventRow = {
@@ -85,15 +83,14 @@ function mondayOf(d: Date) {
 export default async function CalendarioPage({
   searchParams,
 }: {
-  searchParams: Promise<{ view?: string; d?: string; new?: string }>;
+  searchParams: Promise<{ d?: string; new?: string }>;
 }) {
   const { supabase, profile } = await requireUser();
   const staff = isStaff(profile);
   const sp = await searchParams;
-  const view = sp.view === "semana" ? "semana" : sp.view === "mes" ? "mes" : "agenda";
   const anchor = sp.d && !Number.isNaN(Date.parse(sp.d)) ? new Date(sp.d) : new Date();
 
-  const [{ data: events }, { data: athletes }, checkin] = await Promise.all([
+  const [{ data: events }, { data: athletes }] = await Promise.all([
     supabase
       .from("events")
       .select(
@@ -103,7 +100,6 @@ export default async function CalendarioPage({
     staff
       ? supabase.from("athletes").select("id, full_name").eq("active", true).order("full_name")
       : Promise.resolve({ data: null }),
-    getTodayCheckinStatus(supabase, profile!),
   ]);
 
   const byDay = new Map<string, EventRow[]>();
@@ -113,62 +109,17 @@ export default async function CalendarioPage({
     byDay.get(key)!.push(e);
   }
 
-  const baseHref = `/calendario?view=${view}${sp.d ? `&d=${sp.d}` : ""}`;
-  const newHref = (day: string) => `${baseHref}&new=${day}`;
+  const baseHref = sp.d ? `/calendario?d=${sp.d}` : "/calendario";
+  const newHref = (day: string) => `${baseHref}${sp.d ? "&" : "?"}new=${day}`;
   const newDate = staff && sp.new && /^\d{4}-\d{2}-\d{2}$/.test(sp.new) ? sp.new : null;
 
   const monthStart = startOfMonth(anchor);
   const gridStart = mondayOf(monthStart);
   const monthDays = Array.from({ length: 42 }, (_, i) => addDays(gridStart, i));
 
-  const weekStart = mondayOf(anchor);
-  const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
-
-  const agendaItems: AgendaItem[] = [];
-  if (view === "agenda") {
-    const today0 = new Date();
-    today0.setHours(0, 0, 0, 0);
-    const horizon = addDays(today0, 21);
-    for (const e of (events as EventRow[] | null) ?? []) {
-      const at = new Date(e.starts_at);
-      if (at < today0 || at >= horizon) continue;
-      if (!staff && e.athlete_id && e.athlete_id !== checkin.athleteId) continue;
-      agendaItems.push({
-        kind: "event",
-        id: e.id,
-        at: e.starts_at,
-        title: e.title,
-        planType: e.plan_type,
-        eventKind: e.kind,
-        href: `/calendario/${e.id}`,
-      });
-    }
-    if (checkin.athleteId) {
-      agendaItems.push({
-        kind: "checkin",
-        at: `${ymd(today0)}T08:00:00`,
-        done: checkin.done,
-        href: "/salud",
-      });
-    }
-  }
-
-  const prevHref =
-    view === "semana"
-      ? `/calendario?view=semana&d=${ymd(addDays(weekStart, -7))}`
-      : `/calendario?view=mes&d=${ymd(addMonths(monthStart, -1))}`;
-  const nextHref =
-    view === "semana"
-      ? `/calendario?view=semana&d=${ymd(addDays(weekStart, 7))}`
-      : `/calendario?view=mes&d=${ymd(addMonths(monthStart, 1))}`;
-  const todayHref = `/calendario?view=${view === "semana" ? "semana" : "mes"}`;
-
-  const label =
-    view === "agenda"
-      ? "Próximos 21 días"
-      : view === "semana"
-        ? `${weekDays[0].toLocaleDateString("es-PE", { day: "numeric", month: "short" })} – ${weekDays[6].toLocaleDateString("es-PE", { day: "numeric", month: "short", year: "numeric" })}`
-        : monthStart.toLocaleDateString("es-PE", { month: "long", year: "numeric" });
+  const prevHref = `/calendario?d=${ymd(addMonths(monthStart, -1))}`;
+  const nextHref = `/calendario?d=${ymd(addMonths(monthStart, 1))}`;
+  const label = monthStart.toLocaleDateString("es-PE", { month: "long", year: "numeric" });
 
   return (
     <div className="space-y-6">
@@ -255,119 +206,58 @@ export default async function CalendarioPage({
           {label}
         </h2>
         <div className="flex items-center gap-2">
-          {staff && (
-            <LinkButton href={newHref(ymd(new Date()))} variant="primary" size="sm">
-              + Crear
-            </LinkButton>
-          )}
-          <div className="flex rounded-lg border border-line text-sm font-medium">
-            <Link
-              href="/calendario?view=agenda"
-              className={`rounded-l-lg px-3 py-1.5 ${view === "agenda" ? "bg-brand-strong text-white" : "text-ink-2 hover:bg-sunken"}`}
-            >
-              Agenda
-            </Link>
-            <Link
-              href={`/calendario?view=mes${sp.d ? `&d=${sp.d}` : ""}`}
-              className={`px-3 py-1.5 ${view === "mes" ? "bg-brand-strong text-white" : "text-ink-2 hover:bg-sunken"}`}
-            >
-              Mes
-            </Link>
-            <Link
-              href={`/calendario?view=semana${sp.d ? `&d=${sp.d}` : ""}`}
-              className={`rounded-r-lg px-3 py-1.5 ${view === "semana" ? "bg-brand-strong text-white" : "text-ink-2 hover:bg-sunken"}`}
-            >
-              Semana
-            </Link>
-          </div>
-          {view !== "agenda" && (
-            <>
-              <Link href={prevHref} className="rounded-lg border border-line px-2.5 py-1.5 text-ink-2 hover:bg-sunken">
-                ←
-              </Link>
-              <Link href={todayHref} className="rounded-lg border border-line px-2.5 py-1.5 text-sm font-medium text-ink-2 hover:bg-sunken">
-                Hoy
-              </Link>
-              <Link href={nextHref} className="rounded-lg border border-line px-2.5 py-1.5 text-ink-2 hover:bg-sunken">
-                →
-              </Link>
-            </>
-          )}
+          <Link href={prevHref} className="rounded-lg border border-line px-2.5 py-1.5 text-ink-2 hover:bg-sunken">
+            ←
+          </Link>
+          <Link href="/calendario" className="rounded-lg border border-line px-2.5 py-1.5 text-sm font-medium text-ink-2 hover:bg-sunken">
+            Hoy
+          </Link>
+          <Link href={nextHref} className="rounded-lg border border-line px-2.5 py-1.5 text-ink-2 hover:bg-sunken">
+            →
+          </Link>
         </div>
       </div>
 
-      {view === "agenda" ? (
-        <Agenda items={agendaItems} />
-      ) : view === "mes" ? (
-        <div className="overflow-x-auto rounded-xl border border-line bg-surface p-2 sm:p-4">
-          <div className="grid grid-cols-7 gap-px text-center text-xs text-ink-3">
-            {["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"].map((d) => (
-              <div key={d} className="py-1.5">
-                {d}
-              </div>
-            ))}
-          </div>
-          <div className="grid grid-cols-7 gap-px bg-line text-sm">
-            {monthDays.map((d) => {
-              const key = ymd(d);
-              const dayEvents = byDay.get(key) ?? [];
-              const inMonth = d.getMonth() === monthStart.getMonth();
-              const isToday = key === ymd(new Date());
-              return (
-                <div
-                  key={key}
-                  className={`relative min-h-[90px] bg-surface p-1.5 ${staff ? "hover:bg-sunken" : ""} ${inMonth ? "" : "opacity-40"}`}
-                >
-                  {staff && (
-                    <Link href={newHref(key)} aria-label={`Crear evento el ${key}`} className="absolute inset-0" />
-                  )}
-                  <span
-                    className={`pointer-events-none relative text-xs ${isToday ? "rounded bg-brand-strong px-1 text-white" : "text-ink-3"}`}
-                  >
-                    {d.getDate()}
-                  </span>
-                  <div className="pointer-events-none relative mt-1 space-y-1">
-                    {dayEvents.slice(0, 3).map((e) => (
-                      <DayChip key={e.id} e={e} />
-                    ))}
-                    {dayEvents.length > 3 && (
-                      <p className="text-[10px] text-ink-3">+{dayEvents.length - 3} más</p>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+      <div className="overflow-x-auto rounded-xl border border-line bg-surface p-2 sm:p-4">
+        <div className="grid grid-cols-7 gap-px text-center text-xs text-ink-3">
+          {["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"].map((d) => (
+            <div key={d} className="py-1.5">
+              {d}
+            </div>
+          ))}
         </div>
-      ) : (
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-7">
-          {weekDays.map((d) => {
+        <div className="grid grid-cols-7 gap-px bg-line text-sm">
+          {monthDays.map((d) => {
             const key = ymd(d);
             const dayEvents = byDay.get(key) ?? [];
+            const inMonth = d.getMonth() === monthStart.getMonth();
             const isToday = key === ymd(new Date());
             return (
               <div
                 key={key}
-                className={`relative rounded-lg border p-3 ${isToday ? "border-brand/40 bg-brand-soft" : "border-line bg-surface"}`}
+                className={`relative min-h-[90px] bg-surface p-1.5 sm:min-h-[110px] ${staff ? "hover:bg-sunken" : ""} ${inMonth ? "" : "opacity-40"}`}
               >
                 {staff && (
-                  <Link href={newHref(key)} aria-label={`Crear evento el ${key}`} className="absolute inset-0 rounded-lg" />
+                  <Link href={newHref(key)} aria-label={`Crear evento el ${key}`} className="absolute inset-0" />
                 )}
-                <p className="pointer-events-none relative text-xs text-ink-3">
-                  {d.toLocaleDateString("es-PE", { weekday: "short" })}{" "}
-                  <span className="font-medium text-ink-2">{d.getDate()}</span>
-                </p>
-                <div className="pointer-events-none relative mt-2 space-y-1.5">
-                  {dayEvents.map((e) => (
-                    <DayChip key={e.id} e={e} full />
+                <span
+                  className={`pointer-events-none relative text-xs ${isToday ? "rounded bg-brand-strong px-1 text-white" : "text-ink-3"}`}
+                >
+                  {d.getDate()}
+                </span>
+                <div className="pointer-events-none relative mt-1 space-y-1">
+                  {dayEvents.slice(0, 3).map((e) => (
+                    <DayChip key={e.id} e={e} />
                   ))}
-                  {!dayEvents.length && <p className="text-xs text-ink-3/60">—</p>}
+                  {dayEvents.length > 3 && (
+                    <p className="text-[10px] text-ink-3">+{dayEvents.length - 3} más</p>
+                  )}
                 </div>
               </div>
             );
           })}
         </div>
-      )}
+      </div>
 
       {staff && (
         <details className="rounded-xl border border-line bg-surface p-5">
@@ -393,7 +283,7 @@ export default async function CalendarioPage({
   );
 }
 
-function DayChip({ e, full = false }: { e: EventRow; full?: boolean }) {
+function DayChip({ e }: { e: EventRow }) {
   const isRegatta = e.kind === "regatta";
   return (
     <Link
@@ -402,7 +292,7 @@ function DayChip({ e, full = false }: { e: EventRow; full?: boolean }) {
         isRegatta ? "bg-brand-soft text-brand-text" : "bg-info-soft text-info-text"
       }`}
     >
-      {!full && e.starts_at.slice(11, 16) + " "}
+      {e.starts_at.slice(11, 16) + " "}
       {e.title}
       {e.plan_type && (
         <span className="ml-1 opacity-70">· {PLAN_LABEL[e.plan_type]}</span>
