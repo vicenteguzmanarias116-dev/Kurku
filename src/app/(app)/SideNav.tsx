@@ -3,16 +3,15 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import NavIcon from "./NavIcon";
+import { rajdhani } from "./fonts";
 import type { NavItem } from "./modules";
 
 export default function SideNav({
   primary,
   more,
-  fontClass,
 }: {
   primary: NavItem[];
   more: NavItem[];
-  fontClass: string;
 }) {
   const pathname = usePathname();
 
@@ -33,7 +32,7 @@ export default function SideNav({
   };
 
   return (
-    <nav className={`${fontClass} flex-1 space-y-0.5 overflow-y-auto px-3 py-2 text-sm font-medium`}>
+    <nav className={`${rajdhani.className} flex-1 space-y-0.5 overflow-y-auto px-3 py-2 text-sm font-medium`}>
       {primary.map(item)}
       {more.length > 0 && <p className="px-3 pb-1 pt-5 text-xs font-normal text-ink-3">Más</p>}
       {more.map(item)}

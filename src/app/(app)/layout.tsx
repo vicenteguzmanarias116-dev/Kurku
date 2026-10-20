@@ -90,7 +90,7 @@ export default async function AppLayout({
         <div className="px-5 py-5">
           <Brand team={team} />
         </div>
-        <SideNav primary={primary} more={more} fontClass={rajdhani.className} />
+        <SideNav primary={primary} more={more} />
         <div className="flex items-center gap-2 border-t border-line px-5 py-4">
           {account(true)}
         </div>
