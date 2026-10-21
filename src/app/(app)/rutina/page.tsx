@@ -1,8 +1,8 @@
 import { requireUser, isStaff } from "@/lib/auth";
 import PageHead from "../PageHead";
 import { Card, Empty, LinkButton } from "../ui";
-import AthleteRoutineView from "./AthleteRoutineView";
-import type { Days, InfoSection, LogEntry } from "./types";
+import AthleteRoutineView from "../rutina-lib/AthleteRoutineView";
+import type { Days, InfoSection, LogEntry } from "../rutina-lib/types";
 
 function weekStart(d = new Date()) {
   const day = (d.getDay() + 6) % 7;

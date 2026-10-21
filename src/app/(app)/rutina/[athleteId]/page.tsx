@@ -1,8 +1,8 @@
 import { notFound, redirect } from "next/navigation";
 import { requireUser, isStaff } from "@/lib/auth";
-import RoutineEditor from "../RoutineEditor";
-import type { Days, InfoSection } from "../types";
-import { ROUTINE_TEMPLATE } from "../template";
+import RoutineEditor from "../../rutina-lib/RoutineEditor";
+import type { Days, InfoSection } from "../../rutina-lib/types";
+import { ROUTINE_TEMPLATE } from "../../rutina-lib/template";
 
 export default async function EditRoutinePage({
   params,
